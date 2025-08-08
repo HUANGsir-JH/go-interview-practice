@@ -27,7 +27,7 @@ from pathlib import Path
 # API配置
 BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 MODEL = "qwen3-30b-a3b-instruct-2507"
-API_KEY = "sk-5b9a273f951e459da4ad9782590d5937"
+API_KEY = ""
 
 # 翻译配置
 MAX_CONCURRENT = 5  # 并发数量
