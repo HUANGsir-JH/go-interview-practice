@@ -1,7 +1,7 @@
-# Hints for Challenge 14: Microservices with gRPC
+# 挑战14提示：使用gRPC的微服务
 
-## Hint 1: gRPC Service Implementation Structure
-Start by implementing the basic service structure with proper error handling:
+## 提示1：gRPC服务实现结构
+从带有适当错误处理的基本服务结构开始实现：
 ```go
 import (
     "context"
@@ -10,34 +10,34 @@ import (
 )
 
 type userServiceServer struct {
-    users map[string]*User // in-memory store for demo
+    users map[string]*User // 用于演示的内存存储
 }
 
 func (s *userServiceServer) GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error) {
     if req.UserId == "" {
-        return nil, status.Errorf(codes.InvalidArgument, "user ID is required")
+        return nil, status.Errorf(codes.InvalidArgument, "用户ID是必需的")
     }
     
     user, exists := s.users[req.UserId]
     if !exists {
-        return nil, status.Errorf(codes.NotFound, "user not found")
+        return nil, status.Errorf(codes.NotFound, "未找到用户")
     }
     
     return &GetUserResponse{User: user}, nil
 }
 ```
 
-## Hint 2: gRPC Status Codes for Business Logic
-Use appropriate gRPC status codes for different error conditions:
+## 提示2：业务逻辑中的gRPC状态码
+为不同错误情况使用适当的gRPC状态码：
 ```go
 func (s *userServiceServer) ValidateUser(ctx context.Context, req *ValidateUserRequest) (*ValidateUserResponse, error) {
     user, exists := s.users[req.UserId]
     if !exists {
-        return nil, status.Errorf(codes.NotFound, "user not found")
+        return nil, status.Errorf(codes.NotFound, "未找到用户")
     }
     
     if !user.IsActive {
-        return nil, status.Errorf(codes.PermissionDenied, "user is not active")
+        return nil, status.Errorf(codes.PermissionDenied, "用户未激活")
     }
     
     return &ValidateUserResponse{IsValid: true}, nil
@@ -46,19 +46,19 @@ func (s *userServiceServer) ValidateUser(ctx context.Context, req *ValidateUserR
 func (s *productServiceServer) CheckInventory(ctx context.Context, req *CheckInventoryRequest) (*CheckInventoryResponse, error) {
     product, exists := s.products[req.ProductId]
     if !exists {
-        return nil, status.Errorf(codes.NotFound, "product not found")
+        return nil, status.Errorf(codes.NotFound, "产品未找到")
     }
     
     if product.Stock < req.Quantity {
-        return nil, status.Errorf(codes.ResourceExhausted, "insufficient inventory")
+        return nil, status.Errorf(codes.ResourceExhausted, "库存不足")
     }
     
     return &CheckInventoryResponse{Available: true}, nil
 }
 ```
 
-## Hint 3: Setting Up gRPC Server with Interceptors
-Create servers with logging and authentication interceptors:
+## 提示3：设置带有拦截器的gRPC服务器
+创建带有日志记录和身份验证拦截器的服务器：
 ```go
 func StartUserService(port string) (*grpc.Server, error) {
     lis, err := net.Listen("tcp", ":"+port)
@@ -76,7 +76,7 @@ func StartUserService(port string) (*grpc.Server, error) {
     userService := &userServiceServer{
         users: make(map[string]*User),
     }
-    // Register your proto service here
+    // 在此处注册你的proto服务
     RegisterUserServiceServer(server, userService)
     
     go func() {
@@ -87,58 +87,58 @@ func StartUserService(port string) (*grpc.Server, error) {
 }
 ```
 
-## Hint 4: Implementing Interceptors
-Create interceptors for cross-cutting concerns:
+## 提示4：实现拦截器
+为横切关注点创建拦截器：
 ```go
 func LoggingInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
     start := time.Now()
     
-    log.Printf("gRPC call: %s started", info.FullMethod)
+    log.Printf("gRPC调用: %s 已启动", info.FullMethod)
     
     resp, err := handler(ctx, req)
     
     duration := time.Since(start)
-    log.Printf("gRPC call: %s completed in %v", info.FullMethod, duration)
+    log.Printf("gRPC调用: %s 在 %v 内完成", info.FullMethod, duration)
     
     return resp, err
 }
 
 func AuthInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-    // Skip auth for certain methods
+    // 跳过某些方法的身份验证
     if info.FullMethod == "/health/check" {
         return handler(ctx, req)
     }
     
-    // Extract auth metadata
+    // 提取认证元数据
     md, ok := metadata.FromIncomingContext(ctx)
     if !ok {
-        return nil, status.Errorf(codes.Unauthenticated, "metadata not provided")
+        return nil, status.Errorf(codes.Unauthenticated, "未提供元数据")
     }
     
     authHeaders := md.Get("authorization")
     if len(authHeaders) == 0 {
-        return nil, status.Errorf(codes.Unauthenticated, "authorization header not provided")
+        return nil, status.Errorf(codes.Unauthenticated, "未提供授权头")
     }
     
-    // Validate token (simplified)
+    // 验证令牌（简化版）
     if authHeaders[0] != "Bearer valid-token" {
-        return nil, status.Errorf(codes.Unauthenticated, "invalid token")
+        return nil, status.Errorf(codes.Unauthenticated, "无效令牌")
     }
     
     return handler(ctx, req)
 }
 ```
 
-## Hint 5: gRPC Client Implementation
-Create clients that connect to the services:
+## 提示5：gRPC客户端实现
+创建连接到服务的客户端：
 ```go
 type UserServiceClient struct {
     conn   *grpc.ClientConn
-    client UserServiceClient // from generated proto
+    client UserServiceClient // 由生成的proto文件提供
 }
 
 func (c *UserServiceClient) GetUser(ctx context.Context, userID string) (*User, error) {
-    // Add auth metadata
+    // 添加认证元数据
     ctx = metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer valid-token")
     
     req := &GetUserRequest{UserId: userID}
@@ -151,10 +151,10 @@ func (c *UserServiceClient) GetUser(ctx context.Context, userID string) (*User, 
 }
 
 func ConnectToServices(userServiceAddr, productServiceAddr string) (*UserServiceClient, *ProductServiceClient, error) {
-    // Connect to User Service
+    // 连接到用户服务
     userConn, err := grpc.Dial(userServiceAddr, grpc.WithInsecure())
     if err != nil {
-        return nil, nil, fmt.Errorf("failed to connect to user service: %w", err)
+        return nil, nil, fmt.Errorf("连接用户服务失败: %w", err)
     }
     
     userClient := &UserServiceClient{
@@ -162,14 +162,14 @@ func ConnectToServices(userServiceAddr, productServiceAddr string) (*UserService
         client: NewUserServiceClient(userConn),
     }
     
-    // Similar for product service...
+    // 类似地处理产品服务...
     
     return userClient, productClient, nil
 }
 ```
 
-## Hint 6: Service Orchestration
-Implement the order service that coordinates multiple services:
+## 提示6：服务编排
+实现协调多个服务的订单服务：
 ```go
 type OrderService struct {
     userClient    *UserServiceClient
@@ -177,19 +177,19 @@ type OrderService struct {
 }
 
 func (s *OrderService) CreateOrder(ctx context.Context, userID, productID string, quantity int) (*Order, error) {
-    // Step 1: Validate user
+    // 步骤1：验证用户
     _, err := s.userClient.ValidateUser(ctx, userID)
     if err != nil {
-        return nil, fmt.Errorf("user validation failed: %w", err)
+        return nil, fmt.Errorf("用户验证失败: %w", err)
     }
     
-    // Step 2: Check inventory
+    // 步骤2：检查库存
     _, err = s.productClient.CheckInventory(ctx, productID, quantity)
     if err != nil {
-        return nil, fmt.Errorf("inventory check failed: %w", err)
+        return nil, fmt.Errorf("库存检查失败: %w", err)
     }
     
-    // Step 3: Create order
+    // 步骤3：创建订单
     order := &Order{
         Id:        generateOrderID(),
         UserId:    userID,
@@ -203,37 +203,37 @@ func (s *OrderService) CreateOrder(ctx context.Context, userID, productID string
 }
 ```
 
-## Hint 7: Error Handling Across Services
-Handle both gRPC errors and business logic errors:
+## 提示7：跨服务的错误处理
+同时处理gRPC错误和业务逻辑错误：
 ```go
 func handleServiceError(err error) error {
     if err == nil {
         return nil
     }
     
-    // Check if it's a gRPC status error
+    // 检查是否为gRPC状态错误
     if status, ok := status.FromError(err); ok {
         switch status.Code() {
         case codes.NotFound:
-            return fmt.Errorf("resource not found: %s", status.Message())
+            return fmt.Errorf("资源未找到: %s", status.Message())
         case codes.PermissionDenied:
-            return fmt.Errorf("access denied: %s", status.Message())
+            return fmt.Errorf("访问被拒绝: %s", status.Message())
         case codes.ResourceExhausted:
-            return fmt.Errorf("resource exhausted: %s", status.Message())
+            return fmt.Errorf("资源耗尽: %s", status.Message())
         default:
-            return fmt.Errorf("service error: %s", status.Message())
+            return fmt.Errorf("服务错误: %s", status.Message())
         }
     }
     
-    // Handle other errors
-    return fmt.Errorf("unexpected error: %w", err)
+    // 处理其他错误
+    return fmt.Errorf("意外错误: %w", err)
 }
 ```
 
-## Key gRPC Concepts:
-- **Status Codes**: Use appropriate codes (NotFound, PermissionDenied, etc.)
-- **Interceptors**: Chain interceptors for cross-cutting concerns
-- **Metadata**: Pass authentication and context information
-- **Error Handling**: Distinguish between transport and business logic errors
-- **Service Discovery**: Connect clients to running services
-- **Context Propagation**: Pass context across service boundaries 
+## gRPC核心概念：
+- **状态码**：使用适当的代码（NotFound、PermissionDenied等）
+- **拦截器**：链式拦截器以处理横切关注点
+- **元数据**：传递认证和上下文信息
+- **错误处理**：区分传输错误与业务逻辑错误
+- **服务发现**：让客户端连接到运行中的服务
+- **上下文传播**：在服务边界之间传递上下文

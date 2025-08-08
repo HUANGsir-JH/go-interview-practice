@@ -1,15 +1,15 @@
-# Learning Materials for Generic Data Structures
+# 通用数据结构学习材料
 
-## Generics in Go
+## Go 中的泛型
 
-Go 1.18 introduced generics, allowing for type-parametric programming, which enables writing functions and data structures that work with different types while maintaining type safety. This challenge focuses on implementing generic data structures.
+Go 1.18 引入了泛型，允许进行类型参数化编程，这使得可以编写适用于不同类型的函数和数据结构，同时保持类型安全。本挑战聚焦于实现泛型数据结构。
 
-### Introduction to Generics
+### 泛型简介
 
-Generics allow you to write code that operates on values of many types while preserving type safety:
+泛型允许您编写在多种类型上操作的代码，同时保持类型安全：
 
 ```go
-// Before generics: separate functions for each type
+// 泛型之前：每种类型都需要单独的函数
 func SumInts(numbers []int) int {
     sum := 0
     for _, n := range numbers {
@@ -26,7 +26,7 @@ func SumFloats(numbers []float64) float64 {
     return sum
 }
 
-// With generics: one function for multiple types
+// 使用泛型：一个函数适用于多种类型
 func Sum[T constraints.Ordered](numbers []T) T {
     var sum T
     for _, n := range numbers {
@@ -35,18 +35,18 @@ func Sum[T constraints.Ordered](numbers []T) T {
     return sum
 }
 
-// Usage
+// 使用示例
 intSum := Sum([]int{1, 2, 3})               // 6
 floatSum := Sum([]float64{1.1, 2.2, 3.3})   // 6.6
 ```
 
-### Type Parameters and Constraints
+### 类型参数与约束
 
-Type parameters allow functions and types to work with different types:
+类型参数允许函数和类型处理不同的类型：
 
 ```go
-// T is a type parameter
-// constraints.Ordered is a constraint that T must satisfy
+// T 是一个类型参数
+// constraints.Ordered 是 T 必须满足的约束
 func Min[T constraints.Ordered](a, b T) T {
     if a < b {
         return a
@@ -55,42 +55,42 @@ func Min[T constraints.Ordered](a, b T) T {
 }
 ```
 
-Constraints specify what operations can be performed on type parameters:
+约束指定了可以在类型参数上执行的操作：
 
 ```go
-// Custom constraint: types that support addition
+// 自定义约束：支持加法的类型
 type Addable interface {
     int | int64 | float64 | string
 }
 
-// Function that uses the custom constraint
+// 使用自定义约束的函数
 func Add[T Addable](a, b T) T {
     return a + b
 }
 ```
 
-### The `constraints` Package
+### `constraints` 包
 
-The Go standard library provides common constraints in the `constraints` package:
+Go 标准库在 `constraints` 包中提供了常见的约束：
 
 ```go
 import "golang.org/x/exp/constraints"
 
-// Examples of predefined constraints
-// constraints.Ordered: types that support < <= >= >
-// constraints.Integer: integer types
-// constraints.Float: floating-point types
-// constraints.Complex: complex number types
+// 预定义约束示例
+// constraints.Ordered: 支持 < <= >= > 的类型
+// constraints.Integer: 整数类型
+// constraints.Float: 浮点数类型
+// constraints.Complex: 复数类型
 ```
 
-### Generic Data Structures
+### 泛型数据结构
 
-Generics enable creating reusable data structures:
+泛型使创建可重用的数据结构成为可能：
 
-#### Generic Stack
+#### 泛型栈
 
 ```go
-// Generic Stack
+// 泛型栈
 type Stack[T any] struct {
     elements []T
 }
@@ -133,10 +133,10 @@ func (s *Stack[T]) Size() int {
 }
 ```
 
-#### Generic Queue
+#### 泛型队列
 
 ```go
-// Generic Queue
+// 泛型队列
 type Queue[T any] struct {
     elements []T
 }
@@ -178,16 +178,16 @@ func (q *Queue[T]) Size() int {
 }
 ```
 
-#### Generic Linked List
+#### 泛型链表
 
 ```go
-// Generic Linked List Node
+// 泛型链表节点
 type Node[T any] struct {
     Value T
     Next  *Node[T]
 }
 
-// Generic Linked List
+// 泛型链表
 type LinkedList[T any] struct {
     head *Node[T]
     tail *Node[T]
@@ -228,7 +228,7 @@ func (l *LinkedList[T]) Remove(value T, equals func(a, b T) bool) bool {
         return false
     }
     
-    // Special case: remove head
+    // 特殊情况：移除头节点
     if equals(l.head.Value, value) {
         l.head = l.head.Next
         l.size--
@@ -240,13 +240,13 @@ func (l *LinkedList[T]) Remove(value T, equals func(a, b T) bool) bool {
         return true
     }
     
-    // Find the node before the one to remove
+    // 找到要移除节点的前一个节点
     current := l.head
     for current.Next != nil && !equals(current.Next.Value, value) {
         current = current.Next
     }
     
-    // If found, remove it
+    // 如果找到，则移除它
     if current.Next != nil {
         if current.Next == l.tail {
             l.tail = current
@@ -296,17 +296,17 @@ func (l *LinkedList[T]) ToSlice() []T {
 }
 ```
 
-#### Generic Binary Search Tree
+#### 泛型二叉搜索树
 
 ```go
-// Generic Binary Search Tree Node
+// 泛型二叉搜索树节点
 type TreeNode[T constraints.Ordered] struct {
     Value T
     Left  *TreeNode[T]
     Right *TreeNode[T]
 }
 
-// Generic Binary Search Tree
+// 泛型二叉搜索树
 type BinarySearchTree[T constraints.Ordered] struct {
     root *TreeNode[T]
     size int
@@ -380,10 +380,10 @@ func (t *BinarySearchTree[T]) IsEmpty() bool {
 }
 ```
 
-#### Generic Map
+#### 泛型映射
 
 ```go
-// Generic Map (requires a hash function for the key)
+// 泛型映射（需要键的哈希函数）
 type Map[K comparable, V any] struct {
     data map[K]V
 }
@@ -437,14 +437,14 @@ func (m *Map[K, V]) IsEmpty() bool {
 }
 ```
 
-### Generic Algorithms
+### 泛型算法
 
-Generics allow for implementing algorithms that work with multiple types:
+泛型允许实现适用于多种类型的算法：
 
-#### Generic Binary Search
+#### 泛型二分查找
 
 ```go
-// Binary search on a sorted slice
+// 在已排序切片上进行二分查找
 func BinarySearch[T constraints.Ordered](slice []T, target T) (int, bool) {
     low, high := 0, len(slice)-1
     
@@ -466,10 +466,10 @@ func BinarySearch[T constraints.Ordered](slice []T, target T) (int, bool) {
 }
 ```
 
-#### Generic Sorting
+#### 泛型排序
 
 ```go
-// Generic bubble sort
+// 泛型冒泡排序
 func BubbleSort[T constraints.Ordered](slice []T) {
     n := len(slice)
     for i := 0; i < n-1; i++ {
@@ -481,7 +481,7 @@ func BubbleSort[T constraints.Ordered](slice []T) {
     }
 }
 
-// With custom comparator
+// 使用自定义比较器
 func BubbleSortFunc[T any](slice []T, less func(a, b T) bool) {
     n := len(slice)
     for i := 0; i < n-1; i++ {
@@ -494,12 +494,12 @@ func BubbleSortFunc[T any](slice []T, less func(a, b T) bool) {
 }
 ```
 
-### Type Parameters with Methods
+### 带方法的类型参数
 
-Methods can also use type parameters, but they must be declared on the struct itself, not added later:
+方法也可以使用类型参数，但必须在结构体本身上声明，不能后期添加：
 
 ```go
-// This works - type parameter on the struct
+// 这是可行的——在结构体上使用类型参数
 type Pair[T any] struct {
     First, Second T
 }
@@ -508,18 +508,18 @@ func (p *Pair[T]) Swap() {
     p.First, p.Second = p.Second, p.First
 }
 
-// This doesn't work - can't add methods with type parameters
+// 这不可行——无法添加带类型参数的方法
 // func (p Pair) SwapAny[T any](pair Pair[T]) {
 //     p.First, p.Second = pair.Second, pair.First
 // }
 ```
 
-### Designing Generic Interfaces
+### 设计泛型接口
 
-Generic interfaces allow for specifying contracts that work with different types:
+泛型接口允许指定适用于不同类型的工作契约：
 
 ```go
-// Generic Collection interface
+// 泛型集合接口
 type Collection[T any] interface {
     Add(item T)
     Remove(item T) bool
@@ -530,7 +530,7 @@ type Collection[T any] interface {
     ForEach(func(T))
 }
 
-// Implementing the interface
+// 实现接口
 type ArrayList[T any] struct {
     items []T
     equals func(a, b T) bool
@@ -585,15 +585,15 @@ func (a *ArrayList[T]) ForEach(f func(T)) {
 }
 ```
 
-### Generic Function Types
+### 泛型函数类型
 
-Functions can also be parameterized:
+函数也可以被参数化：
 
 ```go
-// Generic function type
+// 泛型函数类型
 type Transformer[T, U any] func(T) U
 
-// Map function that applies a transformation to each element
+// 应用转换到每个元素的 Map 函数
 func Map[T, U any](slice []T, transformer Transformer[T, U]) []U {
     result := make([]U, len(slice))
     for i, v := range slice {
@@ -602,35 +602,35 @@ func Map[T, U any](slice []T, transformer Transformer[T, U]) []U {
     return result
 }
 
-// Usage
+// 使用示例
 numbers := []int{1, 2, 3, 4}
 squares := Map(numbers, func(x int) int { return x * x })
-// squares is [1, 4, 9, 16]
+// squares 是 [1, 4, 9, 16]
 ```
 
-### Best Practices for Generics
+### 泛型的最佳实践
 
-1. **Use generics to reduce duplication**: Apply when you have similar functions for different types
-2. **Choose appropriate constraints**: Use the most restrictive constraint that works for your needs
-3. **Don't overuse generics**: Only use them when the benefits outweigh the added complexity
-4. **Consider performance implications**: Generic code can sometimes be slower than type-specific code
-5. **Provide concrete type helper functions**: Offer convenience functions for common concrete types
+1. **使用泛型减少重复**：当您为不同类型编写相似函数时应用泛型
+2. **选择适当的约束**：使用最严格但能满足需求的约束
+3. **不要过度使用泛型**：只有当优势超过复杂性时才使用
+4. **考虑性能影响**：泛型代码有时可能比特定类型代码慢
+5. **提供具体类型的辅助函数**：为常见具体类型提供便捷函数
 
 ```go
-// Helper function for string comparison
+// 字符串比较的辅助函数
 func NewStringArrayList() *ArrayList[string] {
     return NewArrayList[string](func(a, b string) bool { return a == b })
 }
 
-// Helper function for int comparison
+// 整数比较的辅助函数
 func NewIntArrayList() *ArrayList[int] {
     return NewArrayList[int](func(a, b int) bool { return a == b })
 }
 ```
 
-## Further Reading
+## 进一步阅读
 
-- [Go Generics Tutorial](https://go.dev/doc/tutorial/generics)
-- [Using Generics in Go](https://pkg.go.dev/golang.org/x/exp@v0.0.0-20220613132600-b0d781184e0d/rand)
-- [When To Use Generics](https://go.dev/blog/when-generics)
-- [Type Parameters Proposal](https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md) 
+- [Go 泛型教程](https://go.dev/doc/tutorial/generics)
+- [在 Go 中使用泛型](https://pkg.go.dev/golang.org/x/exp@v0.0.0-20220613132600-b0d781184e0d/rand)
+- [何时使用泛型](https://go.dev/blog/when-generics)
+- [类型参数提案](https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md)

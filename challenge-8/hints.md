@@ -1,7 +1,7 @@
-# Hints for Chat Server with Channels
+# 聊天服务器使用 Channels 的提示
 
-## Hint 1: ChatServer Structure
-Design your ChatServer with channels for coordination and a map to track clients:
+## 提示 1：ChatServer 结构
+设计你的 ChatServer 时，使用 channels 进行协调，并用 map 来跟踪客户端：
 ```go
 type ChatServer struct {
     clients     map[string]*Client
@@ -12,8 +12,8 @@ type ChatServer struct {
 }
 ```
 
-## Hint 2: Client Structure
-Each client needs channels for communication and identifying information:
+## 提示 2：Client 结构
+每个客户端都需要用于通信的 channels 和标识信息：
 ```go
 type Client struct {
     Username string
@@ -22,8 +22,8 @@ type Client struct {
 }
 ```
 
-## Hint 3: Message Types
-Define message structures for different operations:
+## 提示 3：消息类型
+定义不同操作的消息结构：
 ```go
 type BroadcastMessage struct {
     Sender  *Client
@@ -31,42 +31,42 @@ type BroadcastMessage struct {
 }
 ```
 
-## Hint 4: Server Event Loop
-The server should run a goroutine that handles all operations through channels:
+## 提示 4：服务器事件循环
+服务器应运行一个 goroutine，通过 channels 处理所有操作：
 ```go
 func (s *ChatServer) run() {
     for {
         select {
         case client := <-s.connect:
-            // Handle new connection
+            // 处理新连接
         case client := <-s.disconnect:
-            // Handle disconnection
+            // 处理断开连接
         case msg := <-s.broadcast:
-            // Handle broadcast message
+            // 处理广播消息
         }
     }
 }
 ```
 
-## Hint 5: Thread-Safe Client Management
-Use a mutex when accessing the clients map:
+## 提示 5：线程安全的客户端管理
+访问 clients map 时使用 mutex：
 ```go
 s.mutex.Lock()
 s.clients[client.Username] = client
 s.mutex.Unlock()
 ```
 
-## Hint 6: Connect Method Implementation
-Create a new client and send it through the connect channel:
+## 提示 6：Connect 方法实现
+创建新客户端并通过 connect channel 发送：
 ```go
 func (s *ChatServer) Connect(username string) (*Client, error) {
-    if /* username already exists */ {
-        return nil, errors.New("username already taken")
+    if /* 用户名已存在 */ {
+        return nil, errors.New("用户名已被占用")
     }
     
     client := &Client{
         Username: username,
-        Messages: make(chan string, 100), // buffered channel
+        Messages: make(chan string, 100), // 缓冲 channel
         server:   s,
     }
     
@@ -75,8 +75,8 @@ func (s *ChatServer) Connect(username string) (*Client, error) {
 }
 ```
 
-## Hint 7: Broadcast Implementation
-Send the message through the broadcast channel:
+## 提示 7：广播实现
+通过 broadcast channel 发送消息：
 ```go
 func (s *ChatServer) Broadcast(sender *Client, message string) {
     s.broadcast <- BroadcastMessage{
@@ -86,8 +86,8 @@ func (s *ChatServer) Broadcast(sender *Client, message string) {
 }
 ```
 
-## Hint 8: Private Message Implementation
-Find the recipient and send the message directly to their channel:
+## 提示 8：私信实现
+查找接收者并直接将消息发送到其 channel：
 ```go
 func (s *ChatServer) PrivateMessage(sender *Client, recipient string, message string) error {
     s.mutex.RLock()
@@ -95,25 +95,25 @@ func (s *ChatServer) PrivateMessage(sender *Client, recipient string, message st
     s.mutex.RUnlock()
     
     if !exists {
-        return errors.New("recipient not found")
+        return errors.New("未找到接收者")
     }
     
     select {
     case client.Messages <- message:
         return nil
     default:
-        return errors.New("recipient's message queue is full")
+        return errors.New("接收者的消息队列已满")
     }
 }
 ```
 
-## Hint 9: Client Send and Receive Methods
+## 提示 9：客户端发送与接收方法
 ```go
 func (c *Client) Send(message string) {
     select {
     case c.Messages <- message:
     default:
-        // Channel is full, handle gracefully
+        // Channel 已满，优雅处理
     }
 }
 
@@ -122,9 +122,9 @@ func (c *Client) Receive() string {
 }
 ```
 
-## Hint 10: Graceful Shutdown
-When disconnecting, clean up resources and close the client's message channel:
+## 提示 10：优雅关闭
+断开连接时，清理资源并关闭客户端的消息 channel：
 ```go
 close(client.Messages)
 delete(s.clients, client.Username)
-``` 
+```

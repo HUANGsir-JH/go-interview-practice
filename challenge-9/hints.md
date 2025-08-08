@@ -1,7 +1,7 @@
-# Hints for RESTful Book Management API
+# RESTful图书管理API使用提示
 
-## Hint 1: HTTP Handler Structure
-Use `http.HandlerFunc` for each endpoint and route them with a multiplexer:
+## 提示1：HTTP处理器结构
+为每个端点使用 `http.HandlerFunc`，并通过多路复用器进行路由：
 ```go
 func (h *BookHandler) SetupRoutes() *http.ServeMux {
     mux := http.NewServeMux()
@@ -12,8 +12,8 @@ func (h *BookHandler) SetupRoutes() *http.ServeMux {
 }
 ```
 
-## Hint 2: Method-based Routing
-Handle different HTTP methods in your handler:
+## 提示2：基于方法的路由
+在处理器中处理不同的HTTP方法：
 ```go
 func (h *BookHandler) handleBooks(w http.ResponseWriter, r *http.Request) {
     switch r.Method {
@@ -22,13 +22,13 @@ func (h *BookHandler) handleBooks(w http.ResponseWriter, r *http.Request) {
     case http.MethodPost:
         h.createBook(w, r)
     default:
-        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        http.Error(w, "方法不允许", http.StatusMethodNotAllowed)
     }
 }
 ```
 
-## Hint 3: JSON Response Helper
-Create a helper function for JSON responses:
+## 提示3：JSON响应辅助函数
+创建用于JSON响应的辅助函数：
 ```go
 func writeJSONResponse(w http.ResponseWriter, data interface{}, status int) {
     w.Header().Set("Content-Type", "application/json")
@@ -37,21 +37,21 @@ func writeJSONResponse(w http.ResponseWriter, data interface{}, status int) {
 }
 ```
 
-## Hint 4: Request Body Parsing
-Parse JSON request bodies:
+## 提示4：请求体解析
+解析JSON请求体：
 ```go
 func (h *BookHandler) createBook(w http.ResponseWriter, r *http.Request) {
     var book Book
     if err := json.NewDecoder(r.Body).Decode(&book); err != nil {
-        http.Error(w, "Invalid JSON", http.StatusBadRequest)
+        http.Error(w, "无效的JSON", http.StatusBadRequest)
         return
     }
-    // Validate and create book
+    // 验证并创建图书
 }
 ```
 
-## Hint 5: In-Memory Repository
-Implement the repository with a map:
+## 提示5：内存仓库实现
+使用map实现仓库：
 ```go
 type InMemoryBookRepository struct {
     books map[string]*Book
@@ -64,14 +64,14 @@ func (r *InMemoryBookRepository) GetByID(id string) (*Book, error) {
     
     book, exists := r.books[id]
     if !exists {
-        return nil, errors.New("book not found")
+        return nil, errors.New("未找到图书")
     }
     return book, nil
 }
 ```
 
-## Hint 6: URL Parameter Extraction
-Extract ID from URL path:
+## 提示6：URL参数提取
+从URL路径中提取ID：
 ```go
 func extractIDFromPath(path string) string {
     parts := strings.Split(path, "/")
@@ -82,8 +82,8 @@ func extractIDFromPath(path string) string {
 }
 ```
 
-## Hint 7: Query Parameter Handling
-Handle search parameters:
+## 提示7：查询参数处理
+处理搜索参数：
 ```go
 func (h *BookHandler) handleSearch(w http.ResponseWriter, r *http.Request) {
     author := r.URL.Query().Get("author")
@@ -91,33 +91,33 @@ func (h *BookHandler) handleSearch(w http.ResponseWriter, r *http.Request) {
     
     if author != "" {
         books, err := h.Service.SearchBooksByAuthor(author)
-        // handle result
+        // 处理结果
     } else if title != "" {
         books, err := h.Service.SearchBooksByTitle(title)
-        // handle result
+        // 处理结果
     }
 }
 ```
 
-## Hint 8: Input Validation
-Validate required fields:
+## 提示8：输入验证
+验证必填字段：
 ```go
 func validateBook(book *Book) error {
     if book.Title == "" {
-        return errors.New("title is required")
+        return errors.New("标题是必需的")
     }
     if book.Author == "" {
-        return errors.New("author is required")
+        return errors.New("作者是必需的")
     }
     if book.PublishedYear <= 0 {
-        return errors.New("published year must be positive")
+        return errors.New("出版年份必须为正数")
     }
     return nil
 }
 ```
 
-## Hint 9: Search Implementation
-Implement case-insensitive search:
+## 提示9：搜索实现
+实现不区分大小写的搜索：
 ```go
 func (r *InMemoryBookRepository) SearchByAuthor(author string) ([]*Book, error) {
     r.mutex.RLock()
@@ -135,8 +135,8 @@ func (r *InMemoryBookRepository) SearchByAuthor(author string) ([]*Book, error) 
 }
 ```
 
-## Hint 10: Error Response Structure
-Create consistent error responses:
+## 提示10：错误响应结构
+创建一致的错误响应格式：
 ```go
 type ErrorResponse struct {
     Error   string `json:"error"`
@@ -149,4 +149,5 @@ func writeErrorResponse(w http.ResponseWriter, message string, status int) {
         Message: message,
     }
     writeJSONResponse(w, response, status)
-} 
+}
+```

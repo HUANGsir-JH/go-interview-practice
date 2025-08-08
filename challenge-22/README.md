@@ -1,113 +1,113 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 22: Greedy Coin Change
+# 挑战 22：贪心硬币找零
 
-## Problem Statement
+## 问题描述
 
-Implement a coin change algorithm that finds the minimum number of coins needed to make a given amount of change. You'll be using a greedy approach, which works with a specific set of coin denominations.
+实现一个硬币找零算法，找出凑成给定金额所需的最少硬币数量。你将使用贪心方法，该方法在特定的硬币面额组合下有效。
 
-In this challenge, you'll work with the following coin denominations: `[1, 5, 10, 25, 50]` (representing penny, nickel, dime, quarter, and half-dollar coins).
+在此挑战中，你将使用以下硬币面额：`[1, 5, 10, 25, 50]`（分别代表一分、五分、十分、二十五分和五十美分硬币）。
 
-You'll implement two functions:
+你需要实现两个函数：
 
-1. `MinCoins` - Find the minimum number of coins needed to make change for a given amount.
-2. `CoinCombination` - Find the specific combination of coins that gives the minimum number.
+1. `MinCoins` - 找出凑成指定金额所需的最少硬币数量。
+2. `CoinCombination` - 找出能实现最少硬币数量的具体硬币组合。
 
-## Function Signatures
+## 函数签名
 
 ```go
 func MinCoins(amount int, denominations []int) int
 func CoinCombination(amount int, denominations []int) map[int]int
 ```
 
-## Input Format
+## 输入格式
 
-- `amount` - An integer representing the amount of change needed (in cents).
-- `denominations` - A slice of integers representing the available coin denominations, sorted in ascending order.
+- `amount` - 一个整数，表示需要找零的金额（以美分为单位）。
+- `denominations` - 一个整数切片，表示可用的硬币面额，按升序排列。
 
-## Output Format
+## 输出格式
 
-- `MinCoins` - Returns an integer representing the minimum number of coins needed.
-- `CoinCombination` - Returns a map where keys are coin denominations and values are the number of coins used for each denomination.
+- `MinCoins` - 返回一个整数，表示所需的最少硬币数量。
+- `CoinCombination` - 返回一个映射，键为硬币面额，值为每种面额使用的硬币数量。
 
-## Requirements
+## 要求
 
-1. The `MinCoins` function should return the minimum number of coins needed to make the given amount.
-2. The `CoinCombination` function should return a map with the specific combination of coins.
-3. If the amount cannot be made with the given denominations, `MinCoins` should return -1 and `CoinCombination` should return an empty map.
-4. Your solution should implement the greedy approach, which always chooses the largest coin possible.
+1. `MinCoins` 函数应返回凑成指定金额所需的最少硬币数量。
+2. `CoinCombination` 函数应返回包含具体硬币组合的映射。
+3. 如果无法用给定面额凑出金额，则 `MinCoins` 应返回 -1，`CoinCombination` 应返回空映射。
+4. 你的解决方案必须采用贪心策略，即始终选择可能的最大面额硬币。
 
-## Sample Input and Output
+## 示例输入与输出
 
-### Sample Input 1
+### 示例输入 1
 
 ```
 MinCoins(87, []int{1, 5, 10, 25, 50})
 ```
 
-### Sample Output 1
+### 示例输出 1
 
 ```
 5
 ```
 
-### Sample Input 2
+### 示例输入 2
 
 ```
 CoinCombination(87, []int{1, 5, 10, 25, 50})
 ```
 
-### Sample Output 2
+### 示例输出 2
 
 ```
 map[1:2 10:1 25:1 50:1]
 ```
-(This represents 1 half-dollar, 1 quarter, 1 dime, and 2 pennies)
+（表示 1 个五十美分硬币、1 个二十五美分硬币、1 个十分硬币和 2 个一分硬币）
 
-### Sample Input 3
+### 示例输入 3
 
 ```
 MinCoins(42, []int{1, 5, 10, 25, 50})
 ```
 
-### Sample Output 3
+### 示例输出 3
 
 ```
 5
 ```
 
-### Sample Input 4
+### 示例输入 4
 
 ```
 CoinCombination(42, []int{1, 5, 10, 25, 50})
 ```
 
-### Sample Output 4
+### 示例输出 4
 
 ```
 map[1:2 5:1 10:1 25:1]
 ```
-(This represents 1 quarter, 1 dime, 1 nickel, and 2 pennies)
+（表示 1 个二十五美分硬币、1 个十分硬币、1 个五美分硬币和 2 个一分硬币）
 
-## Instructions
+## 指导说明
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-22/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the required functions.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 仓库。
+- **Clone** 你的副本到本地机器。
+- 在 `challenge-22/submissions/` 目录下创建一个以你的 GitHub 用户名命名的文件夹。
+- 将 `solution-template.go` 文件复制到你的提交目录中。
+- **实现** 所需的函数。
+- **本地测试** 你的解决方案，运行测试文件。
+- **提交** 并 **推送** 代码到你的副本。
+- **创建** 一个拉取请求以提交你的解决方案。
 
-## Testing Your Solution Locally
+## 本地测试你的解决方案
 
-Run the following command in the `challenge-22/` directory:
+在 `challenge-22/` 目录下运行以下命令：
 
 ```bash
 go test -v
 ```
 
-## Note About the Greedy Approach
+## 关于贪心策略的说明
 
-The greedy approach for coin change works optimally for the standard U.S. coin denominations. However, it doesn't always produce the optimal result for all sets of denominations. For example, with denominations [1, 3, 4], the greedy approach would use 6 coins (4 + 1 + 1) to make 6, while the optimal solution is 2 coins (3 + 3). 
+对于标准的美国硬币面额，贪心策略在找零问题上是最优的。然而，它并不总是对所有面额组合都产生最优结果。例如，当面额为 [1, 3, 4] 时，贪心策略会使用 6 枚硬币（4 + 1 + 1）来凑出 6，而最优解只需 2 枚硬币（3 + 3）。

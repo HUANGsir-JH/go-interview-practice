@@ -1,8 +1,8 @@
-# Hints for GORM Generics API Challenge
+# GORM 泛型 API 挑战提示
 
-## Hint 1: Database Connection & Migration
+## 提示 1：数据库连接与迁移
 
-Set up your database connection and migrate all models. Use SQLite driver and auto-migrate all three models:
+设置数据库连接并迁移所有模型。使用 SQLite 驱动程序并自动迁移三个模型：
 
 ```go
 import "gorm.io/driver/sqlite"
@@ -18,9 +18,9 @@ func ConnectDB() (*gorm.DB, error) {
 }
 ```
 
-## Hint 2: Basic Generics CRUD Operations
+## 提示 2：基本泛型 CRUD 操作
 
-Use `gorm.G[T]` for type-safe operations. All generics operations require a context:
+使用 `gorm.G[T]` 实现类型安全操作。所有泛型操作都需要上下文：
 
 ```go
 func CreateUser(ctx context.Context, db *gorm.DB, user *User) error {
@@ -40,9 +40,9 @@ func DeleteUser(ctx context.Context, db *gorm.DB, userID uint) error {
 }
 ```
 
-## Hint 3: Batch Operations and Range Queries
+## 提示 3：批量操作与范围查询
 
-Use `CreateInBatches` for efficient batch operations and range conditions for queries:
+使用 `CreateInBatches` 实现高效批量操作，使用范围条件进行查询：
 
 ```go
 func CreateUsersInBatches(ctx context.Context, db *gorm.DB, users []User, batchSize int) error {
@@ -54,9 +54,9 @@ func FindUsersByAgeRange(ctx context.Context, db *gorm.DB, minAge, maxAge int) (
 }
 ```
 
-## Hint 4: OnConflict Handling and Result Metadata
+## 提示 4：冲突处理与结果元数据
 
-Use `clause.OnConflict` for upsert operations and `gorm.WithResult()` to capture metadata:
+使用 `clause.OnConflict` 处理 upsert 操作，并使用 `gorm.WithResult()` 捕获元数据：
 
 ```go
 func UpsertUser(ctx context.Context, db *gorm.DB, user *User) error {
@@ -76,9 +76,9 @@ func CreateUserWithResult(ctx context.Context, db *gorm.DB, user *User) (int64, 
 }
 ```
 
-## Hint 5: Enhanced Joins with Custom Conditions
+## 提示 5：增强的关联查询与自定义条件
 
-Use the new join syntax with custom filter functions:
+使用新的关联语法配合自定义过滤函数：
 
 ```go
 func GetUsersWithCompany(ctx context.Context, db *gorm.DB) ([]User, error) {
@@ -94,9 +94,9 @@ func SearchUsersInCompany(ctx context.Context, db *gorm.DB, companyName string) 
 }
 ```
 
-## Hint 6: Enhanced Preloading with Limits
+## 提示 6：带限制的增强预加载
 
-Use the new preload syntax with `LimitPerRecord` and custom conditions:
+使用新的预加载语法配合 `LimitPerRecord` 和自定义条件：
 
 ```go
 func GetUsersWithPosts(ctx context.Context, db *gorm.DB, limit int) ([]User, error) {
@@ -117,9 +117,9 @@ func GetUserWithPostsAndCompany(ctx context.Context, db *gorm.DB, userID uint) (
 }
 ```
 
-## Hint 7: Complex Queries with Aggregations
+## 提示 7：带聚合的复杂查询
 
-Combine joins, grouping, and ordering for complex analytics queries:
+结合关联、分组和排序实现复杂的分析查询：
 
 ```go
 func GetTopActiveUsers(ctx context.Context, db *gorm.DB, limit int) ([]User, error) {
@@ -132,44 +132,44 @@ func GetTopActiveUsers(ctx context.Context, db *gorm.DB, limit int) ([]User, err
 }
 ```
 
-## Hint 8: Context Patterns and Error Handling
+## 提示 8：上下文模式与错误处理
 
-Always use context properly and handle generics-specific errors:
+始终正确使用上下文并处理泛型特有的错误：
 
 ```go
-// Create context with timeout for database operations
+// 为数据库操作创建带超时的上下文
 ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 defer cancel()
 
-// Handle context cancellation
+// 处理上下文取消
 user, err := gorm.G[User](db).Where("id = ?", id).First(ctx)
 if err != nil {
     if errors.Is(err, context.Canceled) {
-        return nil, errors.New("operation was cancelled")
+        return nil, errors.New("操作已被取消")
     }
     if errors.Is(err, gorm.ErrRecordNotFound) {
-        return nil, errors.New("user not found")
+        return nil, errors.New("用户未找到")
     }
     return nil, err
 }
 ```
 
-## Key Differences from Traditional API
+## 与传统 API 的主要区别
 
-**Traditional API:**
+**传统 API：**
 ```go
 var user User
 db.Where("name = ?", name).First(&user)
 ```
 
-**Generics API:**
+**泛型 API：**
 ```go
 user, err := gorm.G[User](db).Where("name = ?", name).First(ctx)
 ```
 
-**Benefits:**
-- Type safety at compile time
-- Better performance (reduced SQL pollution)
-- Cleaner error handling
-- Required context usage
-- Enhanced IDE support 
+**优势：**
+- 编译时类型安全
+- 更佳性能（减少 SQL 污染）
+- 更清晰的错误处理
+- 必须使用上下文
+- 更强的 IDE 支持

@@ -1,12 +1,12 @@
-# Hints for Challenge 26: Regular Expression Text Processor
+# 挑战 26 提示：正则表达式文本处理器
 
-## Hint 1: Email Extraction Pattern
-Build a regex pattern to match valid email addresses:
+## 提示 1：电子邮件提取模式
+构建一个正则表达式模式来匹配有效的电子邮件地址：
 ```go
 import "regexp"
 
 func ExtractEmails(text string) []string {
-    // Email pattern: local part @ domain part
+    // 电子邮件模式：本地部分 @ 域名部分
     emailPattern := `[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}`
     re := regexp.MustCompile(emailPattern)
     
@@ -14,61 +14,61 @@ func ExtractEmails(text string) []string {
     return matches
 }
 
-// More comprehensive email pattern
+// 更全面的电子邮件模式
 var emailRegex = regexp.MustCompile(`\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b`)
 ```
 
-## Hint 2: Phone Number Validation
-Validate exact phone number format with parentheses and dashes:
+## 提示 2：电话号码验证
+使用括号和连字符验证精确的电话号码格式：
 ```go
 func ValidatePhone(phone string) bool {
-    // Pattern: (XXX) XXX-XXXX where X is a digit
+    // 模式：(XXX) XXX-XXXX，其中 X 为数字
     phonePattern := `^\(\d{3}\) \d{3}-\d{4}$`
     re := regexp.MustCompile(phonePattern)
     
     return re.MatchString(phone)
 }
 
-// Alternative with named groups for clarity
-var phoneRegex = regexp.MustCompile(`^\((?P&lt;area&gt;\d{3})\) (?P&lt;exchange&gt;\d{3})-(?P&lt;number&gt;\d{4})$`)
+// 使用命名组以提高清晰度的替代方案
+var phoneRegex = regexp.MustCompile(`^\((?P<area>\d{3})\) (?P<exchange>\d{3})-(?P<number>\d{4})$`)
 
 func ValidatePhoneDetailed(phone string) bool {
     return phoneRegex.MatchString(phone)
 }
 ```
 
-## Hint 3: Credit Card Masking
-Two approaches to mask credit card numbers while preserving last 4 digits:
+## 提示 3：信用卡号屏蔽
+两种方法在保留最后四位数字的同时屏蔽信用卡号：
 
-**Approach 1: Extract digits, mask, then restore format**
-- Use `\D` regex to remove non-digits, mask middle digits, preserve original formatting
+**方法 1：提取数字，屏蔽中间部分，再恢复格式**
+- 使用 `\D` 正则表达式移除非数字字符，屏蔽中间数字，保留原始格式
 
-**Approach 2: Direct regex replacement with lookahead**
-- Pattern `\d(?=.*\d{3})` matches digits that have at least 3 digits after them
-- Replaces matched digits with "X", automatically preserving last 4
+**方法 2：直接使用前瞻进行正则替换**
+- 模式 `\d(?=.*\d{3})` 匹配后面至少还有三位数字的数字
+- 将匹配到的数字替换为 "X"，自动保留最后四位
 
 ```go
-// Simple regex approach
+// 简单的正则表达式方法
 pattern := `\d(?=.*\d{3})`
 re := regexp.MustCompile(pattern)
 return re.ReplaceAllString(cardNumber, "X")
 ```
 ```
 
-## Hint 4: Log Entry Parsing
-Parse structured log entries using capture groups:
+## 提示 4：日志条目解析
+使用捕获组解析结构化日志条目：
 
-**Key concepts:**
-- Use `^` and `$` anchors to match entire line
-- `(?P&lt;name&gt;pattern)` creates named capture groups
-- `\d{4}` matches exactly 4 digits, `\w+` matches word characters
-- Use `re.SubexpNames()` to map group names to values
+**关键概念：**
+- 使用 `^` 和 `$` 锚点匹配整行
+- `(?P<name>pattern)` 创建命名捕获组
+- `\d{4}` 匹配恰好四位数字，`\w+` 匹配单词字符
+- 使用 `re.SubexpNames()` 将组名映射到值
 
 ```go
-// Pattern: YYYY-MM-DD HH:MM:SS LEVEL Message
-pattern := `^(?P&lt;date&gt;\d{4}-\d{2}-\d{2}) (?P&lt;time&gt;\d{2}:\d{2}:\d{2}) (?P&lt;level&gt;\w+) (?P&lt;message&gt;.+)$`
+// 模式：YYYY-MM-DD HH:MM:SS LEVEL Message
+pattern := `^(?P<date>\d{4}-\d{2}-\d{2}) (?P<time>\d{2}:\d{2}:\d{2}) (?P<level>\w+) (?P<message>.+)$`
 
-// Extract using named groups
+// 使用命名组提取
 names := re.SubexpNames()
 for i, name := range names {
     if name != "" && i < len(matches) {
@@ -78,11 +78,11 @@ for i, name := range names {
 ```
 ```
 
-## Hint 5: URL Extraction
-Extract URLs with various protocols and query parameters:
+## 提示 5：URL 提取
+提取支持多种协议和查询参数的 URL：
 ```go
 func ExtractURLs(text string) []string {
-    // URL pattern supporting http/https with optional query parameters
+    // 支持 http/https 及可选查询参数的 URL 模式
     urlPattern := `https?://[a-zA-Z0-9._/-]+(?:\?[a-zA-Z0-9=&%._-]*)?`
     re := regexp.MustCompile(urlPattern)
     
@@ -90,7 +90,7 @@ func ExtractURLs(text string) []string {
     return matches
 }
 
-// More comprehensive URL pattern
+// 更全面的 URL 模式
 var urlRegex = regexp.MustCompile(`https?://(?:[-\w.])+(?:[:\d]+)?(?:/(?:[\w/_.])*)?(?:\?(?:[\w&=%._-])*)?(?:#(?:\w)*)?`)
 
 func ExtractURLsComprehensive(text string) []string {
@@ -98,14 +98,14 @@ func ExtractURLsComprehensive(text string) []string {
 }
 ```
 
-## Hint 6: Performance Optimization with Pre-compiled Regexes
-Compile patterns once for better performance:
+## 提示 6：通过预编译正则表达式优化性能
+一次性编译模式以获得更好的性能：
 ```go
 var (
     emailRegex      = regexp.MustCompile(`\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b`)
     phoneRegex      = regexp.MustCompile(`^\(\d{3}\) \d{3}-\d{4}$`)
     creditCardRegex = regexp.MustCompile(`\d(?=.*\d{3})`)
-    logRegex        = regexp.MustCompile(`^(?P&lt;date&gt;\d{4}-\d{2}-\d{2}) (?P&lt;time&gt;\d{2}:\d{2}:\d{2}) (?P&lt;level&gt;\w+) (?P&lt;message&gt;.+)$`)
+    logRegex        = regexp.MustCompile(`^(?P<date>\d{4}-\d{2}-\d{2}) (?P<time>\d{2}:\d{2}:\d{2}) (?P<level>\w+) (?P<message>.+)$`)
     urlRegex        = regexp.MustCompile(`https?://[a-zA-Z0-9._/-]+(?:\?[a-zA-Z0-9=&%._-]*)?`)
 )
 
@@ -118,8 +118,8 @@ func ValidatePhoneOptimized(phone string) bool {
 }
 ```
 
-## Hint 7: Edge Cases and Error Handling
-Handle various edge cases and invalid inputs:
+## 提示 7：边缘情况与错误处理
+处理各种边缘情况和无效输入：
 ```go
 func ExtractEmailsSafe(text string) []string {
     if text == "" {
@@ -161,20 +161,20 @@ func MaskCreditCardSafe(cardNumber string) string {
         return ""
     }
     
-    // Check if it's a valid card number format
+    // 检查是否为有效的卡号格式
     digitsOnly := regexp.MustCompile(`\D`).ReplaceAllString(cardNumber, "")
     if len(digitsOnly) < 4 || len(digitsOnly) > 19 {
-        return cardNumber // Return original if invalid
+        return cardNumber // 如果无效则返回原值
     }
     
     return creditCardRegex.ReplaceAllString(cardNumber, "X")
 }
 ```
 
-## Key Regex Concepts:
-- **Character Classes**: `[a-zA-Z0-9]` for alphanumeric characters
-- **Quantifiers**: `+` (one or more), `*` (zero or more), `{n}` (exactly n)
-- **Anchors**: `^` (start of string), `$` (end of string), `\b` (word boundary)
-- **Groups**: `()` for capturing groups, `(?P<name>...)` for named groups
-- **Lookahead**: `(?=...)` for positive lookahead assertions
-- **Escaping**: `\` to escape special characters like `.` or `?` 
+## 关键正则表达式概念：
+- **字符类**：`[a-zA-Z0-9]` 表示字母数字字符
+- **量词**：`+`（一个或多个），`*`（零个或多个），`{n}`（恰好 n 个）
+- **锚点**：`^`（字符串开头），`$`（字符串结尾），`\b`（单词边界）
+- **分组**：`()` 用于捕获组，`(?P<name>...)` 用于命名组
+- **前瞻**：`(?=...)` 用于正向前瞻断言
+- **转义**：`\` 用于转义特殊字符如 `.` 或 `?`

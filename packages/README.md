@@ -1,57 +1,57 @@
-# Package Challenges - Dynamic System Documentation
+# 包挑战 - 动态系统文档
 
-This directory contains package-specific coding challenges for popular Go libraries and frameworks. The system is designed to be completely dynamic, allowing easy addition of new packages without requiring code changes.
+此目录包含流行 Go 库和框架的特定包编码挑战。该系统设计为完全动态，允许轻松添加新包而无需更改代码。
 
-## Available Packages
+## 可用包
 
-### 🗄️ [GORM](./gorm/) - ORM Library
-**5 Challenges** | Beginner to Advanced | **6-8 hours**
-- Database operations, associations, migrations, advanced queries, and generics API
+### 🗄️ [GORM](./gorm/) - ORM 库
+**5 个挑战** | 初学者到高级 | **6-8 小时**
+- 数据库操作、关联、迁移、高级查询和泛型 API
 
-### 🌐 [Gin](./gin/) - Web Framework  
-**5 Challenges** | Beginner to Advanced | **6-8 hours**
-- HTTP routing, middleware, authentication, file handling, and testing
+### 🌐 [Gin](./gin/) - Web 框架  
+**5 个挑战** | 初学者到高级 | **6-8 小时**
+- HTTP 路由、中间件、认证、文件处理和测试
 
-### ⚡ [Cobra](./cobra/) - CLI Framework
-**4 Challenges** | Beginner to Advanced | **4-6 hours**
-- Command-line applications, flags, subcommands, data persistence, and advanced patterns
+### ⚡ [Cobra](./cobra/) - CLI 框架
+**4 个挑战** | 初学者到高级 | **4-6 小时**
+- 命令行应用程序、标志、子命令、数据持久化和高级模式
 
-*More packages coming soon...*
+*更多包即将上线...*
 
-## Directory Structure
+## 目录结构
 
 ```
 packages/
 ├── {package-name}/
-│   ├── package.json                    # Package metadata
+│   ├── package.json                    # 包元数据
 │   ├── challenge-N-{name}/
-│   │   ├── metadata.json              # Challenge metadata (optional)
-│   │   ├── README.md                  # Challenge description
-│   │   ├── solution-template.go       # Template code for users
-│   │   ├── solution-template_test.go  # Test file
-│   │   ├── hints.md                   # Hints and tips
-│   │   └── submissions/               # User submissions
+│   │   ├── metadata.json              # 挑战元数据（可选）
+│   │   ├── README.md                  # 挑战说明
+│   │   ├── solution-template.go       # 用户代码模板
+│   │   ├── solution-template_test.go  # 测试文件
+│   │   ├── hints.md                   # 提示与技巧
+│   │   └── submissions/               # 用户提交
 │   │       └── {username}/
-│   │           └── solution.go        # User's solution
+│   │           └── solution.go        # 用户的解决方案
 │   └── ...
 ```
 
-## Adding a New Package
+## 添加新包
 
-### 1. Create Package Directory
-Create a new directory with your package name:
+### 1. 创建包目录
+使用你的包名称创建新目录：
 ```bash
 mkdir packages/{package-name}
 ```
 
-### 2. Create package.json
-Define package metadata in `packages/{package-name}/package.json`:
+### 2. 创建 package.json
+在 `packages/{package-name}/package.json` 中定义包元数据：
 
 ```json
 {
   "name": "package-name",
-  "display_name": "Package Display Name",
-  "description": "Brief description of the package",
+  "display_name": "包显示名称",
+  "description": "包的简要描述",
   "version": "v1.0.0",
   "github_url": "https://github.com/owner/repo",
   "documentation_url": "https://package-docs.com",
@@ -64,148 +64,148 @@ Define package metadata in `packages/{package-name}/package.json`:
     "challenge-2-advanced-feature"
   ],
   "tags": ["tag1", "tag2", "tag3"],
-  "estimated_time": "4-6 hours",
+  "estimated_time": "4-6 小时",
   "real_world_usage": [
-    "Use case 1",
-    "Use case 2"
+    "使用场景 1",
+    "使用场景 2"
   ]
 }
 ```
 
-### 3. Create Challenges
-For each challenge in your learning path:
+### 3. 创建挑战
+针对学习路径中的每个挑战：
 
-#### Challenge Directory
+#### 挑战目录
 ```bash
 mkdir packages/{package-name}/challenge-N-{name}
 ```
 
-#### Required Files
+#### 必需文件
 
-**README.md** - Challenge description and instructions
-**solution-template.go** - Starting code template
-**solution-template_test.go** - Test cases
-**hints.md** - Helpful hints for learners
+**README.md** - 挑战说明和指导
+**solution-template.go** - 起始代码模板
+**solution-template_test.go** - 测试用例
+**hints.md** - 对学习者有帮助的提示
 
-#### Optional metadata.json
-For enhanced challenge information:
+#### 可选 metadata.json
+用于增强挑战信息：
 
 ```json
 {
-  "title": "Challenge Title",
-  "description": "Detailed description",
-  "short_description": "Brief description for cards",
-  "difficulty": "Beginner|Intermediate|Advanced",
-  "estimated_time": "30-45 min",
+  "title": "挑战标题",
+  "description": "详细描述",
+  "short_description": "卡片上的简要描述",
+  "difficulty": "初学者|中级|高级",
+  "estimated_time": "30-45 分钟",
   "learning_objectives": [
-    "Objective 1",
-    "Objective 2"
+    "目标 1",
+    "目标 2"
   ],
-  "prerequisites": ["prerequisite1"],
+  "prerequisites": ["前置条件1"],
   "tags": ["tag1", "tag2"],
-  "real_world_connection": "How this applies in real projects",
+  "real_world_connection": "如何在真实项目中应用",
   "requirements": [
-    "Requirement 1",
-    "Requirement 2"
+    "要求 1",
+    "要求 2"
   ],
   "bonus_points": [
-    "Bonus task 1"
+    "加分任务 1"
   ],
   "icon": "bi-icon-name",
   "order": 1
 }
 ```
 
-## How the Dynamic System Works
+## 动态系统工作原理
 
-### 1. Package Discovery
-- The system automatically scans the `packages/` directory
-- Each subdirectory is treated as a package
-- Package metadata is loaded from `package.json`
+### 1. 包发现
+- 系统自动扫描 `packages/` 目录
+- 每个子目录被视为一个包
+- 包元数据从 `package.json` 加载
 
-### 2. Challenge Loading
-- Challenges are discovered from the `learning_path` in `package.json`
-- Challenge directories are scanned for content
-- Metadata is loaded from `metadata.json` if available
-- Fallback metadata is generated from directory names and README files
+### 2. 挑战加载
+- 挑战从 `package.json` 的 `learning_path` 中发现
+- 扫描挑战目录以获取内容
+- 如果可用，则从 `metadata.json` 加载元数据
+- 若无元数据，则根据目录名和 README 文件生成回退元数据
 
-### 3. Template Functions
-The system provides dynamic template functions:
-- `isPackageActive` - Check if package has available challenges
-- `getPackageChallenges` - Get ordered list of challenges
-- `getChallengeInfo` - Get metadata for specific challenge
-- `getDifficultyBadgeClass` - Get CSS class for difficulty
-- `getCategoryIcon` - Get icon for package category
-- `isComingSoon` - Check if challenge is not yet available
+### 3. 模板函数
+系统提供动态模板函数：
+- `isPackageActive` - 检查包是否有可用挑战
+- `getPackageChallenges` - 获取有序的挑战列表
+- `getChallengeInfo` - 获取特定挑战的元数据
+- `getDifficultyBadgeClass` - 获取难度的 CSS 类
+- `getCategoryIcon` - 获取包类别的图标
+- `isComingSoon` - 检查挑战是否尚未可用
 
-### 4. Status Management
-Challenges automatically have status:
-- **available** - Challenge directory exists with content
-- **coming-soon** - Challenge listed in learning_path but directory doesn't exist
+### 4. 状态管理
+挑战自动具有状态：
+- **available** - 挑战目录存在且包含内容
+- **coming-soon** - 挑战列在 learning_path 中但目录不存在
 
-## Benefits of Dynamic System
+## 动态系统的优点
 
-1. **Zero Code Changes** - Add packages without modifying application code
-2. **Consistent UI** - All packages render with the same templates
-3. **Flexible Metadata** - Rich challenge information through JSON
-4. **Automatic Discovery** - New packages appear immediately
-5. **Fallback Support** - Works with minimal metadata, enhances with more
-6. **Easy Maintenance** - Package-specific logic contained in metadata
+1. **零代码变更** - 添加包无需修改应用程序代码
+2. **一致的 UI** - 所有包使用相同的模板渲染
+3. **灵活的元数据** - 通过 JSON 实现丰富的挑战信息
+4. **自动发现** - 新包立即出现
+5. **回退支持** - 即使元数据最少也能运行，越多越完善
+6. **易于维护** - 包特定逻辑包含在元数据中
 
-## Package Categories
+## 包类别
 
-- **web** - Web frameworks and HTTP libraries
-- **cli** - Command-line tools and frameworks  
-- **database** - Database drivers and ORMs
-- **other** - General purpose libraries
+- **web** - Web 框架和 HTTP 库
+- **cli** - 命令行工具和框架  
+- **database** - 数据库驱动和 ORM
+- **other** - 通用库
 
-## Icons
+## 图标
 
-Use Bootstrap Icons for challenges:
-- `bi-play-circle` - Basic/intro challenges
-- `bi-layers` - Middleware/architecture 
-- `bi-shield-check` - Validation/security
-- `bi-person-lock` - Authentication
-- `bi-cloud-upload` - File handling
-- `bi-database` - Database operations
-- `bi-terminal` - CLI operations
-- `bi-code-slash` - General coding
+为挑战使用 Bootstrap 图标：
+- `bi-play-circle` - 基础/入门挑战
+- `bi-layers` - 中间件/架构
+- `bi-shield-check` - 验证/安全
+- `bi-person-lock` - 认证
+- `bi-cloud-upload` - 文件处理
+- `bi-database` - 数据库操作
+- `bi-terminal` - CLI 操作
+- `bi-code-slash` - 一般编码
 
-## Best Practices
+## 最佳实践
 
-1. **Learning Path Order** - Arrange challenges from basic to advanced
-2. **Clear Descriptions** - Write helpful, specific challenge descriptions
-3. **Good Test Coverage** - Provide comprehensive test cases
-4. **Practical Examples** - Use real-world scenarios in challenges
-5. **Progressive Difficulty** - Each challenge should build on previous ones
-6. **Helpful Hints** - Provide hints without giving away solutions
+1. **学习路径顺序** - 按从基础到高级排列挑战
+2. **清晰的描述** - 编写有用且具体的挑战描述
+3. **良好的测试覆盖** - 提供全面的测试用例
+4. **实际示例** - 在挑战中使用真实场景
+5. **渐进的难度** - 每个挑战应建立在前一个基础上
+6. **有用的提示** - 提供提示但不泄露答案
 
-## Contributing
+## 贡献指南
 
-For detailed contribution guidelines for package challenges, see [CONTRIBUTING.md](../CONTRIBUTING.md#package-challenges-frameworklibrary-focused).
+有关包挑战的详细贡献指南，请参阅 [CONTRIBUTING.md](../CONTRIBUTING.md#package-challenges-frameworklibrary-focused)。
 
-### Quick Guidelines
+### 快速指南
 
-1. **Follow the Directory Structure** - Use the exact structure shown above
-2. **Include All Required Files** - README.md, solution-template.go, tests, and hints
-3. **Create Working Solutions** - Include a complete solution in submissions/RezaSi/
-4. **Test Thoroughly** - Ensure all tests pass and edge cases are covered
-5. **Write Clear Documentation** - Provide comprehensive learning materials
-6. **Use Appropriate Difficulty** - Match difficulty to target audience
-7. **Ensure Learning Objectives** - Each challenge should have clear educational goals
-8. **Follow Package Conventions** - Use consistent naming and structure
-9. **Include Dependencies** - Set up proper go.mod with all required packages
-10. **Create Executable Scripts** - Provide run_tests.sh for validation
+1. **遵循目录结构** - 使用上述所示的精确结构
+2. **包含所有必需文件** - README.md、solution-template.go、测试文件和提示
+3. **创建完整解决方案** - 在 submissions/RezaSi/ 中包含完整解决方案
+4. **彻底测试** - 确保所有测试通过并覆盖边界情况
+5. **编写清晰文档** - 提供全面的学习材料
+6. **使用适当的难度** - 根据目标受众匹配难度
+7. **确保学习目标** - 每个挑战应有明确的教育目标
+8. **遵循包约定** - 使用一致的命名和结构
+9. **包含依赖项** - 正确设置 go.mod 并包含所有所需包
+10. **创建可执行脚本** - 提供 run_tests.sh 用于验证
 
-### Template Files Included
+### 包含的模板文件
 
-The system provides template files for:
-- **metadata.json** - Challenge metadata structure
-- **go.mod** - Module configuration with dependencies  
-- **solution-template.go** - Code template with TODOs
-- **solution-template_test.go** - Comprehensive test suite
-- **learning.md** - Educational content (400+ lines recommended)
-- **hints.md** - Step-by-step guidance
-- **run_tests.sh** - Testing and validation script
+系统提供以下模板文件：
+- **metadata.json** - 挑战元数据结构
+- **go.mod** - 包含依赖项的模块配置
+- **solution-template.go** - 带有 TODO 的代码模板
+- **solution-template_test.go** - 全面的测试套件
+- **learning.md** - 教育内容（建议 400+ 行）
+- **hints.md** - 分步指导
+- **run_tests.sh** - 测试和验证脚本
 
-The system will automatically detect and display your new package challenges! 
+系统将自动检测并显示你的新包挑战！

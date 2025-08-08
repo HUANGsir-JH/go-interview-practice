@@ -186,7 +186,7 @@
     <div class="col">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Challenges</a></li>
+                <li class="breadcrumb-item"><a href="/">挑战</a></li>
                 <li class="breadcrumb-item"><a href="/packages/{{.Package.Name}}">{{.Package.DisplayName}}</a></li>
                 <li class="breadcrumb-item active">{{.Challenge.Title}}</li>
             </ol>
@@ -204,9 +204,9 @@
             <div class="card-body">
                 {{if .HasAttempted}}
                 <div class="alert alert-success mb-3">
-                    <i class="bi bi-check-circle-fill"></i> You've previously attempted this challenge.
+                    <i class="bi bi-check-circle-fill"></i> 您之前已尝试过此挑战。
                     {{if .ExistingSolution}}
-                    <br>Your existing solution has been loaded in the editor.
+                    <br>您的现有解决方案已在编辑器中加载。
                     {{end}}
                 </div>
                 {{end}}
@@ -222,21 +222,21 @@
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs" id="editorTabs" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="solution-tab" data-bs-toggle="tab" href="#solution" role="tab">Solution</a>
+                        <a class="nav-link active" id="solution-tab" data-bs-toggle="tab" href="#solution" role="tab">解决方案</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="tests-tab" data-bs-toggle="tab" href="#tests" role="tab">Tests</a>
+                        <a class="nav-link" id="tests-tab" data-bs-toggle="tab" href="#tests" role="tab">测试</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="results-tab" data-bs-toggle="tab" href="#results" role="tab">Results</a>
+                        <a class="nav-link" id="results-tab" data-bs-toggle="tab" href="#results" role="tab">结果</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="hints-tab" data-bs-toggle="tab" href="#hints" role="tab">
-                            <i class="bi bi-lightbulb me-1"></i>Hints
+                            <i class="bi bi-lightbulb me-1"></i>提示
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="learning-tab" data-bs-toggle="tab" href="#learning" role="tab">Learnings</a>
+                        <a class="nav-link" id="learning-tab" data-bs-toggle="tab" href="#learning" role="tab">学习</a>
                     </li>
                 </ul>
             </div>
@@ -244,27 +244,27 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="solution" role="tabpanel">
                                                     <div class="editor-wrapper position-relative">
-                            <!-- Editor Toolbar -->
+                            <!-- 编辑器工具栏 -->
                             <div class="editor-toolbar position-absolute top-0 end-0 p-2 d-flex align-items-center gap-2" style="z-index: 10; background: rgba(255,255,255,0.95); border-radius: 0 0 0 8px; border-left: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6;">
-                                <!-- Save Status -->
+                                <!-- 保存状态 -->
                                 <span id="save-indicator" class="badge bg-success d-none">
-                                    <i class="bi bi-check2"></i> Saved
+                                    <i class="bi bi-check2"></i> 已保存
                                 </span>
                                 <span id="saving-indicator" class="badge bg-warning d-none">
-                                    <i class="bi bi-arrow-repeat"></i> Saving...
+                                    <i class="bi bi-arrow-repeat"></i> 正在保存...
                                 </span>
 
-                                <!-- Fullscreen Button -->
+                                <!-- 全屏按钮 -->
                                 <button class="btn btn-outline-primary btn-sm" id="fullscreen-btn" 
                                         data-bs-toggle="tooltip" data-bs-placement="top" 
-                                        title="Enter fullscreen mode (ESC to exit)">
+                                        title="进入全屏模式 (ESC 退出)">
                                     <i class="bi bi-arrows-fullscreen"></i>
                                 </button>
 
-                                <!-- Reset Button -->
+                                <!-- 重置按钮 -->
                                 <button class="btn btn-outline-primary btn-sm" id="reset-editor-btn" 
                                         data-bs-toggle="tooltip" data-bs-placement="top" 
-                                        title="Reset code to original template">
+                                        title="将代码重置为原始模板">
                                     <span id="reset-icon">
                                         <i class="bi bi-arrow-counterclockwise"></i>
                                     </span>
@@ -274,11 +274,11 @@
                                 </button>
                             </div>
 
-                            <!-- Editor Status Bar -->
+                            <!-- 编辑器状态栏 -->
                             <div class="editor-status-bar position-absolute bottom-0 end-0 px-2 py-1" style="z-index: 10; background: rgba(248,249,250,0.95); border-radius: 4px 0 0 0; border-left: 1px solid #dee2e6; border-top: 1px solid #dee2e6;">
                                 <small class="text-muted" id="editor-position">
                                     <i class="bi bi-cursor-text me-1"></i>
-                                    Ln <span id="line-number">1</span>, Col <span id="col-number">1</span>
+                                    第 <span id="line-number">1</span> 行，第 <span id="col-number">1</span> 列
                                 </small>
                             </div>
 
@@ -290,63 +290,63 @@
                     </div>
                     <div class="tab-pane fade" id="results" role="tabpanel">
                         <div id="test-results" class="p-3">
-                            <div class="alert alert-info">Run your code to see test results.</div>
+                            <div class="alert alert-info">运行您的代码以查看测试结果。</div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="hints" role="tabpanel">
                         <div id="hints-content" class="p-3">
                             <div class="text-center mb-4">
                                 <i class="bi bi-lightbulb" style="font-size: 2.5rem; color: #ffc107;"></i>
-                                <h5 class="mb-2">Progressive Hints</h5>
-                                <p class="text-muted mb-3">Click "Show Next Hint" to reveal hints one by one</p>
+                                <h5 class="mb-2">逐步提示</h5>
+                                <p class="text-muted mb-3">点击“显示下一个提示”逐个揭示提示</p>
                             </div>
                             
                             <div id="hints-container">
-                                <!-- Hints will be dynamically loaded here -->
+                                <!-- 提示将动态加载于此 -->
                             </div>
                             
                             <div class="text-center mt-4">
                                 <button class="btn btn-outline-warning" id="show-hint-btn">
-                                    <i class="bi bi-lightbulb me-2"></i>Show Next Hint
+                                    <i class="bi bi-lightbulb me-2"></i>显示下一个提示
                                 </button>
                                 <button class="btn btn-outline-secondary ms-2 d-none" id="reset-hints-btn">
-                                    <i class="bi bi-arrow-counterclockwise me-2"></i>Reset Hints
+                                    <i class="bi bi-arrow-counterclockwise me-2"></i>重置提示
                                 </button>
                             </div>
                             
                             <div class="mt-3 text-center">
                                 <small class="text-muted">
-                                    <span id="hints-progress">0</span> of <span id="total-hints">0</span> hints revealed
+                                    <span id="hints-progress">0</span> / <span id="total-hints">0</span> 个提示已揭示
                                 </small>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="learning" role="tabpanel">
                         <div id="learning-materials" class="p-3 markdown-content">
-                            <!-- Learning materials will be loaded here -->
+                            <!-- 学习材料将在此处加载 -->
                         </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mt-3">
                     <button class="btn btn-primary" id="run-button">
                         <span class="spinner-border spinner-border-sm d-none" id="run-spinner" role="status" aria-hidden="true"></span>
-                        <span id="run-text">Run Tests</span>
+                        <span id="run-text">运行测试</span>
                     </button>
                     <button class="btn btn-success" id="submit-button">
                         <span class="spinner-border spinner-border-sm d-none" id="submit-spinner" role="status" aria-hidden="true"></span>
-                        <span id="submit-text">Submit Solution</span>
+                        <span id="submit-text">提交解决方案</span>
                     </button>
                 </div>
                 
-                <!-- Status message toast -->
+                <!-- 状态消息提示框 -->
                 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
                     <div id="statusToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
-                            <strong class="me-auto" id="toast-title">Notification</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            <strong class="me-auto" id="toast-title">通知</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="关闭"></button>
                         </div>
                         <div class="toast-body" id="toast-message">
-                            Message content
+                            消息内容
                         </div>
                     </div>
                 </div>
@@ -355,17 +355,17 @@
     </div>
 </div>
 
-<!-- Premium Sponsors Section -->
+<!-- 付费赞助商部分 -->
 <div class="row mb-4">
     <div class="col">
         <div class="text-center py-3">
             <div class="sponsors-container" id="package-challenge-premium-sponsors">
-                <!-- Premium sponsor logos will appear here -->
+                <!-- 付费赞助商图标将出现在此处 -->
                 <div class="text-muted">
                     <i class="bi bi-building me-2"></i>
                     <span class="small">
                         <a href="https://github.com/sponsors/RezaSi" target="_blank" class="text-decoration-none text-muted">
-                            Sponsored by our premium partners
+                            由我们的高级合作伙伴赞助
                         </a>
                     </span>
                 </div>
@@ -374,53 +374,53 @@
     </div>
 </div>
 
-<!-- Reset Confirmation Modal -->
+<!-- 重置确认模态框 -->
 <div class="modal fade reset-modal" id="resetModal" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="resetModalLabel">
-                    <i class="bi bi-exclamation-triangle me-2"></i>Reset Code to Original Template
+                    <i class="bi bi-exclamation-triangle me-2"></i>将代码重置为原始模板
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <p class="mb-2"><strong>Are you sure you want to reset your code?</strong></p>
-                    <p class="text-muted small mb-3">This action will permanently delete all your changes and restore the original template.</p>
+                    <p class="mb-2"><strong>您确定要重置代码吗？</strong></p>
+                    <p class="text-muted small mb-3">此操作将永久删除所有更改并恢复原始模板。</p>
                 </div>
                 
                 <div class="mb-3">
                     <h6 class="text-danger mb-2">
-                        <i class="bi bi-trash me-1"></i>What will be lost:
+                        <i class="bi bi-trash me-1"></i>将丢失的内容：
                     </h6>
                     <ul class="list-unstyled small text-muted mb-0">
-                        <li><i class="bi bi-x-circle text-danger me-1"></i>All your current code changes</li>
-                        <li><i class="bi bi-x-circle text-danger me-1"></i>Auto-saved progress in browser</li>
-                        <li><i class="bi bi-x-circle text-danger me-1"></i>Any work since your last submission</li>
+                        <li><i class="bi bi-x-circle text-danger me-1"></i>您当前的所有代码更改</li>
+                        <li><i class="bi bi-x-circle text-danger me-1"></i>浏览器中的自动保存进度</li>
+                        <li><i class="bi bi-x-circle text-danger me-1"></i>自上次提交以来的所有工作</li>
                     </ul>
                 </div>
 
                 <div class="mb-3">
                     <h6 class="text-success mb-2">
-                        <i class="bi bi-arrow-clockwise me-1"></i>What will be restored:
+                        <i class="bi bi-arrow-clockwise me-1"></i>将恢复的内容：
                     </h6>
                     <div class="code-preview p-2">
-                        <div class="small text-muted mb-1">Original template preview:</div>
+                        <div class="small text-muted mb-1">原始模板预览：</div>
                         <pre id="template-preview" class="mb-0"></pre>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i>Cancel
+                    <i class="bi bi-x-lg me-1"></i>取消
                 </button>
                 <button type="button" class="btn btn-danger btn-reset-confirm" id="confirmResetBtn">
                     <span id="confirm-reset-text">
-                        <i class="bi bi-arrow-counterclockwise me-1"></i>Reset Code
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>重置代码
                     </span>
                     <span id="confirm-reset-spinner" class="d-none">
-                        <i class="bi bi-arrow-repeat spin me-1"></i>Resetting...
+                        <i class="bi bi-arrow-repeat spin me-1"></i>正在重置...
                     </span>
                 </button>
             </div>
@@ -432,32 +432,32 @@
 
 {{define "scripts"}}
 <script>
-    // Helper function to decode HTML entities
+    // 辅助函数用于解码HTML实体
     function decodeHtmlEntities(text) {
         const textarea = document.createElement('textarea');
         textarea.innerHTML = text;
         return textarea.value;
     }
 
-    // Global challenge data variable
+    // 全局挑战数据变量
     let challengeData = {};
 
-    // User data and existing solution
+    // 用户数据和现有解决方案
     const hasAttempted = document.getElementById('has-attempted').textContent === 'true';
     const existingSolution = decodeHtmlEntities(document.getElementById('existing-solution').textContent) || null;
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Store username in localStorage if provided by server
+        // 如果服务器提供用户名，则存储到 localStorage
         const serverUsername = '{{.Username}}';
         if (serverUsername && serverUsername !== '') {
             localStorage.setItem('githubUsername', serverUsername);
         }
         
-        // Initialize challenge data from server (loaded from hidden elements)
+        // 从服务器初始化挑战数据（从隐藏元素加载）
         challengeData = {
             packageName: "{{.Package.Name}}",
-            challengeId: "{{.Challenge.ID}}", // Keep as string for API calls
-            challengeIdForHighlighting: "{{.Package.Name}}_{{.Challenge.ID}}", // Use unique string for highlighting storage
+            challengeId: "{{.Challenge.ID}}", // 保持为字符串用于API调用
+            challengeIdForHighlighting: "{{.Package.Name}}_{{.Challenge.ID}}", // 用于高亮存储的唯一字符串
             title: "{{.Challenge.Title}}",
             description: `{{.Challenge.Description}}`,
             template: decodeHtmlEntities(document.getElementById('template-content').textContent),
@@ -465,26 +465,26 @@
             learningMaterials: decodeHtmlEntities(document.getElementById('learning-content').textContent),
             hints: decodeHtmlEntities(document.getElementById('hints-content').textContent)
         };
-        // Initialize Markdown for description (description is already rendered server-side)
-        // Just highlight any code blocks in the rendered content
+        // 初始化 Markdown 渲染描述（描述已在服务端渲染）
+        // 只需高亮渲染内容中的代码块
         hljs.highlightAll();
 
-        // Initialize Markdown for learning materials
+        // 初始化学习材料的 Markdown 渲染
         const learningElement = document.getElementById('learning-materials');
         renderMarkdown(challengeData.learningMaterials, learningElement);
 
-        // Initialize learning materials highlighting
+        // 初始化学习材料高亮
         initLearningMaterials('learning-materials', challengeData.challengeIdForHighlighting);
 
-        // Initialize hints system
+        // 初始化提示系统
         initializeHints(challengeData.hints);
 
-        // Initialize code editor for solution
+        // 初始化解决方案代码编辑器
         const editor = ace.edit("editor");
         editor.setTheme("ace/theme/chrome");
         editor.session.setMode("ace/mode/golang");
         
-        // Load content from template or existing solution
+        // 从模板或现有解决方案加载内容
         if (existingSolution) {
             editor.setValue(existingSolution);
         } else {
@@ -493,7 +493,7 @@
         
         editor.clearSelection();
 
-        // Initialize code editor for tests
+        // 初始化测试代码编辑器
         const testEditor = ace.edit("test-editor");
         testEditor.setTheme("ace/theme/chrome");
         testEditor.session.setMode("ace/mode/golang");
@@ -501,7 +501,7 @@
         testEditor.setReadOnly(true);
         testEditor.clearSelection();
 
-        // Button event listeners
+        // 按钮事件监听器
         document.getElementById('run-button').addEventListener('click', function() {
             runCode(false);
         });
@@ -510,11 +510,11 @@
             runCode(true);
         });
 
-        // Auto-save functionality with visual indicators
+        // 自动保存功能及视觉指示器
         let saveTimeout;
         let isOriginalTemplate = true;
         
-        // Check if we have saved code to determine initial state
+        // 检查是否有已保存的代码以确定初始状态
         const savedCode = localStorage.getItem(`package_challenge_${challengeData.packageName}_${challengeData.challengeId}`);
         if (savedCode && !existingSolution) {
             editor.setValue(savedCode, 1);
@@ -526,7 +526,7 @@
             clearTimeout(saveTimeout);
             isOriginalTemplate = false;
 
-            // Show saving indicator
+            // 显示正在保存指示器
             showSavingIndicator();
 
             saveTimeout = setTimeout(() => {
@@ -535,33 +535,33 @@
             }, 1000);
         });
 
-        // Update line/column numbers on cursor movement
+        // 在光标移动时更新行/列号
         editor.selection.on('changeCursor', function() {
             updateEditorPosition();
         });
 
-        // Initial position update
+        // 初始位置更新
         updateEditorPosition();
 
-        // Initialize tooltips
+        // 初始化工具提示
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
-        // Reset button functionality
+        // 重置按钮功能
         document.getElementById('reset-editor-btn').addEventListener('click', function() {
-            // Show template preview in modal
+            // 在模态框中显示模板预览
             const templatePreview = document.getElementById('template-preview');
             const previewText = existingSolution || challengeData.template;
             templatePreview.textContent = previewText.substring(0, 200) + (previewText.length > 200 ? '...' : '');
             
-            // Show the custom modal
+            // 显示自定义模态框
             const resetModal = new bootstrap.Modal(document.getElementById('resetModal'));
             resetModal.show();
         });
 
-        // Confirm reset button in modal
+        // 模态框中的确认重置按钮
         document.getElementById('confirmResetBtn').addEventListener('click', function() {
             const resetButton = document.getElementById('reset-editor-btn');
             const resetIcon = document.getElementById('reset-icon');
@@ -569,7 +569,7 @@
             const confirmText = document.getElementById('confirm-reset-text');
             const confirmSpinner = document.getElementById('confirm-reset-spinner');
             
-            // Show loading states
+            // 显示加载状态
             resetIcon.classList.add('d-none');
             resetSpinner.classList.remove('d-none');
             confirmText.classList.add('d-none');
@@ -577,12 +577,12 @@
             resetButton.disabled = true;
             this.disabled = true;
             
-            // Simulate reset process with delay for better UX
+            // 模拟重置过程以获得更好的用户体验
             setTimeout(() => {
-                // Clear saved code
+                // 清除已保存的代码
                 localStorage.removeItem(`package_challenge_${challengeData.packageName}_${challengeData.challengeId}`);
                 
-                // Reset to template
+                // 重置为模板
                 if (existingSolution) {
                     editor.setValue(existingSolution);
                 } else {
@@ -593,11 +593,11 @@
                 isOriginalTemplate = true;
                 hideSaveIndicators();
                 
-                // Hide modal
+                // 隐藏模态框
                 const resetModal = bootstrap.Modal.getInstance(document.getElementById('resetModal'));
                 resetModal.hide();
                 
-                // Reset button states
+                // 重置按钮状态
                 resetIcon.classList.remove('d-none');
                 resetSpinner.classList.add('d-none');
                 confirmText.classList.remove('d-none');
@@ -605,42 +605,42 @@
                 resetButton.disabled = false;
                 this.disabled = false;
                 
-                // Show success message with higher z-index
+                // 显示成功消息（更高的 z-index）
                 setTimeout(() => {
-                    showToast('Success', 'Code successfully reset to original template', 'success');
+                    showToast('成功', '代码已成功重置为原始模板', 'success');
                 }, 200);
-            }, 800); // Small delay for better UX feedback
+            }, 800); // 小延迟以获得更好的用户体验反馈
         });
 
-        // Fullscreen functionality
+        // 全屏功能
         document.getElementById('fullscreen-btn').addEventListener('click', function() {
             const editorWrapper = document.querySelector('.editor-wrapper');
             const icon = this.querySelector('i');
             const tooltip = bootstrap.Tooltip.getInstance(this);
             
             if (!document.fullscreenElement && !editorWrapper.classList.contains('editor-fullscreen')) {
-                // Enter fullscreen mode
+                // 进入全屏模式
                 editorWrapper.classList.add('editor-fullscreen');
                 icon.className = 'bi bi-fullscreen-exit';
-                this.setAttribute('data-bs-original-title', 'Exit fullscreen mode (ESC)');
+                this.setAttribute('data-bs-original-title', '退出全屏模式 (ESC)');
                 if (tooltip) {
                     tooltip.dispose();
                     new bootstrap.Tooltip(this, { 
-                        title: 'Exit fullscreen mode (ESC)',
+                        title: '退出全屏模式 (ESC)',
                         placement: 'top'
                     });
                 }
                 
-                // Resize editor to fit fullscreen
+                // 调整编辑器以适应全屏
                 setTimeout(() => {
                     editor.resize();
-                    updateEditorPosition(); // Update position after resize
+                    updateEditorPosition(); // 调整后更新位置
                 }, 100);
                 
-                // Add escape key listener
+                // 添加 ESC 键监听器
                 document.addEventListener('keydown', handleEscapeKey);
             } else {
-                // Exit fullscreen mode
+                // 退出全屏模式
                 exitFullscreen();
             }
         });
@@ -653,22 +653,22 @@
             
             editorWrapper.classList.remove('editor-fullscreen');
             icon.className = 'bi bi-arrows-fullscreen';
-            fullscreenBtn.setAttribute('data-bs-original-title', 'Enter fullscreen mode (ESC to exit)');
+            fullscreenBtn.setAttribute('data-bs-original-title', '进入全屏模式 (ESC)');
             if (tooltip) {
                 tooltip.dispose();
                 new bootstrap.Tooltip(fullscreenBtn, { 
-                    title: 'Enter fullscreen mode (ESC to exit)',
+                    title: '进入全屏模式 (ESC)',
                     placement: 'top'
                 });
             }
             
-            // Resize editor back to normal
+            // 将编辑器调整回正常大小
             setTimeout(() => {
                 editor.resize();
-                updateEditorPosition(); // Update position after resize
+                updateEditorPosition(); // 调整后更新位置
             }, 100);
             
-            // Remove escape key listener
+            // 移除 ESC 键监听器
             document.removeEventListener('keydown', handleEscapeKey);
         }
 
@@ -678,7 +678,7 @@
             }
         }
 
-        // Helper functions for save indicators
+        // 保存指示器的辅助函数
         function showSavingIndicator() {
             document.getElementById('saving-indicator').classList.remove('d-none');
             document.getElementById('save-indicator').classList.add('d-none');
@@ -688,7 +688,7 @@
             document.getElementById('saving-indicator').classList.add('d-none');
             document.getElementById('save-indicator').classList.remove('d-none');
             
-            // Hide save indicator after 2 seconds
+            // 2秒后隐藏保存指示器
             setTimeout(() => {
                 if (!isOriginalTemplate) {
                     document.getElementById('save-indicator').classList.add('d-none');
@@ -701,12 +701,12 @@
             document.getElementById('save-indicator').classList.add('d-none');
         }
 
-        // Update line and column numbers in status bar
+        // 更新状态栏中的行和列号
         function updateEditorPosition() {
             if (!editor) return;
             
             const cursor = editor.getCursorPosition();
-            const lineNumber = cursor.row + 1; // Ace uses 0-based indexing
+            const lineNumber = cursor.row + 1; // Ace 使用 0 基索引
             const colNumber = cursor.column + 1;
             
             document.getElementById('line-number').textContent = lineNumber;
@@ -723,22 +723,22 @@
         const submitText = document.getElementById('submit-text');
         const testResults = document.getElementById('test-results');
         
-        // Show loading state
+        // 显示加载状态
         if (isSubmit) {
             submitSpinner.classList.remove('d-none');
-            submitText.textContent = 'Submitting...';
+            submitText.textContent = '提交中...';
             submitButton.disabled = true;
         } else {
             runSpinner.classList.remove('d-none');
-            runText.textContent = 'Running...';
+            runText.textContent = '运行中...';
             runButton.disabled = true;
         }
         
-        // Switch to results tab
+        // 切换到结果标签页
         const resultsTab = document.getElementById('results-tab');
         resultsTab.click();
         
-        testResults.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm me-2"></div>Running tests...</div>';
+        testResults.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm me-2"></div>运行测试...</div>';
         
         const startTime = Date.now();
         const code = ace.edit("editor").getValue();
@@ -761,29 +761,29 @@
             
             displayTestResults(data, duration, isSubmit);
             showToast(
-                data.success ? 'Success!' : 'Failed',
+                data.success ? '成功!' : '失败',
                 data.success ? 
-                    (isSubmit ? 'Solution submitted successfully!' : 'All tests passed!') : 
-                    'Some tests failed. Check the results tab.',
+                    (isSubmit ? '解决方案提交成功!' : '所有测试通过!') : 
+                    '部分测试失败。请检查结果标签页。',
                 data.success ? 'success' : 'danger'
             );
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('错误:', error);
             testResults.innerHTML = `
                 <div class="alert alert-danger">
                     <i class="bi bi-exclamation-triangle me-2"></i>
-                    <strong>Error:</strong> Failed to run tests. Please try again.
+                    <strong>错误:</strong> 测试运行失败。请重试。
                 </div>
             `;
-            showToast('Error', 'Failed to run tests. Please try again.', 'danger');
+            showToast('错误', '测试运行失败。请重试。', 'danger');
         })
         .finally(() => {
-            // Reset button states
+            // 重置按钮状态
             runSpinner.classList.add('d-none');
             submitSpinner.classList.add('d-none');
-            runText.textContent = 'Run Tests';
-            submitText.textContent = 'Submit Solution';
+            runText.textContent = '运行测试';
+            submitText.textContent = '提交解决方案';
             runButton.disabled = false;
             submitButton.disabled = false;
         });
@@ -796,22 +796,22 @@
             html = `
                 <div class="alert alert-success">
                     <i class="bi bi-check-circle-fill me-2"></i>
-                    <strong>All tests passed!</strong>
-                    ${data.tests_passed || 0}/${data.tests_total || 0} tests successful
+                    <strong>所有测试通过！</strong>
+                    ${data.tests_passed || 0}/${data.tests_total || 0} 个测试成功
                 </div>
             `;
             
-            // Only show sponsor CTA on submission, not on test runs
+            // 仅在提交时显示赞助商 CTA，而不是在测试运行时
             if (isSubmit) {
                 html += `
-                    <!-- Small sponsor CTA -->
+                    <!-- 小型赞助商 CTA -->
                     <div class="alert alert-light border-0 py-2 px-3 mb-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 3px solid #28a745 !important;">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-heart text-danger me-2"></i>
                                 <small class="text-muted mb-0">
-                                    <strong>Learned something new?</strong><br>
-                                    Show some love and help us build more ❤️
+                                    <strong>学到了新东西？</strong><br>
+                                    表达一些喜爱，帮助我们继续构建 ❤️
                                 </small>
                             </div>
                             <div class="d-flex gap-2">
@@ -827,7 +827,7 @@
                                    target="_blank" 
                                    style="font-size: 0.8rem; border-radius: 12px;">
                                     <i class="bi bi-heart-fill me-1" style="font-size: 0.7rem;"></i>
-                                    Sponsor
+                                    赞助
                                 </a>
                             </div>
                         </div>
@@ -835,41 +835,41 @@
                 `;
             }
             
-            // Show PR instructions for successful submissions
+            // 对于成功的提交显示 PR 指令
             if (isSubmit && data.show_pr_instructions) {
                 const username = getUsernameFromStorage() || 'anonymous';
                 
-                // Replace the success alert with the unified format
+                // 替换成功警报为统一格式
                 html = html.replace(
                     /<div class="alert alert-success">[\s\S]*?<\/div>/,
                     `<div class="alert alert-success mb-3">
-                        <h4 class="alert-heading">Solution Submitted Successfully! 🎉</h4>
-                        <p>All tests passed. Execution time: ${duration}ms</p>
+                        <h4 class="alert-heading">解决方案提交成功！ 🎉</h4>
+                        <p>所有测试通过。执行时间: ${duration}ms</p>
                         <hr>
-                        <p class="mb-0">Follow the instructions below to submit your solution to the public scoreboard.</p>
+                        <p class="mb-0">按照以下说明将您的解决方案提交到公共排行榜。</p>
                     </div>`
                 );
                 
                 html += `
                     <div class="alert alert-info mb-3">
-                        <h5>🚀 Next Steps: Create a Pull Request</h5>
-                        <p class="mb-3">To contribute your solution to the project and appear on the public scoreboard, follow these steps:</p>
+                        <h5>🚀 下一步：创建拉取请求</h5>
+                        <p class="mb-3">为了将您的解决方案贡献给项目并在公共排行榜上显示，请按以下步骤操作：</p>
                         
                         <div class="d-flex gap-2 mb-3">
-                            <button class="btn btn-primary" id="save-filesystem-btn">💾 Save to Filesystem</button>
-                            <button class="btn btn-secondary" id="copy-commands-btn">📋 Copy Git Commands</button>
+                            <button class="btn btn-primary" id="save-filesystem-btn">💾 保存到文件系统</button>
+                            <button class="btn btn-secondary" id="copy-commands-btn">📋 复制 Git 命令</button>
                         </div>
                         
                         <div class="accordion" id="submissionAccordion">
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#step1" aria-expanded="true">
-                                        <strong>Step 1: Save Your Solution Locally</strong>
+                                        <strong>步骤 1：将解决方案本地保存</strong>
                                     </button>
                                 </h2>
                                 <div id="step1" class="accordion-collapse collapse show" data-bs-parent="#submissionAccordion">
                                     <div class="accordion-body">
-                                        <p>Click "💾 Save to Filesystem" above to save your solution directly to the correct location.</p>
+                                        <p>点击上方的“💾 保存到文件系统”按钮，直接将您的解决方案保存到正确位置。</p>
                                     </div>
                                 </div>
                             </div>
@@ -877,12 +877,12 @@
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step2">
-                                        <strong>Step 2: Commit and Push to Your Fork</strong>
+                                        <strong>步骤 2：提交并推送至您的分支</strong>
                                     </button>
                                 </h2>
                                 <div id="step2" class="accordion-collapse collapse" data-bs-parent="#submissionAccordion">
                                     <div class="accordion-body">
-                                        <p>Run these Git commands to save your changes to your forked repository:</p>
+                                        <p>运行以下 Git 命令将您的更改保存到您的分叉仓库中：</p>
                                         <div class="bg-dark text-light p-3 rounded">
                                             <pre><code>$ cd ../../../
 $ git add packages/${challengeData.packageName}/${challengeData.challengeId}/submissions/${username}/
@@ -896,21 +896,21 @@ $ git push origin main</code></pre>
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step3">
-                                        <strong>Step 3: Create Pull Request on GitHub</strong>
+                                        <strong>步骤 3：在 GitHub 上创建拉取请求</strong>
                                     </button>
                                 </h2>
                                 <div id="step3" class="accordion-collapse collapse" data-bs-parent="#submissionAccordion">
                                     <div class="accordion-body">
                                         <ol>
-                                            <li>Go to your forked repository on GitHub: <code>https://github.com/${username}/go-interview-practice</code></li>
-                                            <li>You should see a banner saying "This branch is X commits ahead of RezaSi:main"</li>
-                                            <li>Click the <strong>"Contribute"</strong> button next to it</li>
-                                            <li>Click <strong>"Open pull request"</strong></li>
-                                            <li>Add a title like: <code>Add solution for ${challengeData.packageName} ${challengeData.challengeId} by ${username}</code></li>
-                                            <li>Click <strong>"Create pull request"</strong></li>
+                                            <li>转到您的分叉仓库： <code>https://github.com/${username}/go-interview-practice</code></li>
+                                            <li>您应该看到一个 banner，显示“此分支比 RezaSi:main 前进 X 提交”</li>
+                                            <li>点击其旁边的 <strong>"Contribute"</strong> 按钮</li>
+                                            <li>点击 <strong>"Open pull request"</strong></li>
+                                            <li>添加标题，例如：<code>Add solution for ${challengeData.packageName} ${challengeData.challengeId} by ${username}</code></li>
+                                            <li>点击 <strong>"Create pull request"</strong></li>
                                         </ol>
                                         <div class="alert alert-success mt-3">
-                                            <strong>🎉 That's it!</strong> Your solution will be reviewed and merged, appearing on the public scoreboard.
+                                            <strong>🎉 完成！</strong> 您的解决方案将被审查并合并，出现在公共排行榜上。
                                         </div>
                                     </div>
                                 </div>
@@ -919,7 +919,7 @@ $ git push origin main</code></pre>
                     </div>
                 `;
                 
-                // Add event listeners for the buttons after HTML is inserted
+                // 在 HTML 插入后添加按钮事件监听器
                 setTimeout(() => {
                     const saveFilesystemBtn = document.getElementById('save-filesystem-btn');
                     const copyCommandsBtn = document.getElementById('copy-commands-btn');
@@ -927,7 +927,7 @@ $ git push origin main</code></pre>
                     if (saveFilesystemBtn) {
                         saveFilesystemBtn.addEventListener('click', function() {
                             this.disabled = true;
-                            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+                            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 保存中...';
                             
                             fetch('/api/packages-save-to-filesystem', {
                                 method: 'POST',
@@ -944,15 +944,15 @@ $ git push origin main</code></pre>
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    showToast('Success', 'Solution saved to filesystem!', 'success');
+                                    showToast('成功', '解决方案已保存到文件系统！', 'success');
                                     
-                                    // Show comprehensive next steps including PR creation
+                                    // 显示包含 PR 创建的综合下一步
                                     let nextStepsHtml = `
                                         <div class="mt-3 p-3 bg-light rounded">
-                                            <h6>✅ Solution Saved! Next Steps:</h6>
+                                            <h6>✅ 解决方案已保存！下一步：</h6>
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <h6 class="text-primary">1. Commit & Push to Your Fork:</h6>
+                                                    <h6 class="text-primary">1. 提交并推送到您的分叉：</h6>
                                                     <div class="bg-dark text-light p-2 rounded small">
                                                         <pre><code>cd ../../../
 git add packages/${challengeData.packageName}/${challengeData.challengeId}/submissions/${username}/
@@ -961,38 +961,38 @@ git push origin main</code></pre>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <h6 class="text-success">2. Create Pull Request:</h6>
+                                                    <h6 class="text-success">2. 创建拉取请求：</h6>
                                                     <ol class="small">
-                                                        <li>Go to <a href="https://github.com/${username}/go-interview-practice" target="_blank">your fork on GitHub</a></li>
-                                                        <li>Click the "Contribute" button</li>
-                                                        <li>Click "Open pull request"</li>
-                                                        <li>Add title: "Add solution for ${challengeData.packageName} ${challengeData.challengeId}"</li>
-                                                        <li>Submit your PR! 🎉</li>
+                                                        <li>转到 <a href="https://github.com/${username}/go-interview-practice" target="_blank">您的分叉</a></li>
+                                                        <li>点击 "Contribute" 按钮</li>
+                                                        <li>点击 "Open pull request"</li>
+                                                        <li>添加标题："Add solution for ${challengeData.packageName} ${challengeData.challengeId}"</li>
+                                                        <li>提交您的 PR！ 🎉</li>
                                                     </ol>
                                                 </div>
                                             </div>
                                             <div class="alert alert-info mt-2 small">
-                                                <strong>🔗 Direct Link:</strong> After pushing, GitHub will often show a banner with a direct "Compare & pull request" button for convenience.
+                                                <strong>🔗 直接链接：</strong> 推送后，GitHub 通常会显示一个带有直接 "Compare & pull request" 按钮的横幅，方便使用。
                                             </div>
                                         </div>
                                     `;
                                     
-                                    // Insert after the button
+                                    // 在按钮之后插入
                                     this.parentNode.insertAdjacentHTML('afterend', nextStepsHtml);
                                 } else {
-                                    showToast('Error', data.message || 'Failed to save to filesystem', 'error');
+                                    showToast('错误', data.message || '无法保存到文件系统', 'error');
                                 }
                                 
                                 this.disabled = false;
-                                this.textContent = 'Saved!';
+                                this.textContent = '已保存！';
                                 setTimeout(() => {
-                                    this.textContent = '💾 Save to Filesystem';
+                                    this.textContent = '💾 保存到文件系统';
                                 }, 2000);
                             })
                             .catch(error => {
-                                showToast('Error', 'Failed to save: ' + error.message, 'error');
+                                showToast('错误', '保存失败: ' + error.message, 'error');
                                 this.disabled = false;
-                                this.textContent = '💾 Save to Filesystem';
+                                this.textContent = '💾 保存到文件系统';
                             });
                         });
                     }
@@ -1005,13 +1005,13 @@ git commit -m "Add solution for ${challengeData.packageName} ${challengeData.cha
 git push origin main`;
                             
                             navigator.clipboard.writeText(commands).then(() => {
-                                showToast('Success', 'Git commands copied to clipboard!', 'success');
-                                this.textContent = '✅ Copied!';
+                                showToast('成功', 'Git 命令已复制到剪贴板！', 'success');
+                                this.textContent = '✅ 已复制！';
                                 setTimeout(() => {
-                                    this.textContent = '📋 Copy Git Commands';
+                                    this.textContent = '📋 复制 Git 命令';
                                 }, 2000);
                             }).catch(() => {
-                                showToast('Error', 'Failed to copy to clipboard', 'error');
+                                showToast('错误', '无法复制到剪贴板', 'error');
                             });
                         });
                     }
@@ -1021,8 +1021,8 @@ git push origin main`;
             html += `
                 <div class="alert alert-danger">
                     <i class="bi bi-x-circle-fill me-2"></i>
-                    <strong>Tests failed:</strong>
-                    ${data.tests_passed || 0}/${data.tests_total || 0} tests passed
+                    <strong>测试失败：</strong>
+                    ${data.tests_passed || 0}/${data.tests_total || 0} 个测试通过
                 </div>
             `;
         }
@@ -1030,7 +1030,7 @@ git push origin main`;
         if (data.output) {
             html += `
                 <div class="mt-3">
-                    <h6>Output:</h6>
+                    <h6>输出：</h6>
                     <pre class="bg-light p-3 rounded"><code>${escapeHtml(data.output)}</code></pre>
                 </div>
             `;
@@ -1039,7 +1039,7 @@ git push origin main`;
         if (data.error) {
             html += `
                 <div class="mt-3">
-                    <h6>Error:</h6>
+                    <h6>错误：</h6>
                     <pre class="bg-light p-3 rounded text-danger"><code>${escapeHtml(data.error)}</code></pre>
                 </div>
             `;
@@ -1054,13 +1054,13 @@ git push origin main`;
         const toastTitle = document.getElementById('toast-title');
         const toastMessage = document.getElementById('toast-message');
         
-        // Fix z-index issue
+        // 修复 z-index 问题
         toastContainer.style.zIndex = '10000';
         
         toastTitle.textContent = title;
         toastMessage.textContent = message;
         
-        // Update toast styling based on type
+        // 根据类型更新提示样式
         toast.className = 'toast';
         if (type === 'success') {
             toast.classList.add('bg-success', 'text-white');
@@ -1086,7 +1086,7 @@ git push origin main`;
         return localStorage.getItem('githubUsername') || localStorage.getItem('username') || sessionStorage.getItem('username');
     }
 
-    // Hints system functionality
+    // 提示系统功能
     function initializeHints(hintsMarkdown) {
         const hintsContainer = document.getElementById('hints-container');
         const showHintBtn = document.getElementById('show-hint-btn');
@@ -1096,33 +1096,33 @@ git push origin main`;
         
         if (!hintsContainer || !showHintBtn || !resetHintsBtn) return;
         
-        // Parse hints from markdown
+        // 从 Markdown 解析提示
         const hints = parseHintsFromMarkdown(hintsMarkdown);
         let currentHintIndex = 0;
         
-        // Update total hints count
+        // 更新总提示数
         totalHints.textContent = hints.length;
         
-        // Show hint button functionality
+        // 显示提示按钮功能
         showHintBtn.addEventListener('click', function() {
             if (currentHintIndex < hints.length) {
                 showHint(hints[currentHintIndex], currentHintIndex + 1);
                 currentHintIndex++;
                 updateHintsProgress();
                 
-                // Show reset button when at least one hint is shown
+                // 当至少显示一个提示时显示重置按钮
                 if (currentHintIndex > 0) {
                     resetHintsBtn.classList.remove('d-none');
                 }
                 
-                // Hide show button when all hints are revealed
+                // 当所有提示都揭示后隐藏显示按钮
                 if (currentHintIndex >= hints.length) {
                     showHintBtn.classList.add('d-none');
                 }
             }
         });
         
-        // Reset hints button functionality
+        // 重置提示按钮功能
         resetHintsBtn.addEventListener('click', function() {
             currentHintIndex = 0;
             hintsContainer.innerHTML = '';
@@ -1138,7 +1138,7 @@ git push origin main`;
             hintElement.innerHTML = `
                 <div class="d-flex align-items-start">
                     <div class="flex-shrink-0">
-                        <span class="badge bg-warning text-dark me-2">Hint ${hintNumber}</span>
+                        <span class="badge bg-warning text-dark me-2">提示 ${hintNumber}</span>
                     </div>
                     <div class="flex-grow-1 markdown-content">
                         ${hint.content}
@@ -1147,7 +1147,7 @@ git push origin main`;
             `;
             hintsContainer.appendChild(hintElement);
             
-            // Scroll hint into view
+            // 滚动提示到视图中
             hintElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         
@@ -1167,21 +1167,21 @@ git push origin main`;
             for (const line of lines) {
                 const trimmedLine = line.trim();
                 
-                // Check if this is a hint header (## Hint N:)
+                // 检查这是否是提示标题 (## Hint N:)
                 const hintMatch = trimmedLine.match(/^##\s+Hint\s+\d+:\s*(.*)$/i);
                 if (hintMatch) {
-                    // Save previous hint if exists
+                    // 保存之前的提示（如果存在）
                     if (currentHint) {
                         hints.push(currentHint);
                     }
                     
-                    // Start new hint
+                    // 开始新的提示
                     currentHint = {
                         title: hintMatch[1],
                         content: ''
                     };
                 } else if (currentHint && trimmedLine && !trimmedLine.startsWith('#')) {
-                    // Add content to current hint
+                    // 将内容添加到当前提示
                     if (currentHint.content) {
                         currentHint.content += '\n';
                     }
@@ -1189,12 +1189,12 @@ git push origin main`;
                 }
             }
             
-            // Add the last hint
+            // 添加最后一个提示
             if (currentHint) {
                 hints.push(currentHint);
             }
             
-            // Convert markdown content to HTML using proper markdown parser
+            // 使用适当的 Markdown 解析器将 Markdown 内容转换为 HTML
             hints.forEach(hint => {
                 const tempDiv = document.createElement('div');
                 renderMarkdown(hint.content.trim(), tempDiv);
@@ -1205,4 +1205,4 @@ git push origin main`;
         }
     }
 </script>
-{{end}} 
+{{end}}

@@ -1,78 +1,78 @@
-# Challenge 28: Cache Implementation with Multiple Eviction Policies
+# 挑战 28：支持多种淘汰策略的缓存实现
 
-## Problem Statement
+## 问题描述
 
-In this challenge, you will implement a high-performance, thread-safe cache system with multiple eviction policies. This is a common interview question that tests your understanding of data structures, algorithms, concurrency, and system design.
+在此挑战中，你将实现一个高性能、线程安全的缓存系统，支持多种淘汰策略。这是一个常见的面试题，用于测试你对数据结构、算法、并发编程和系统设计的理解。
 
-Your task is to implement three different cache eviction policies:
+你的任务是实现三种不同的缓存淘汰策略：
 
-1. **LRU (Least Recently Used)**: Evicts the item that was accessed least recently
-2. **LFU (Least Frequently Used)**: Evicts the item that has been accessed the fewest times
-3. **FIFO (First In, First Out)**: Evicts the oldest item regardless of access patterns
+1. **LRU（最近最少使用）**：淘汰最近访问时间最久的项
+2. **LFU（最不经常使用）**：淘汰访问次数最少的项
+3. **FIFO（先进先出）**：淘汰最早加入的项，不考虑访问模式
 
-Each implementation must provide O(1) time complexity for get and put operations and must be thread-safe.
+每种实现都必须保证 get 和 put 操作的时间复杂度为 O(1)，并且必须是线程安全的。
 
-## Requirements
+## 要求
 
-### Core Interface
+### 核心接口
 
-All cache implementations must satisfy this interface:
+所有缓存实现都必须满足以下接口：
 
 ```go
 type Cache interface {
-    // Get retrieves a value by key. Returns the value and true if found, or nil and false if not found.
+    // Get 根据键获取值。如果找到返回值和 true，否则返回 nil 和 false。
     Get(key string) (value interface{}, found bool)
     
-    // Put stores a key-value pair. If the cache is at capacity, it should evict according to its policy.
+    // Put 存储键值对。如果缓存已满，应根据其策略进行淘汰。
     Put(key string, value interface{})
     
-    // Delete removes a key-value pair. Returns true if the key existed, false otherwise.
+    // Delete 删除键值对。如果键存在则返回 true，否则返回 false。
     Delete(key string) bool
     
-    // Clear removes all entries from the cache.
+    // Clear 清除缓存中的所有条目。
     Clear()
     
-    // Size returns the current number of items in the cache.
+    // Size 返回当前缓存中的项目数量。
     Size() int
     
-    // Capacity returns the maximum number of items the cache can hold.
+    // Capacity 返回缓存能容纳的最大项目数。
     Capacity() int
     
-    // HitRate returns the cache hit rate as a float between 0 and 1.
+    // HitRate 返回缓存命中率，范围在 0 到 1 之间。
     HitRate() float64
 }
 ```
 
-### Performance Requirements
+### 性能要求
 
-- **Time Complexity**: O(1) for Get, Put, and Delete operations
-- **Space Complexity**: O(n) where n is the cache capacity
-- **Thread Safety**: All operations must be safe for concurrent use
-- **Memory Efficiency**: Minimize memory overhead and prevent memory leaks
+- **时间复杂度**：Get、Put 和 Delete 操作均为 O(1)
+- **空间复杂度**：O(n)，其中 n 是缓存容量
+- **线程安全**：所有操作必须支持并发安全使用
+- **内存效率**：最小化内存开销并防止内存泄漏
 
-### Implementation Requirements
+### 实现要求
 
-You must implement:
+你必须实现：
 
-1. **LRUCache**: Uses doubly-linked list + hash map
-2. **LFUCache**: Uses frequency tracking with efficient eviction
-3. **FIFOCache**: Uses queue-based eviction
-4. **ThreadSafeWrapper**: Makes any cache implementation thread-safe
-5. **CacheFactory**: Creates cache instances based on policy type
+1. **LRUCache**：使用双向链表 + 哈希表
+2. **LFUCache**：使用频率追踪机制实现高效淘汰
+3. **FIFOCache**：使用队列式淘汰机制
+4. **ThreadSafeWrapper**：使任意缓存实现变为线程安全
+5. **CacheFactory**：根据策略类型创建缓存实例
 
-## Function Signatures
+## 函数签名
 
-### 1. LRU Cache
+### 1. LRU 缓存
 
 ```go
 type LRUCache struct {
-    // Private fields - design your own implementation
+    // 私有字段 - 自行设计实现
 }
 
-// NewLRUCache creates a new LRU cache with the specified capacity
+// NewLRUCache 创建指定容量的新 LRU 缓存
 func NewLRUCache(capacity int) *LRUCache
 
-// Implement Cache interface methods
+// 实现 Cache 接口方法
 func (c *LRUCache) Get(key string) (interface{}, bool)
 func (c *LRUCache) Put(key string, value interface{})
 func (c *LRUCache) Delete(key string) bool
@@ -82,17 +82,17 @@ func (c *LRUCache) Capacity() int
 func (c *LRUCache) HitRate() float64
 ```
 
-### 2. LFU Cache
+### 2. LFU 缓存
 
 ```go
 type LFUCache struct {
-    // Private fields - design your own implementation
+    // 私有字段 - 自行设计实现
 }
 
-// NewLFUCache creates a new LFU cache with the specified capacity
+// NewLFUCache 创建指定容量的新 LFU 缓存
 func NewLFUCache(capacity int) *LFUCache
 
-// Implement Cache interface methods
+// 实现 Cache 接口方法
 func (c *LFUCache) Get(key string) (interface{}, bool)
 func (c *LFUCache) Put(key string, value interface{})
 func (c *LFUCache) Delete(key string) bool
@@ -102,17 +102,17 @@ func (c *LFUCache) Capacity() int
 func (c *LFUCache) HitRate() float64
 ```
 
-### 3. FIFO Cache
+### 3. FIFO 缓存
 
 ```go
 type FIFOCache struct {
-    // Private fields - design your own implementation
+    // 私有字段 - 自行设计实现
 }
 
-// NewFIFOCache creates a new FIFO cache with the specified capacity
+// NewFIFOCache 创建指定容量的新 FIFO 缓存
 func NewFIFOCache(capacity int) *FIFOCache
 
-// Implement Cache interface methods
+// 实现 Cache 接口方法
 func (c *FIFOCache) Get(key string) (interface{}, bool)
 func (c *FIFOCache) Put(key string, value interface{})
 func (c *FIFOCache) Delete(key string) bool
@@ -122,17 +122,17 @@ func (c *FIFOCache) Capacity() int
 func (c *FIFOCache) HitRate() float64
 ```
 
-### 4. Thread-Safe Wrapper
+### 4. 线程安全包装器
 
 ```go
 type ThreadSafeCache struct {
-    // Private fields - design your own implementation
+    // 私有字段 - 自行设计实现
 }
 
-// NewThreadSafeCache wraps any cache implementation to make it thread-safe
+// NewThreadSafeCache 包装任意缓存实现，使其线程安全
 func NewThreadSafeCache(cache Cache) *ThreadSafeCache
 
-// Implement Cache interface methods with proper locking
+// 使用适当锁实现 Cache 接口方法
 func (c *ThreadSafeCache) Get(key string) (interface{}, bool)
 func (c *ThreadSafeCache) Put(key string, value interface{})
 func (c *ThreadSafeCache) Delete(key string) bool
@@ -142,7 +142,7 @@ func (c *ThreadSafeCache) Capacity() int
 func (c *ThreadSafeCache) HitRate() float64
 ```
 
-### 5. Cache Factory
+### 5. 缓存工厂
 
 ```go
 type CachePolicy int
@@ -153,63 +153,63 @@ const (
     FIFO
 )
 
-// NewCache creates a cache with the specified policy and capacity
+// NewCache 根据指定策略和容量创建缓存
 func NewCache(policy CachePolicy, capacity int) Cache
 
-// NewThreadSafeCacheWithPolicy creates a thread-safe cache with the specified policy
+// NewThreadSafeCacheWithPolicy 创建指定策略的线程安全缓存
 func NewThreadSafeCacheWithPolicy(policy CachePolicy, capacity int) Cache
 ```
 
-## Input/Output Examples
+## 输入/输出示例
 
-### LRU Cache Example
+### LRU 缓存示例
 ```go
 cache := NewLRUCache(2)
 
 cache.Put("a", 1)
 cache.Put("b", 2)
-fmt.Println(cache.Get("a"))  // Output: 1, true
+fmt.Println(cache.Get("a"))  // 输出: 1, true
 
-cache.Put("c", 3)            // Evicts "b" (least recently used)
-fmt.Println(cache.Get("b"))  // Output: nil, false
-fmt.Println(cache.Get("a"))  // Output: 1, true
-fmt.Println(cache.Get("c"))  // Output: 3, true
+cache.Put("c", 3)            // 淘汰 "b"（最近最少使用）
+fmt.Println(cache.Get("b"))  // 输出: nil, false
+fmt.Println(cache.Get("a"))  // 输出: 1, true
+fmt.Println(cache.Get("c"))  // 输出: 3, true
 ```
 
-### LFU Cache Example
+### LFU 缓存示例
 ```go
 cache := NewLFUCache(2)
 
 cache.Put("a", 1)
 cache.Put("b", 2)
-cache.Get("a")               // "a" now has frequency 2
-cache.Get("a")               // "a" now has frequency 3
+cache.Get("a")               // "a" 的访问频率变为 2
+cache.Get("a")               // "a" 的访问频率变为 3
 
-cache.Put("c", 3)            // Evicts "b" (frequency 1, least frequent)
-fmt.Println(cache.Get("b"))  // Output: nil, false
-fmt.Println(cache.Get("a"))  // Output: 1, true
-fmt.Println(cache.Get("c"))  // Output: 3, true
+cache.Put("c", 3)            // 淘汰 "b"（频率为 1，最低频）
+fmt.Println(cache.Get("b"))  // 输出: nil, false
+fmt.Println(cache.Get("a"))  // 输出: 1, true
+fmt.Println(cache.Get("c"))  // 输出: 3, true
 ```
 
-### FIFO Cache Example
+### FIFO 缓存示例
 ```go
 cache := NewFIFOCache(2)
 
 cache.Put("a", 1)
 cache.Put("b", 2)
-cache.Get("a")               // Doesn't affect eviction order
+cache.Get("a")               // 不影响淘汰顺序
 
-cache.Put("c", 3)            // Evicts "a" (first in, first out)
-fmt.Println(cache.Get("a"))  // Output: nil, false
-fmt.Println(cache.Get("b"))  // Output: 2, true
-fmt.Println(cache.Get("c"))  // Output: 3, true
+cache.Put("c", 3)            // 淘汰 "a"（先进先出）
+fmt.Println(cache.Get("a"))  // 输出: nil, false
+fmt.Println(cache.Get("b"))  // 输出: 2, true
+fmt.Println(cache.Get("c"))  // 输出: 3, true
 ```
 
-### Thread-Safe Example
+### 线程安全示例
 ```go
 cache := NewThreadSafeCache(NewLRUCache(100))
 
-// Safe for concurrent use
+// 安全地用于并发场景
 var wg sync.WaitGroup
 for i := 0; i < 10; i++ {
     wg.Add(1)
@@ -224,73 +224,73 @@ for i := 0; i < 10; i++ {
 }
 wg.Wait()
 
-fmt.Printf("Hit rate: %.2f\n", cache.HitRate())
+fmt.Printf("命中率: %.2f\n", cache.HitRate())
 ```
 
-## Evaluation Criteria
+## 评估标准
 
-### Correctness (40 points)
-- All cache policies work correctly
-- Proper eviction behavior
-- Thread safety when wrapped
-- Edge cases handled properly
+### 正确性（40 分）
+- 所有缓存策略正确运行
+- 正确的淘汰行为
+- 包装后具备线程安全性
+- 正确处理边界情况
 
-### Performance (25 points)
-- O(1) time complexity for all operations
-- Efficient memory usage
-- Minimal lock contention in thread-safe version
+### 性能（25 分）
+- 所有操作均为 O(1) 时间复杂度
+- 内存使用高效
+- 线程安全版本锁竞争最小
 
-### Code Quality (20 points)
-- Clean, readable, and well-organized code
-- Proper abstraction and interfaces
-- Good variable and function naming
-- Appropriate comments
+### 代码质量（20 分）
+- 代码清晰、可读性强且结构良好
+- 适当的抽象与接口设计
+- 变量和函数命名恰当
+- 注释合理
 
-### Algorithm Understanding (15 points)
-- Efficient implementation of each eviction policy
-- Understanding of data structure trade-offs
-- Proper handling of concurrent access patterns
+### 算法理解（15 分）
+- 各淘汰策略的高效实现
+- 对数据结构权衡的理解
+- 并发访问模式的妥善处理
 
-## Advanced Requirements (Bonus)
+## 高级要求（加分项）
 
-Implement these for extra credit:
+实现以下内容可获得额外分数：
 
-1. **TTL Support**: Add time-to-live functionality
-2. **Cache Metrics**: Detailed statistics (hit rate, eviction count, etc.)
-3. **Benchmark Tests**: Performance comparison between policies
-4. **Memory Pressure Handling**: Automatic eviction under memory pressure
+1. **TTL 支持**：添加生存时间功能
+2. **缓存指标**：详细统计信息（命中率、淘汰次数等）
+3. **基准测试**：不同策略间的性能对比
+4. **内存压力处理**：在内存压力下自动淘汰
 
-## Constraints
+## 约束条件
 
-- Cache capacity must be at least 1
-- Keys are always non-empty strings
-- Values can be any interface{} type
-- Must handle nil values correctly
-- Zero-capacity cache should always miss
-- Thread-safe operations should use minimal locking
+- 缓存容量至少为 1
+- 键始终为非空字符串
+- 值可以是任意 interface{} 类型
+- 必须正确处理 nil 值
+- 容量为 0 的缓存应始终未命中
+- 线程安全操作应尽量减少锁的使用
 
-## Hints
+## 提示
 
-1. **LRU**: Use a doubly-linked list with a hash map pointing to nodes
-2. **LFU**: Consider using frequency buckets or a min-heap for efficient victim selection
-3. **FIFO**: A simple queue or circular buffer works well
-4. **Thread Safety**: Use sync.RWMutex for better read performance
-5. **Memory Management**: Be careful about memory leaks when removing nodes
-6. **Testing**: Test edge cases like capacity 1, concurrent access, and large datasets
+1. **LRU**：使用双向链表配合哈希表指向节点
+2. **LFU**：考虑使用频率桶或最小堆来高效选择淘汰项
+3. **FIFO**：简单的队列或环形缓冲区即可
+4. **线程安全**：使用 sync.RWMutex 以提升读操作性能
+5. **内存管理**：移除节点时注意避免内存泄漏
+6. **测试**：测试容量为 1、并发访问和大数据集等边界情况
 
-## Time Limit
+## 时间限制
 
-This challenge should be completed within 60-90 minutes for an interview setting.
+此挑战应在 60-90 分钟内完成，适用于面试场景。
 
-## Learning Resources
+## 学习资源
 
-See the [learning.md](learning.md) document for comprehensive information about cache implementation patterns, algorithms, and best practices.
+参见 [learning.md](learning.md) 文件，了解缓存实现模式、算法及最佳实践的完整信息。
 
-## Success Criteria
+## 成功标准
 
-A successful implementation should:
-- Pass all provided test cases
-- Demonstrate O(1) performance for basic operations
-- Handle concurrent access safely
-- Show understanding of different eviction policies
-- Include proper error handling and edge case management 
+成功的实现应满足：
+- 通过所有提供的测试用例
+- 展示基本操作的 O(1) 性能
+- 安全处理并发访问
+- 展现对不同淘汰策略的理解
+- 包含适当的错误处理和边界情况管理

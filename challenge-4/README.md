@@ -1,32 +1,32 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 4: Concurrent Graph BFS Queries
+# 挑战 4：并发图BFS查询
 
-You are required to concurrently process multiple breadth-first search (BFS) queries on a single graph. Each query specifies a starting node, and you must compute the BFS order from that node. Unlike a simple single-threaded BFS, your solution should utilize goroutines and channels (or concurrency-safe data structures) to handle multiple queries efficiently and in parallel.
+您需要在单个图上并发处理多个广度优先搜索（BFS）查询。每个查询指定一个起始节点，您必须计算从该节点开始的BFS顺序。与简单的单线程BFS不同，您的解决方案应该利用goroutine和通道（或并发安全的数据结构）来高效地并行处理多个查询。
 
-## Function Signature
+## 函数签名
 
 ```go
 func ConcurrentBFSQueries(graph map[int][]int, queries []int, numWorkers int) map[int][]int
 ```
 
-Parameters:
-- graph: A representation of the graph as an adjacency list. 
-  - The key is a node (an integer).
-  - The value is a slice of adjacent nodes.
-- queries: A slice of starting nodes for which BFS must be performed.
-- numWorkers: The number of goroutines (workers) that concurrently handle these BFS queries.
+参数：
+- graph：图的邻接表表示。
+  - 键是节点（整数）。
+  - 值是相邻节点的切片。
+- queries：需要执行BFS的起始节点切片。
+- numWorkers：并发处理这些BFS查询的goroutine（工作器）数量。
 
-Returns:
-- A map from the query node to the BFS order starting from that node.
+返回：
+- 从查询节点到从该节点开始的BFS顺序的映射。
 
-## Requirements
+## 要求
 
-1. You must use concurrency (goroutines + channels, or concurrency-safe data structures) to process BFS queries in parallel.
-2. A naive or purely sequential approach may be too slow, especially for large graphs and many queries.
-3. The BFS algorithm itself can be standard (using a queue), but each BFS query should run concurrently if workers are available.
+1. 您必须使用并发（goroutine + 通道，或并发安全的数据结构）来并行处理BFS查询。
+2. 朴素或纯顺序的方法可能太慢，特别是对于大型图和许多查询。
+3. BFS算法本身可以是标准的（使用队列），但如果工作器可用，每个BFS查询应该并发运行。
 
-## Example Usage (Not Tested by the Official Tests)
+## 示例用法（官方测试不测试）
 
 ```go
 func main() {
@@ -42,7 +42,7 @@ func main() {
 
     results := ConcurrentBFSQueries(graph, queries, numWorkers)
     /*
-       Possible output:
+       可能的输出：
        results[0] = [0 1 2 3 4]
        results[1] = [1 2 3 4]
        results[2] = [2 3 4]
@@ -50,18 +50,18 @@ func main() {
 }
 ```
 
-## Instructions
+## 操作说明
 
-1. Fork this repository and clone your fork.  
-2. Create a directory for your submission: `challenge-4/submissions/<yourgithubusername>/`.  
-3. Copy `solution-template.go` into your submission directory.  
-4. Implement the function `ConcurrentBFSQueries(graph map[int][]int, queries []int, numWorkers int) map[int][]int`.  
-5. Use goroutines to handle BFS queries in parallel, respecting the number of workers.  
-6. Open a pull request with your solution.  
+1. Fork 这个仓库并 clone 您的 fork。
+2. 为您的提交创建目录：`challenge-4/submissions/<您的github用户名>/`。
+3. 将 `solution-template.go` 复制到您的提交目录中。
+4. 实现函数 `ConcurrentBFSQueries(graph map[int][]int, queries []int, numWorkers int) map[int][]int`。
+5. 使用 goroutine 并行处理BFS查询，尊重工作器数量。
+6. 用您的解决方案打开拉取请求。
 
-## Testing Locally
+## 本地测试
 
-From inside `challenge-4/`, run:
+在 `challenge-4/` 目录内运行：
 
 ```bash
 go test -v

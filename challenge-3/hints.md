@@ -1,46 +1,25 @@
-# Hints for Employee Data Management
+# 回文检查技巧
 
-## Hint 1: Struct Definition
-You need to implement two structs. The `Employee` struct stores individual employee data, and the `Manager` struct contains a slice of employees:
-```go
-type Manager struct {
-    Employees []Employee
-}
-```
+## 技巧 1：什么是回文？
+回文是指正读和反读都相同的单词、短语、数字或其他字符序列。例如："madam"，"racecar"。
 
-## Hint 2: AddEmployee Method
-Use a pointer receiver `(m *Manager)` to modify the slice. Append the new employee to the `Employees` slice:
-```go
-m.Employees = append(m.Employees, e)
-```
+## 技巧 2：忽略大小写和非字母数字字符
+题目要求忽略大小写和非字母数字字符。这意味着 "A man, a plan, a canal: Panama" 应被视为 "amanaplanacanalpanama"。
 
-## Hint 3: RemoveEmployee Method
-To remove an employee by ID, find the employee in the slice and remove it. You can create a new slice excluding the employee with the matching ID.
+## 技巧 3：预处理字符串
+在检查回文之前，应先清理输入字符串。创建一个新字符串，将其转换为小写，并且仅包含字母和数字字符。
 
-## Hint 4: Finding Index for Removal
-Loop through the slice to find the index of the employee with the matching ID:
-```go
-for i, emp := range m.Employees {
-    if emp.ID == id {
-        // Remove element at index i
-    }
-}
-```
+## 技巧 4：过滤逻辑
+遍历输入字符串。对于每个字符，检查它是否为字母或数字。如果是，则将其转换为小写并添加到过滤后的字符串中。
 
-## Hint 5: Slice Removal Technique
-Remove an element at index `i` from a slice using:
-```go
-m.Employees = append(m.Employees[:i], m.Employees[i+1:]...)
-```
+## 技巧 5：双指针技术
+在获得清理后的字符串后，双指针技术非常有效。一个指针从开头开始，另一个指针从结尾开始。比较这两个指针所指向的字符。
 
-## Hint 6: GetAverageSalary Implementation
-Calculate the sum of all salaries and divide by the number of employees. Handle the case when there are no employees to avoid division by zero.
+## 技巧 6：循环条件
+当左指针小于右指针时，循环应继续进行。如果两个指针交叉或相遇，则说明字符串是回文。
 
-## Hint 7: FindEmployeeByID Return Type
-This method should return `*Employee` (a pointer). Return `nil` if the employee is not found, or return the address of the found employee using `&`.
+## 技巧 7：不匹配条件
+如果在任何时刻，两个指针所指向的字符不匹配，可以立即返回 `false`。
 
-## Hint 8: Returning Employee Pointer
-When you find the employee, return a pointer to it:
-```go
-return &m.Employees[i]
-``` 
+## 技巧 8：成功检查
+如果循环完成且未发现任何不匹配，则字符串是回文，可以返回 `true`。

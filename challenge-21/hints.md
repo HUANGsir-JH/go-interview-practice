@@ -1,22 +1,22 @@
-# Hints for Binary Search
+# 二分查找提示
 
-## Hint 1: Algorithm Choice
-This problem requires searching in a sorted array. Think about algorithms that can take advantage of the sorted property to search more efficiently than linear search.
+## 提示 1：算法选择
+此问题需要在有序数组中进行搜索。思考一下可以利用有序性质，比线性搜索更高效地进行查找的算法。
 
-## Hint 2: Divide and Conquer
-Binary search uses a divide-and-conquer approach. In each step, you eliminate half of the remaining search space.
+## 提示 2：分治策略
+二分查找采用分治方法。每一步中，你可以排除一半的剩余搜索空间。
 
-## Hint 3: Middle Element Strategy
-Start by looking at the middle element of the array. Compare it with your target value to decide which half of the array to search next.
+## 提示 3：中间元素策略
+从数组的中间元素开始查看。将其与目标值比较，以决定下一步搜索数组的哪一半。
 
-## Hint 4: Pointer Management
-Use two pointers: `left` and `right` to track the current search boundaries. Update these pointers based on your comparison with the middle element.
+## 提示 4：指针管理
+使用两个指针：`left` 和 `right` 来跟踪当前的搜索边界。根据与中间元素的比较结果来更新这两个指针。
 
-## Hint 5: Loop Condition
-Continue searching while `left <= right`. When this condition becomes false, the element is not in the array.
+## 提示 5：循环条件
+当 `left <= right` 时继续搜索。当该条件变为 false 时，说明元素不在数组中。
 
-## Hint 6: Avoiding Integer Overflow
-When calculating the middle index, use `left + (right - left) / 2` instead of `(left + right) / 2` to avoid potential integer overflow.
+## 提示 6：避免整数溢出
+计算中间索引时，使用 `left + (right - left) / 2` 而不是 `(left + right) / 2`，以避免潜在的整数溢出。
 
-## Hint 7: Return Values
-Return the index if the element is found, or -1 if the element is not in the array. 
+## 提示 7：返回值
+如果找到元素，返回其索引；如果元素不在数组中，则返回 -1。

@@ -1,169 +1,169 @@
-# Fiber Web Development Challenges
+# Fiber Web 开发挑战
 
-Master high-performance web development in Go using the Fiber framework. This package contains 4 progressive challenges that take you from basic HTTP concepts to advanced production-ready patterns with Fiber's Express-inspired API.
+使用 Fiber 框架掌握高性能 Go 语言 Web 开发。本套包包含 4 个循序渐进的挑战，带你从基础 HTTP 概念逐步过渡到使用 Fiber 的 Express 风格 API 构建高级生产就绪模式。
 
-## Challenge Overview
+## 挑战概览
 
-### 🎯 [Challenge 1: Basic Routing](./challenge-1-basic-routing/)
-**Difficulty:** Beginner | **Duration:** 30-45 minutes
+### 🎯 [挑战 1：基础路由](./challenge-1-basic-routing/)
+**难度：** 初学者 | **时长：** 30-45 分钟
 
-Learn the fundamentals of Fiber by building a simple task management API with basic routing, request handling, and JSON responses.
+通过构建一个简单的任务管理 API 来学习 Fiber 的基础知识，涵盖基础路由、请求处理和 JSON 响应。
 
-**Key Skills:**
-- Basic Fiber application setup
-- Route handlers and HTTP methods
-- JSON request/response handling
-- Path parameters
-- Query parameters
+**核心技能：**
+- 基础 Fiber 应用设置
+- 路由处理器与 HTTP 方法
+- JSON 请求/响应处理
+- 路径参数
+- 查询参数
 
-**Topics Covered:**
-- `fiber.App` basics
-- Route definitions and handlers
-- Context handling
-- JSON marshaling/unmarshaling
-- Error responses
-
----
-
-### 🚀 [Challenge 2: Middleware & Request/Response Handling](./challenge-2-middleware/)
-**Difficulty:** Intermediate | **Duration:** 45-60 minutes
-
-Build an enhanced blog API with comprehensive middleware patterns including logging, authentication, CORS, and rate limiting.
-
-**Key Skills:**
-- Custom middleware creation
-- Request ID generation and tracking
-- Rate limiting implementation
-- CORS handling
-- Authentication middleware
-
-**Topics Covered:**
-- Request/response logging
-- API key authentication
-- Cross-origin request handling
-- Rate limiting per IP
-- Centralized error handling
+**涵盖主题：**
+- `fiber.App` 基础知识
+- 路由定义与处理器
+- 上下文处理
+- JSON 序列化/反序列化
+- 错误响应
 
 ---
 
-### 📦 [Challenge 3: Validation & Error Handling](./challenge-3-validation-errors/)
-**Difficulty:** Intermediate | **Duration:** 60-75 minutes
+### 🚀 [挑战 2：中间件与请求/响应处理](./challenge-2-middleware/)
+**难度：** 中级 | **时长：** 45-60 分钟
 
-Build a product catalog API with comprehensive input validation, custom validators, and robust error handling.
+构建一个增强版博客 API，涵盖全面的中间件模式，包括日志记录、认证、CORS 和限流。
 
-**Key Skills:**
-- Input validation using struct tags
-- Custom validator creation
-- Bulk operations with partial failures
-- Detailed error responses
-- Filtering and search functionality
+**核心技能：**
+- 自定义中间件创建
+- 请求 ID 生成与追踪
+- 限流实现
+- CORS 处理
+- 认证中间件
 
-**Topics Covered:**
-- Validator package integration
-- Custom validation rules
-- Error message formatting
-- API filtering patterns
-- Bulk operation handling
-
----
-
-### ⚡ [Challenge 4: Authentication & Session Management](./challenge-4-authentication/)
-**Difficulty:** Advanced | **Duration:** 75-90 minutes
-
-Build a secure user authentication API with JWT tokens, password hashing, and role-based access control.
-
-**Key Skills:**
-- JWT token generation and validation
-- Password hashing with bcrypt
-- Role-based access control
-- Authentication middleware
-- Session management
-
-**Topics Covered:**
-- User registration and login
-- JWT claims and validation
-- Password security best practices
-- Protected route middleware
-- Admin role management
+**涵盖主题：**
+- 请求/响应日志记录
+- API 密钥认证
+- 跨域请求处理
+- 按 IP 限流
+- 集中式错误处理
 
 ---
 
-## Why Learn Fiber?
+### 📦 [挑战 3：验证与错误处理](./challenge-3-validation-errors/)
+**难度：** 中级 | **时长：** 60-75 分钟
 
-**🚀 Performance**: Built on top of Fasthttp for high-performance HTTP handling
+构建一个产品目录 API，包含全面的输入验证、自定义验证器和健壮的错误处理机制。
 
-**📝 Express-like**: Familiar routing and middleware patterns for JavaScript developers
+**核心技能：**
+- 使用结构体标签进行输入验证
+- 自定义验证器创建
+- 支持部分失败的批量操作
+- 详细的错误响应
+- 过滤与搜索功能
 
-**🔧 Feature-Rich**: Built-in middleware, validation support, and extensive ecosystem
+**涵盖主题：**
+- 验证器包集成
+- 自定义验证规则
+- 错误消息格式化
+- API 过滤模式
+- 批量操作处理
 
-**🎯 Production Ready**: Used by companies for high-traffic applications
+---
 
-## Learning Path
+### ⚡ [挑战 4：认证与会话管理](./challenge-4-authentication/)
+**难度：** 高级 | **时长：** 75-90 分钟
 
-1. **Start with Challenge 1** if you're new to Fiber or web frameworks in Go
-2. **Jump to Challenge 2** if you understand basic HTTP concepts in Go
-3. **Challenge 3** focuses on real-world concerns like validation and error handling
-4. **Challenge 4** covers advanced features for production applications
+构建一个安全的用户认证 API，支持 JWT 令牌、密码哈希和基于角色的访问控制。
 
-## Prerequisites
+**核心技能：**
+- JWT 令牌生成与验证
+- 使用 bcrypt 进行密码哈希
+- 基于角色的访问控制
+- 认证中间件
+- 会话管理
 
-- **Basic Go knowledge**: Variables, structs, functions, packages
-- **HTTP fundamentals**: Understanding of HTTP methods, status codes, headers
-- **JSON handling**: Basic familiarity with JSON in Go
+**涵盖主题：**
+- 用户注册与登录
+- JWT 声明与验证
+- 密码安全最佳实践
+- 受保护路由中间件
+- 管理员角色管理
 
-## Real-World Applications
+---
 
-These challenges prepare you for building:
+## 为什么学习 Fiber？
 
-- **High-performance REST APIs**
-- **Real-time applications** with WebSocket support
-- **Microservices** that require fast response times
-- **API gateways** handling thousands of requests per second
+**🚀 性能卓越**：基于 Fasthttp 构建，提供高性能 HTTP 处理能力
 
-## Challenge Structure
+**📝 类似 Express**：对 JavaScript 开发者而言熟悉的路由与中间件模式
 
-Each challenge follows a consistent structure:
+**🔧 功能丰富**：内置中间件、验证支持及庞大的生态系统
+
+**🎯 生产就绪**：被多家公司用于高流量应用
+
+## 学习路径
+
+1. **如果你是 Fiber 或 Go 语言 Web 框架的新手，请从挑战 1 开始**
+2. **如果你已掌握 Go 中的基础 HTTP 概念，可直接跳至挑战 2**
+3. **挑战 3 专注于现实世界中的关注点，如验证与错误处理**
+4. **挑战 4 涵盖生产环境应用的高级特性**
+
+## 先决条件
+
+- **基础 Go 知识**：变量、结构体、函数、包
+- **HTTP 基础**：理解 HTTP 方法、状态码、头部信息
+- **JSON 处理**：在 Go 中对 JSON 的基本熟悉
+
+## 真实应用场景
+
+这些挑战帮助你为以下项目做好准备：
+
+- **高性能 REST API**
+- **支持 WebSocket 的实时应用**
+- **需要快速响应时间的微服务**
+- **每秒处理数千请求的 API 网关**
+
+## 挑战结构
+
+每个挑战遵循一致的结构：
 
 ```
 challenge-X-name/
-├── README.md              # Challenge description and requirements
-├── solution-template.go   # Template with TODOs to implement
-├── solution-template_test.go  # Comprehensive test suite
-├── run_tests.sh          # Test runner script
-├── go.mod                # Go module with dependencies
-├── metadata.json         # Challenge metadata
-├── SCOREBOARD.md         # Participant scores
-├── hints.md              # Implementation hints (when available)
-├── learning.md           # Additional learning resources (when available)
-└── submissions/          # Participant submission directory
+├── README.md              # 挑战说明与要求
+├── solution-template.go   # 包含 TODO 的模板文件
+├── solution-template_test.go  # 全面的测试套件
+├── run_tests.sh          # 测试运行脚本
+├── go.mod                # 包含依赖项的 Go 模块
+├── metadata.json         # 挑战元数据
+├── SCOREBOARD.md         # 参与者得分表
+├── hints.md              # 实现提示（如有）
+├── learning.md           # 额外学习资源（如有）
+└── submissions/          # 参与者提交目录
 ```
 
-## Getting Started
+## 开始入门
 
-1. **Choose your starting challenge** based on your experience level
-2. **Read the README.md** in the challenge directory
-3. **Implement the solution** in `solution-template.go`
-4. **Test your solution** using `./run_tests.sh`
-5. **Submit via PR** to the submissions directory
+1. **根据你的经验水平选择起始挑战**
+2. **阅读挑战目录中的 README.md**
+3. **在 `solution-template.go` 中实现解决方案**
+4. **使用 `./run_tests.sh` 测试你的解决方案**
+5. **通过 PR 提交至 submissions 目录**
 
-## Testing Your Solutions
+## 测试你的解决方案
 
-Each challenge includes a comprehensive test suite. To test your solution:
+每个挑战都包含全面的测试套件。要测试你的解决方案，请执行：
 
 ```bash
 cd packages/fiber/challenge-X-name/
 ./run_tests.sh
 ```
 
-The test script will:
-- Prompt for your GitHub username
-- Copy your solution to a temporary environment
-- Run all tests against your implementation
-- Provide detailed feedback on test results
+测试脚本将：
+- 提示输入你的 GitHub 用户名
+- 将你的解决方案复制到临时环境
+- 对你的实现运行所有测试
+- 提供详细的测试结果反馈
 
-## Common Patterns and Best Practices
+## 常见模式与最佳实践
 
-### Basic App Setup
+### 基础应用设置
 ```go
 app := fiber.New()
 
@@ -176,41 +176,41 @@ app.Get("/", func(c *fiber.Ctx) error {
 app.Listen(":3000")
 ```
 
-### Middleware Usage
+### 中间件使用
 ```go
-// Built-in middleware
+// 内置中间件
 app.Use(logger.New())
 app.Use(cors.New())
 
-// Custom middleware
+// 自定义中间件
 app.Use(func(c *fiber.Ctx) error {
-    // Custom logic
+    // 自定义逻辑
     return c.Next()
 })
 ```
 
-### Error Handling
+### 错误处理
 ```go
 app.Get("/users/:id", func(c *fiber.Ctx) error {
     id := c.Params("id")
     if id == "" {
         return c.Status(400).JSON(fiber.Map{
-            "error": "ID is required",
+            "error": "ID 是必需的",
         })
     }
     
-    // Process request
+    // 处理请求
     return c.JSON(response)
 })
 ```
 
-## Resources
+## 资源
 
-- [Official Fiber Documentation](https://docs.gofiber.io/)
-- [Fiber GitHub Repository](https://github.com/gofiber/fiber)
-- [Fiber Examples](https://github.com/gofiber/recipes)
-- [Performance Benchmarks](https://docs.gofiber.io/extra/benchmarks)
+- [官方 Fiber 文档](https://docs.gofiber.io/)
+- [Fiber GitHub 仓库](https://github.com/gofiber/fiber)
+- [Fiber 示例](https://github.com/gofiber/recipes)
+- [性能基准测试](https://docs.gofiber.io/extra/benchmarks)
 
 ---
 
-Ready to build blazing-fast web applications with Fiber? Start with Challenge 1! 🚀
+准备好使用 Fiber 构建极速 Web 应用了吗？从挑战 1 开始吧！🚀

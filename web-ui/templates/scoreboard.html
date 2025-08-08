@@ -4,15 +4,15 @@
     <div class="col">
         <div class="hero-section text-center py-4">
             <div class="hero-content">
-                <h1 class="display-5 fw-bold mb-3">🏆 Main Leaderboard</h1>
-                <p class="lead mb-4">Top developers ranked by completed challenges</p>
+                <h1 class="display-5 fw-bold mb-3">🏆 主排行榜</h1>
+                <p class="lead mb-4">按完成挑战数排名的顶尖开发者</p>
                 
                 <div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
                     <button id="refresh-leaderboard" class="btn btn-light px-4">
-                        <i class="bi bi-arrow-clockwise me-2"></i>Refresh Leaderboard
+                        <i class="bi bi-arrow-clockwise me-2"></i>刷新排行榜
                     </button>
                     <a href="/" class="btn btn-outline-light px-4">
-                        <i class="bi bi-code-slash me-2"></i>Browse Challenges
+                        <i class="bi bi-code-slash me-2"></i>浏览挑战
                     </a>
                 </div>
             </div>
@@ -20,33 +20,33 @@
     </div>
 </div>
 
-<!-- Loading State -->
+<!-- 加载状态 -->
 <div id="loading-state" class="text-center py-5">
     <div class="spinner-border text-primary mb-3" role="status">
-        <span class="visually-hidden">Loading leaderboard...</span>
+        <span class="visually-hidden">正在加载排行榜...</span>
     </div>
-    <p class="text-muted">Loading leaderboard data...</p>
+    <p class="text-muted">正在加载排行榜数据...</p>
 </div>
 
-<!-- Leaderboard Content -->
+<!-- 排行榜内容 -->
 <div id="leaderboard-content" style="display: none;">
-    <!-- Top 3 Podium -->
+    <!-- 前三名奖台 -->
     <div class="row mb-5" id="podium-section" style="display: none;">
         <div class="col">
-            <h3 class="text-center mb-4">🥇 Top Champions</h3>
+            <h3 class="text-center mb-4">🥇 冠军榜</h3>
             <div class="row justify-content-center">
-                <!-- Top 3 will be populated by JavaScript -->
+                <!-- 前三名将由 JavaScript 动态填充 -->
             </div>
         </div>
     </div>
 
-    <!-- Full Leaderboard -->
-<div class="row">
+    <!-- 完整排行榜 -->
+    <div class="row">
         <div class="col">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0">
-                        <i class="bi bi-trophy me-2"></i>Complete Rankings
+                        <i class="bi bi-trophy me-2"></i>完整排名
                     </h5>
                 </div>
                 <div class="card-body p-0">
@@ -54,16 +54,16 @@
                         <table class="table table-hover mb-0" id="leaderboard-table">
                             <thead class="table-light">
                                 <tr>
-                                    <th class="text-center" style="width: 80px;">Rank</th>
-                                    <th style="width: 200px;">Developer</th>
-                                    <th class="text-center" style="width: 120px;">Solved</th>
-                                    <th class="text-center" style="width: 120px;">Rate</th>
-                                    <th class="text-center" style="width: 150px;">Achievement</th>
-                                    <th>Challenge Progress</th>
+                                    <th class="text-center" style="width: 80px;">排名</th>
+                                    <th style="width: 200px;">开发者</th>
+                                    <th class="text-center" style="width: 120px;">已解决</th>
+                                    <th class="text-center" style="width: 120px;">完成率</th>
+                                    <th class="text-center" style="width: 150px;">成就</th>
+                                    <th>挑战进度</th>
                                 </tr>
                             </thead>
                             <tbody id="leaderboard-tbody">
-                                <!-- Leaderboard rows will be populated by JavaScript -->
+                                <!-- 排行榜行将由 JavaScript 填充 -->
                             </tbody>
                         </table>
                     </div>
@@ -73,25 +73,25 @@
     </div>
 </div>
 
-<!-- Challenge Legend -->
+<!-- 挑战图例 -->
 <div class="row mt-4" id="legend-section" style="display: none;">
     <div class="col">
         <div class="card">
             <div class="card-body">
                 <h6 class="card-title">
-                    <i class="bi bi-info-circle me-2"></i>Challenge Progress Legend
+                    <i class="bi bi-info-circle me-2"></i>挑战进度图例
                 </h6>
                 <div class="row">
                     <div class="col-md-6">
                         <small class="text-muted d-flex align-items-center mb-2">
                             <span class="badge bg-success me-2">✓</span>
-                            Completed (All tests passed)
+                            已完成（所有测试通过）
                         </small>
                     </div>
                     <div class="col-md-6">
                         <small class="text-muted d-flex align-items-center mb-2">
                             <span class="badge bg-light text-dark me-2">•</span>
-                            Not attempted or incomplete
+                            未尝试或未完成
                         </small>
                     </div>
                 </div>
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const leaderboardTbody = document.getElementById('leaderboard-tbody');
     const refreshButton = document.getElementById('refresh-leaderboard');
 
-    // Load leaderboard data
+    // 加载排行榜数据
     async function loadLeaderboard() {
         try {
             loadingState.style.display = 'block';
@@ -285,19 +285,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 showEmptyState();
             }
         } catch (error) {
-            console.error('Error loading leaderboard:', error);
+            console.error('加载排行榜时出错:', error);
             showErrorState();
         }
     }
 
     function renderLeaderboard(leaderboard) {
-        // Show podium for top 3
+        // 显示前三名奖台
         if (leaderboard.length >= 3) {
             renderPodium(leaderboard.slice(0, 3));
             podiumSection.style.display = 'block';
         }
 
-        // Render full table
+        // 渲染完整表格
         leaderboardTbody.innerHTML = '';
         leaderboard.forEach(user => {
             const row = createLeaderboardRow(user);
@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const podiumContainer = podiumSection.querySelector('.row');
         podiumContainer.innerHTML = '';
 
-        // Reorder for podium visual: 2nd, 1st, 3rd
+        // 重新排序以实现奖台视觉效果：第二名、第一名、第三名
         const podiumOrder = [topThree[1], topThree[0], topThree[2]].filter(Boolean);
         
         podiumOrder.forEach((user, index) => {
@@ -328,8 +328,8 @@ document.addEventListener('DOMContentLoaded', function() {
                          class="rounded-circle mx-auto mb-3" 
                          style="width: 80px; height: 80px; border: 3px solid white;">
                     <h5 class="mb-2">${user.username}</h5>
-                    <p class="mb-2"><strong>${user.completedCount}</strong> challenges solved</p>
-                    <p class="mb-0 small">${user.completionRate.toFixed(1)}% completion rate</p>
+                    <p class="mb-2"><strong>${user.completedCount}</strong> 个挑战已解决</p>
+                    <p class="mb-0 small">${user.completionRate.toFixed(1)}% 完成率</p>
                     <div class="mt-2">
                         <span class="badge bg-primary achievement-badge">${user.achievement}</span>
                     </div>
@@ -342,19 +342,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function createLeaderboardRow(user) {
         const row = document.createElement('tr');
         
-        // Rank badge styling
+        // 排名徽章样式
         let rankBadgeClass = 'other';
         if (user.rank === 1) rankBadgeClass = 'top-1';
         else if (user.rank <= 3) rankBadgeClass = 'top-3';
         else if (user.rank <= 10) rankBadgeClass = 'top-10';
 
-        // Generate challenge indicators (assuming challenges 1-28 exist)
+        // 生成挑战指示器（假设存在 1-28 号挑战）
         let challengeIndicators = '';
         for (let i = 1; i <= 28; i++) {
             const isCompleted = user.completedChallenges[i] === true;
             const indicatorClass = isCompleted ? 'completed' : 'not-completed';
             const content = isCompleted ? '✓' : '•';
-            challengeIndicators += `<span class="challenge-indicator ${indicatorClass}" title="Challenge ${i}: ${isCompleted ? 'Completed' : 'Not completed'}">${content}</span>`;
+            challengeIndicators += `<span class="challenge-indicator ${indicatorClass}" title="挑战 ${i}: ${isCompleted ? '已完成' : '未完成'}">${content}</span>`;
         }
 
         row.innerHTML = `
@@ -369,18 +369,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="fw-bold">${user.username}</div>
                         <a href="https://github.com/${user.username}" target="_blank" 
                            class="small text-muted text-decoration-none">
-                            <i class="bi bi-github"></i> View Profile
+                            <i class="bi bi-github"></i> 查看资料
                         </a>
                     </div>
                 </div>
             </td>
             <td class="text-center">
                 <div class="fw-bold text-primary fs-5">${user.completedCount}</div>
-                <small class="text-muted">challenges</small>
+                <small class="text-muted">个挑战</small>
             </td>
             <td class="text-center">
                 <div class="fw-bold text-success">${user.completionRate.toFixed(1)}%</div>
-                <small class="text-muted">complete</small>
+                <small class="text-muted">完成</small>
             </td>
             <td class="text-center">
                 <span class="badge bg-primary achievement-badge">${user.achievement}</span>
@@ -399,9 +399,9 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingState.innerHTML = `
             <div class="text-center py-5">
                 <i class="bi bi-trophy" style="font-size: 3rem; color: #6c757d;"></i>
-                <h4 class="mt-3 text-muted">No Rankings Yet</h4>
-                <p class="text-muted">Be the first to complete a challenge and claim the top spot!</p>
-                <a href="/" class="btn btn-primary">Browse Challenges</a>
+                <h4 class="mt-3 text-muted">暂无排名</h4>
+                <p class="text-muted">成为第一个完成挑战的人，争夺榜首！</p>
+                <a href="/" class="btn btn-primary">浏览挑战</a>
             </div>
         `;
     }
@@ -410,18 +410,18 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingState.innerHTML = `
             <div class="text-center py-5">
                 <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #dc3545;"></i>
-                <h4 class="mt-3 text-danger">Error Loading Leaderboard</h4>
-                <p class="text-muted">Failed to load leaderboard data. Please try again.</p>
-                <button class="btn btn-primary" onclick="location.reload()">Retry</button>
+                <h4 class="mt-3 text-danger">加载排行榜失败</h4>
+                <p class="text-muted">无法加载排行榜数据。请重试。</p>
+                <button class="btn btn-primary" onclick="location.reload()">重试</button>
             </div>
         `;
     }
 
-    // Refresh button handler
+    // 刷新按钮处理
     refreshButton.addEventListener('click', loadLeaderboard);
 
-    // Initial load
+    // 初始加载
     loadLeaderboard();
 });
 </script>
-{{end}} 
+{{end}}

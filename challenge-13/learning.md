@@ -1,28 +1,28 @@
-# Learning Materials for SQL Database Operations with Go
+# Go 中 SQL 数据库操作学习资料
 
-## SQL Databases in Go
+## Go 中的 SQL 数据库
 
-Go provides excellent support for SQL databases through the standard `database/sql` package. This challenge focuses on implementing CRUD operations with SQLite, but the concepts apply to other SQL databases like MySQL, PostgreSQL, etc.
+Go 通过标准 `database/sql` 包提供了对 SQL 数据库的优秀支持。本挑战聚焦于使用 SQLite 实现 CRUD 操作，但这些概念同样适用于 MySQL、PostgreSQL 等其他 SQL 数据库。
 
-### The database/sql Package
+### database/sql 包
 
-The `database/sql` package provides a generic interface around SQL (or SQL-like) databases. It:
+`database/sql` 包为 SQL（或类似 SQL）数据库提供了一个通用接口。它具备以下功能：
 
-- Manages connection pools 
-- Handles transactions
-- Provides prepared statements
-- Offers drivers for various databases
+- 管理连接池  
+- 处理事务
+- 提供预处理语句
+- 支持多种数据库的驱动
 
 ```go
 import (
     "database/sql"
-    _ "github.com/mattn/go-sqlite3" // Note the underscore import
+    _ "github.com/mattn/go-sqlite3" // 注意下划线导入
 )
 ```
 
-The underscore import (`_`) is used to import a package solely for its side effects (in this case, registering a database driver).
+下划线导入（`_`）用于仅导入包的副作用（此处是注册数据库驱动）。
 
-### Opening a Database Connection
+### 打开数据库连接
 
 ```go
 db, err := sql.Open("sqlite3", "path/to/database.db")
@@ -30,7 +30,7 @@ if err != nil {
     return nil, err
 }
 
-// Test the connection
+// 测试连接
 if err = db.Ping(); err != nil {
     return nil, err
 }
@@ -38,11 +38,11 @@ if err = db.Ping(); err != nil {
 return db, nil
 ```
 
-The `sql.Open()` function doesn't actually establish a connection to the database initially. It's only when you call methods like `Ping()` or execute a query that a connection is established.
+`sql.Open()` 函数最初并不会实际建立数据库连接。只有在调用 `Ping()` 或执行查询时才会建立连接。
 
-### Executing Simple Queries
+### 执行简单查询
 
-You can execute simple SQL statements that don't return rows using `db.Exec()`:
+可以使用 `db.Exec()` 执行不返回行的简单 SQL 语句：
 
 ```go
 result, err := db.Exec(
@@ -53,7 +53,7 @@ if err != nil {
 }
 ```
 
-For `INSERT` operations, you can retrieve the last inserted ID:
+对于 `INSERT` 操作，可以获取最后插入的 ID：
 
 ```go
 result, err := db.Exec(
@@ -64,7 +64,7 @@ if err != nil {
     return err
 }
 
-// Get the ID of the inserted row
+// 获取插入行的 ID
 id, err := result.LastInsertId()
 if err != nil {
     return err
@@ -72,17 +72,17 @@ if err != nil {
 product.ID = id
 ```
 
-### Querying for Data
+### 查询数据
 
-To query and retrieve data, use `db.Query()` or `db.QueryRow()`:
+要查询并检索数据，请使用 `db.Query()` 或 `db.QueryRow()`：
 
 ```go
-// For multiple rows
+// 获取多行数据
 rows, err := db.Query("SELECT id, name, price, quantity, category FROM products WHERE category = ?", category)
 if err != nil {
     return nil, err
 }
-defer rows.Close() // Always close rows when done
+defer rows.Close() // 使用完毕后始终关闭 rows
 
 var products []*Product
 for rows.Next() {
@@ -94,7 +94,7 @@ for rows.Next() {
     products = append(products, p)
 }
 
-// Check for errors from iterating over rows
+// 检查遍历 rows 时的错误
 if err = rows.Err(); err != nil {
     return nil, err
 }
@@ -102,7 +102,7 @@ if err = rows.Err(); err != nil {
 return products, nil
 ```
 
-For a single row, use `QueryRow()`:
+对于单行数据，使用 `QueryRow()`：
 
 ```go
 row := db.QueryRow("SELECT id, name, price, quantity, category FROM products WHERE id = ?", id)
@@ -111,7 +111,7 @@ p := &Product{}
 err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Quantity, &p.Category)
 if err != nil {
     if err == sql.ErrNoRows {
-        return nil, fmt.Errorf("product with ID %d not found", id)
+        return nil, fmt.Errorf("ID 为 %d 的产品未找到", id)
     }
     return nil, err
 }
@@ -119,9 +119,9 @@ if err != nil {
 return p, nil
 ```
 
-### Prepared Statements
+### 预处理语句
 
-For queries that will be executed multiple times, you can use prepared statements to improve performance:
+对于需要多次执行的查询，可以使用预处理语句以提高性能：
 
 ```go
 stmt, err := db.Prepare("UPDATE products SET quantity = ? WHERE id = ?")
@@ -138,19 +138,19 @@ for id, quantity := range updates {
 }
 ```
 
-### Transactions
+### 事务
 
-Transactions ensure that a group of operations either all succeed or all fail together:
+事务确保一组操作要么全部成功，要么全部失败：
 
 ```go
-// Begin a transaction
+// 开始事务
 tx, err := db.Begin()
 if err != nil {
     return err
 }
 defer func() {
     if err != nil {
-        tx.Rollback() // Rollback on error
+        tx.Rollback() // 出错时回滚
     }
 }()
 
@@ -172,35 +172,35 @@ for id, quantity := range updates {
     }
     
     if rowsAffected == 0 {
-        return fmt.Errorf("product with ID %d not found", id)
+        return fmt.Errorf("ID 为 %d 的产品未找到", id)
     }
 }
 
-// Commit the transaction
+// 提交事务
 return tx.Commit()
 ```
 
-### Parameter Binding and SQL Injection Prevention
+### 参数绑定与防止 SQL 注入
 
-Always use parameter binding instead of string concatenation to prevent SQL injection:
+始终使用参数绑定而非字符串拼接来防止 SQL 注入：
 
 ```go
-// DON'T DO THIS - vulnerable to SQL injection
+// 不要这样做 - 易受 SQL 注入攻击
 query := fmt.Sprintf("SELECT * FROM products WHERE category = '%s'", category)
 
-// DO THIS - uses parameter binding
+// 要这样做 - 使用参数绑定
 rows, err := db.Query("SELECT * FROM products WHERE category = ?", category)
 ```
 
-Different database drivers use different placeholder styles:
+不同数据库驱动使用不同的占位符风格：
 
-- SQLite, MySQL: `?`
-- PostgreSQL: `$1`, `$2`, etc.
-- Oracle: `:name`
+- SQLite、MySQL：`?`
+- PostgreSQL：`$1`, `$2` 等
+- Oracle：`:name`
 
-### Working with NULL Values
+### 处理 NULL 值
 
-SQL databases can contain NULL values. Go provides special types in the `database/sql` package to handle these:
+SQL 数据库可能包含 NULL 值。Go 在 `database/sql` 包中提供了特殊类型来处理这些情况：
 
 ```go
 import (
@@ -212,52 +212,52 @@ type Product struct {
     Name     string
     Price    float64
     Quantity int
-    Category sql.NullString // Can be NULL
+    Category sql.NullString // 可以为 NULL
 }
 
-// When scanning
+// 扫描时
 var category sql.NullString
 err := row.Scan(&id, &name, &price, &quantity, &category)
 
-// When using
+// 使用时
 if category.Valid {
     fmt.Println(category.String)
 } else {
-    fmt.Println("Category is NULL")
+    fmt.Println("Category 为 NULL")
 }
 ```
 
-### Error Handling
+### 错误处理
 
-There are several error types to check for:
+需要检查多种错误类型：
 
 ```go
 if err == sql.ErrNoRows {
-    // No rows returned (not necessarily an error)
-    return nil, fmt.Errorf("product not found")
+    // 未返回任何行（不一定是错误）
+    return nil, fmt.Errorf("产品未找到")
 }
 
-// Check for unique constraint violation
+// 检查唯一约束冲突
 if strings.Contains(err.Error(), "UNIQUE constraint failed") {
-    return nil, fmt.Errorf("product with that name already exists")
+    return nil, fmt.Errorf("名称为该的产品已存在")
 }
 ```
 
-### Connection Pooling
+### 连接池
 
-The `database/sql` package automatically handles connection pooling. You can control pool behavior:
+`database/sql` 包自动处理连接池。你可以控制池的行为：
 
 ```go
-db.SetMaxOpenConns(25)  // Maximum number of open connections
-db.SetMaxIdleConns(25)  // Maximum number of idle connections
-db.SetConnMaxLifetime(5 * time.Minute) // Maximum amount of time a connection may be reused
+db.SetMaxOpenConns(25)  // 最大打开连接数
+db.SetMaxIdleConns(25)  // 最大空闲连接数
+db.SetConnMaxLifetime(5 * time.Minute) // 连接可复用的最大时间
 ```
 
-### Best Practices
+### 最佳实践
 
-1. Always close resources like rows and statements
-2. Use transactions for operations that must succeed as a group
-3. Never concatenate strings to build SQL queries
-4. Check for specific errors like sql.ErrNoRows
-5. Keep database connections open for the lifetime of your application
-6. Consider using ORMs or query builders for complex applications 
+1. 始终关闭如 rows 和 statements 等资源  
+2. 对必须作为一个整体成功的操作使用事务  
+3. 永远不要通过字符串拼接构建 SQL 查询  
+4. 检查特定错误，如 `sql.ErrNoRows`  
+5. 保持数据库连接在整个应用程序生命周期内打开  
+6. 对复杂应用考虑使用 ORM 或查询生成器

@@ -1,7 +1,7 @@
-# Hints for Challenge 15: OAuth2 Authentication System
+# 挑战15：OAuth2认证系统提示
 
-## Hint 1: OAuth2 Client Registration and Management
-Start by implementing client registration with secure storage:
+## 提示1：OAuth2客户端注册与管理
+从实现安全存储的客户端注册开始：
 ```go
 type OAuth2Client struct {
     ClientID     string `json:"client_id"`
@@ -33,11 +33,11 @@ func (cs *ClientStore) RegisterClient(redirectURIs []string, scopes []string) (*
 }
 ```
 
-## Hint 2: Authorization Endpoint Implementation
-Implement the authorization endpoint that handles user consent:
+## 提示2：授权端点实现
+实现处理用户同意的授权端点：
 ```go
 func (s *OAuth2Server) AuthorizeHandler(w http.ResponseWriter, r *http.Request) {
-    // Parse authorization request
+    // 解析授权请求
     authReq := &AuthorizationRequest{
         ClientID:     r.URL.Query().Get("client_id"),
         RedirectURI:  r.URL.Query().Get("redirect_uri"),
@@ -48,7 +48,7 @@ func (s *OAuth2Server) AuthorizeHandler(w http.ResponseWriter, r *http.Request) 
         CodeChallengeMethod: r.URL.Query().Get("code_challenge_method"),
     }
     
-    // Validate client and redirect URI
+    // 验证客户端和重定向URI
     client, err := s.clientStore.GetClient(authReq.ClientID)
     if err != nil {
         http.Error(w, "invalid_client", http.StatusBadRequest)
@@ -60,18 +60,18 @@ func (s *OAuth2Server) AuthorizeHandler(w http.ResponseWriter, r *http.Request) 
         return
     }
     
-    // Generate authorization code
+    // 生成授权码
     authCode := generateAuthorizationCode()
-    s.codeStore.StoreCode(authCode, authReq, 10*time.Minute) // 10 min expiry
+    s.codeStore.StoreCode(authCode, authReq, 10*time.Minute) // 10分钟过期
     
-    // Redirect with authorization code
+    // 重定向并携带授权码
     redirectURL := fmt.Sprintf("%s?code=%s&state=%s", authReq.RedirectURI, authCode, authReq.State)
     http.Redirect(w, r, redirectURL, http.StatusFound)
 }
 ```
 
-## Hint 3: Token Endpoint with PKCE Support
-Implement the token endpoint that exchanges codes for tokens:
+## 提示3：支持PKCE的令牌端点
+实现交换代码获取令牌的令牌端点：
 ```go
 func (s *OAuth2Server) TokenHandler(w http.ResponseWriter, r *http.Request) {
     grantType := r.FormValue("grant_type")
@@ -82,7 +82,7 @@ func (s *OAuth2Server) TokenHandler(w http.ResponseWriter, r *http.Request) {
     case "refresh_token":
         s.handleRefreshTokenGrant(w, r)
     default:
-        writeErrorResponse(w, "unsupported_grant_type", "Grant type not supported")
+        writeErrorResponse(w, "unsupported_grant_type", "不支持的授权类型")
     }
 }
 
@@ -91,29 +91,29 @@ func (s *OAuth2Server) handleAuthorizationCodeGrant(w http.ResponseWriter, r *ht
     clientID := r.FormValue("client_id")
     codeVerifier := r.FormValue("code_verifier")
     
-    // Validate authorization code
+    // 验证授权码
     authReq, err := s.codeStore.GetCode(code)
     if err != nil {
-        writeErrorResponse(w, "invalid_grant", "Authorization code is invalid")
+        writeErrorResponse(w, "invalid_grant", "授权码无效")
         return
     }
     
-    // Validate PKCE if present
+    // 如果存在，验证PKCE
     if authReq.CodeChallenge != "" {
         if !validatePKCE(authReq.CodeChallenge, authReq.CodeChallengeMethod, codeVerifier) {
-            writeErrorResponse(w, "invalid_grant", "PKCE validation failed")
+            writeErrorResponse(w, "invalid_grant", "PKCE验证失败")
             return
         }
     }
     
-    // Generate tokens
+    // 生成令牌
     accessToken := generateAccessToken()
     refreshToken := generateRefreshToken()
     
     tokenResponse := &TokenResponse{
         AccessToken:  accessToken,
         TokenType:    "Bearer",
-        ExpiresIn:    3600, // 1 hour
+        ExpiresIn:    3600, // 1小时
         RefreshToken: refreshToken,
         Scope:        authReq.Scope,
     }
@@ -123,8 +123,8 @@ func (s *OAuth2Server) handleAuthorizationCodeGrant(w http.ResponseWriter, r *ht
 }
 ```
 
-## Hint 4: PKCE Implementation
-Implement Proof Key for Code Exchange for enhanced security:
+## 提示4：PKCE实现
+实现代码交换证明以增强安全性：
 ```go
 import (
     "crypto/sha256"
@@ -132,7 +132,7 @@ import (
 )
 
 func generateCodeVerifier() string {
-    // Generate random 43-128 character string
+    // 生成长度为43-128字符的随机字符串
     return base64.RawURLEncoding.EncodeToString(randomBytes(32))
 }
 
@@ -154,8 +154,8 @@ func validatePKCE(challenge, method, verifier string) bool {
 }
 ```
 
-## Hint 5: Token Validation and Introspection
-Implement token validation for protected resources:
+## 提示5：令牌验证与探查
+实现受保护资源的令牌验证：
 ```go
 func (s *OAuth2Server) ValidateToken(tokenString string) (*TokenInfo, error) {
     s.tokenStore.mutex.RLock()
@@ -163,22 +163,22 @@ func (s *OAuth2Server) ValidateToken(tokenString string) (*TokenInfo, error) {
     
     tokenInfo, exists := s.tokenStore.tokens[tokenString]
     if !exists {
-        return nil, errors.New("token not found")
+        return nil, errors.New("令牌未找到")
     }
     
     if time.Now().After(tokenInfo.ExpiresAt) {
         delete(s.tokenStore.tokens, tokenString)
-        return nil, errors.New("token expired")
+        return nil, errors.New("令牌已过期")
     }
     
     return tokenInfo, nil
 }
 ```
 
-## Key OAuth2 Concepts:
-- **Authorization Code Flow**: Secure flow for web applications
-- **PKCE**: Proof Key for Code Exchange for enhanced security
-- **Scopes**: Define permission levels for access tokens
-- **Token Expiration**: Implement proper token lifecycle management
-- **Refresh Tokens**: Allow clients to obtain new access tokens
-- **Secure Storage**: Protect client secrets and tokens 
+## OAuth2核心概念：
+- **授权码流程**：适用于Web应用的安全流程
+- **PKCE**：代码交换证明，用于增强安全性
+- **作用域**：定义访问令牌的权限级别
+- **令牌过期**：实现正确的令牌生命周期管理
+- **刷新令牌**：允许客户端获取新的访问令牌
+- **安全存储**：保护客户端密钥和令牌

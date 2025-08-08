@@ -1,8 +1,8 @@
-# Hints for GORM Associations Challenge
+# GORM 关联挑战提示
 
-## Hint 1: Database Connection & Migration
+## 提示 1：数据库连接与迁移
 
-Start with the database connection - Make sure your `ConnectDB()` function properly connects to SQLite and auto-migrates all models (User, Post, Tag).
+从数据库连接开始——确保你的 `ConnectDB()` 函数正确连接到 SQLite，并自动迁移所有模型（User、Post、Tag）。
 
 ```go
 func ConnectDB() (*gorm.DB, error) {
@@ -16,13 +16,13 @@ func ConnectDB() (*gorm.DB, error) {
 }
 ```
 
-## Hint 2: Understanding Relationships
+## 提示 2：理解关系
 
-This challenge involves one-to-many (User→Posts) and many-to-many (Post↔Tags) relationships. The User model has a slice of Posts, and Posts have both a User and a slice of Tags.
+本挑战涉及一对多（User→Posts）和多对多（Post↔Tags）关系。User 模型包含一个 Posts 切片，而 Posts 包含一个 User 和一个 Tags 切片。
 
-## Hint 3: Creating User with Posts
+## 提示 3：创建用户及其文章
 
-Use GORM's association mode to create user and posts together. The posts will be automatically associated with the user:
+使用 GORM 的关联模式同时创建用户和文章。文章将自动与用户关联：
 
 ```go
 func CreateUserWithPosts(db *gorm.DB, user *User) error {
@@ -30,9 +30,9 @@ func CreateUserWithPosts(db *gorm.DB, user *User) error {
 }
 ```
 
-## Hint 4: Preloading Related Data
+## 提示 4：预加载相关数据
 
-Use `Preload("Posts")` to load the user's posts. Use `First()` to get a single user by ID:
+使用 `Preload("Posts")` 加载用户的帖子。使用 `First()` 根据 ID 获取单个用户：
 
 ```go
 func GetUserWithPosts(db *gorm.DB, userID uint) (*User, error) {
@@ -45,18 +45,18 @@ func GetUserWithPosts(db *gorm.DB, userID uint) (*User, error) {
 }
 ```
 
-## Hint 5: Creating Posts with Tags
+## 提示 5：创建带标签的文章
 
-First, find or create tags by name, then associate them with the post:
+首先根据名称查找或创建标签，然后将其与文章关联：
 
 ```go
 func CreatePostWithTags(db *gorm.DB, post *Post, tagNames []string) error {
-    // Create the post first
+    // 先创建文章
     if err := db.Create(post).Error; err != nil {
         return err
     }
     
-    // Find or create tags and associate them
+    // 查找或创建标签并关联
     for _, name := range tagNames {
         var tag Tag
         db.FirstOrCreate(&tag, Tag{Name: name})
@@ -66,9 +66,9 @@ func CreatePostWithTags(db *gorm.DB, post *Post, tagNames []string) error {
 }
 ```
 
-## Hint 6: Querying Posts by Tag
+## 提示 6：按标签查询文章
 
-Use `Joins()` to join posts with tags through the junction table:
+使用 `Joins()` 通过中间表将文章与标签连接起来：
 
 ```go
 func GetPostsByTag(db *gorm.DB, tagName string) ([]Post, error) {
@@ -81,9 +81,9 @@ func GetPostsByTag(db *gorm.DB, tagName string) ([]Post, error) {
 }
 ```
 
-## Hint 7: Adding Tags to Existing Post
+## 提示 7：为已有文章添加标签
 
-Find the post first, then find or create tags and append them:
+先查找文章，然后查找或创建标签并追加：
 
 ```go
 func AddTagsToPost(db *gorm.DB, postID uint, tagNames []string) error {
@@ -101,9 +101,9 @@ func AddTagsToPost(db *gorm.DB, postID uint, tagNames []string) error {
 }
 ```
 
-## Hint 8: Preloading Multiple Associations
+## 提示 8：预加载多个关联
 
-Use multiple `Preload()` calls to load both User and Tags:
+使用多个 `Preload()` 调用加载 User 和 Tags：
 
 ```go
 func GetPostWithUserAndTags(db *gorm.DB, postID uint) (*Post, error) {
@@ -116,11 +116,11 @@ func GetPostWithUserAndTags(db *gorm.DB, postID uint) (*Post, error) {
 }
 ```
 
-## Common Patterns
+## 常见模式
 
-### Creating Related Records
+### 创建相关记录
 ```go
-// Method 1: Association mode
+// 方法 1：关联模式
 user := User{
     Name: "John",
     Posts: []Post{
@@ -131,18 +131,18 @@ user := User{
 db.Create(&user)
 ```
 
-### Preloading Related Data
+### 预加载相关数据
 ```go
 var user User
 db.Preload("Posts").First(&user, userID)
 ```
 
-### Working with Many-to-Many
+### 处理多对多关系
 ```go
-// Add tags to post
+// 为文章添加标签
 db.Model(&post).Association("Tags").Append(&tags)
 
-// Get posts by tag
+// 按标签获取文章
 var posts []Post
 db.Joins("JOIN post_tags ON posts.id = post_tags.post_id").
    Joins("JOIN tags ON post_tags.tag_id = tags.id").
@@ -150,71 +150,71 @@ db.Joins("JOIN post_tags ON posts.id = post_tags.post_id").
    Find(&posts)
 ```
 
-## Error Handling
+## 错误处理
 
-1. **Check for errors** after each database operation
-2. **Handle not found cases** - return appropriate errors when records don't exist
-3. **Validate input** - check for empty or invalid data before database operations
+1. **检查错误**——每次数据库操作后都要检查
+2. **处理未找到的情况**——当记录不存在时返回适当的错误
+3. **验证输入**——在数据库操作前检查空值或无效数据
 
-## Testing Tips
+## 测试技巧
 
-1. **Clean up after tests** - Always clean up test data
-2. **Test edge cases** - Test with empty data, invalid IDs, etc.
-3. **Verify relationships** - Make sure associations are properly created
+1. **测试后清理**——始终清理测试数据
+2. **测试边界情况**——测试空数据、无效 ID 等情况
+3. **验证关联**——确保关联正确创建
 
-## Debugging
+## 调试
 
-1. **Enable GORM logging** to see SQL queries:
+1. **启用 GORM 日志**以查看 SQL 查询：
 ```go
 db = db.Debug()
 ```
 
-2. **Check table structure** after migration:
+2. **检查迁移后的表结构**：
 ```go
-// Verify tables exist
+// 验证表是否存在
 assert.True(t, db.Migrator().HasTable(&User{}))
 assert.True(t, db.Migrator().HasTable(&Post{}))
 assert.True(t, db.Migrator().HasTable(&Tag{}))
 ```
 
-3. **Verify foreign keys** are properly set:
+3. **验证外键是否正确设置**：
 ```go
-// Check if post has correct user_id
+// 检查文章是否有正确的 user_id
 assert.Equal(t, user.ID, post.UserID)
 ```
 
-## Performance Considerations
+## 性能考虑
 
-1. **Use preloading** to avoid N+1 queries
-2. **Limit result sets** when querying large datasets
-3. **Use transactions** for multiple related operations
+1. **使用预加载**避免 N+1 查询问题
+2. **限制结果集**——查询大数据集时注意
+3. **使用事务**处理多个相关操作
 
-## Common Mistakes to Avoid
+## 常见错误避免
 
-1. **Forgetting to set foreign keys** - Make sure UserID is set in posts
-2. **Not handling errors** - Always check for errors after database operations
-3. **Not using preloading** - This can lead to N+1 query problems
-4. **Forgetting to migrate** - Make sure all models are migrated before use
+1. **忘记设置外键**——确保 Posts 中的 UserID 已设置
+2. **未处理错误**——每次数据库操作后都应检查错误
+3. **未使用预加载**——可能导致 N+1 查询问题
+4. **忘记迁移**——使用前确保所有模型已完成迁移
 
-## Useful GORM Methods
+## 有用的 GORM 方法
 
-- `db.Create()` - Create records
-- `db.First()` - Get first record
-- `db.Preload()` - Preload related data
-- `db.Joins()` - Join tables
-- `db.Where()` - Filter results
-- `db.Association()` - Work with associations
-- `db.AutoMigrate()` - Migrate models
+- `db.Create()` - 创建记录
+- `db.First()` - 获取第一条记录
+- `db.Preload()` - 预加载相关数据
+- `db.Joins()` - 连接表
+- `db.Where()` - 过滤结果
+- `db.Association()` - 操作关联
+- `db.AutoMigrate()` - 迁移模型
 
-## SQLite Specific Notes
+## SQLite 特定说明
 
-- SQLite is used for this challenge, so some SQL syntax might be different from other databases
-- SQLite doesn't support some advanced features like full-text search
-- Use `gorm.io/driver/sqlite` for the driver
+- 本挑战使用 SQLite，因此某些 SQL 语法可能与其他数据库不同
+- SQLite 不支持一些高级功能，如全文搜索
+- 使用 `gorm.io/driver/sqlite` 作为驱动
 
-## Final Tips
+## 最终建议
 
-1. **Read the tests carefully** - They show exactly what your functions should do
-2. **Start simple** - Get basic CRUD working first, then add associations
-3. **Test incrementally** - Test each function as you implement it
-4. **Use the learning resources** - Check the GORM documentation for detailed examples 
+1. **仔细阅读测试用例**——它们明确展示了函数应实现的功能
+2. **从简单开始**——先实现基本的增删改查，再添加关联
+3. **逐步测试**——每实现一个函数就立即测试
+4. **利用学习资源**——查阅 GORM 文档获取详细示例

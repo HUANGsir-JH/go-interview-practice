@@ -1,51 +1,51 @@
-# Learning: Advanced Fiber Middleware Patterns
+# 学习：高级 Fiber 中间件模式
 
-## 🌟 **What is Middleware?**
+## 🌟 **什么是中间件？**
 
-Middleware functions execute during the request-response cycle and can:
-- Execute code before the route handler
-- Modify request or response objects
-- End the request-response cycle
-- Call the next middleware function
+中间件函数在请求-响应周期中执行，可以：
+- 在路由处理器之前执行代码
+- 修改请求或响应对象
+- 结束请求-响应周期
+- 调用下一个中间件函数
 
-### **Middleware in Fiber**
-Fiber middleware uses a similar pattern to Express.js with the `c.Next()` function:
+### **Fiber 中的中间件**
+Fiber 中间件使用与 Express.js 类似的模式，通过 `c.Next()` 函数：
 
 ```go
 func MyMiddleware() fiber.Handler {
     return func(c *fiber.Ctx) error {
-        // Before handler logic
+        // 处理前逻辑
         
-        err := c.Next() // Execute next middleware/handler
+        err := c.Next() // 执行下一个中间件/处理器
         
-        // After handler logic
+        // 处理后逻辑
         
         return err
     }
 }
 ```
 
-## 🔄 **Middleware Execution Order**
+## 🔄 **中间件执行顺序**
 
-Middleware executes in the order it's registered:
+中间件按注册顺序执行：
 
 ```
-Request → MW1 → MW2 → MW3 → Handler → MW3 → MW2 → MW1 → Response
+请求 → MW1 → MW2 → MW3 → 处理器 → MW3 → MW2 → MW1 → 响应
 ```
 
-### **Best Practice Order**
-1. **Error Recovery** - Catch panics first
-2. **Request ID** - Track requests
-3. **Logging** - Log with request ID
-4. **CORS** - Handle cross-origin requests
-5. **Rate Limiting** - Protect against abuse
-6. **Authentication** - Verify users
-7. **Route Handlers** - Business logic
+### **最佳实践顺序**
+1. **错误恢复** - 首先捕获 panic
+2. **请求 ID** - 跟踪请求
+3. **日志记录** - 使用请求 ID 记录日志
+4. **CORS** - 处理跨域请求
+5. **限流** - 防止滥用
+6. **认证** - 验证用户
+7. **路由处理器** - 业务逻辑
 
-## 🛠️ **Essential Middleware Patterns**
+## 🛠️ **必备中间件模式**
 
-### **1. Request ID Middleware**
-Track requests across your application:
+### **1. 请求 ID 中间件**
+在整个应用中跟踪请求：
 
 ```go
 func RequestIDMiddleware() fiber.Handler {
@@ -58,8 +58,8 @@ func RequestIDMiddleware() fiber.Handler {
 }
 ```
 
-### **2. Logging Middleware**
-Monitor request performance:
+### **2. 日志中间件**
+监控请求性能：
 
 ```go
 func LoggingMiddleware() fiber.Handler {
@@ -81,8 +81,8 @@ func LoggingMiddleware() fiber.Handler {
 }
 ```
 
-### **3. CORS Middleware**
-Enable cross-origin requests:
+### **3. CORS 中间件**
+启用跨域请求：
 
 ```go
 func CORSMiddleware() fiber.Handler {
@@ -100,8 +100,8 @@ func CORSMiddleware() fiber.Handler {
 }
 ```
 
-### **4. Authentication Middleware**
-Protect routes with API keys or tokens:
+### **4. 认证中间件**
+使用 API 密钥或令牌保护路由：
 
 ```go
 func AuthMiddleware() fiber.Handler {
@@ -110,7 +110,7 @@ func AuthMiddleware() fiber.Handler {
         
         if !isValidAPIKey(apiKey) {
             return c.Status(401).JSON(fiber.Map{
-                "error": "Unauthorized",
+                "error": "未授权",
             })
         }
         
@@ -120,10 +120,10 @@ func AuthMiddleware() fiber.Handler {
 }
 ```
 
-## 📊 **Rate Limiting Strategies**
+## 📊 **限流策略**
 
-### **Fixed Window**
-Simple but can allow bursts:
+### **固定窗口**
+简单但可能允许突发流量：
 
 ```go
 func FixedWindowRateLimit() fiber.Handler {
@@ -134,7 +134,7 @@ func FixedWindowRateLimit() fiber.Handler {
         now := time.Now()
         ip := c.IP()
         
-        // Reset window every minute
+        // 每分钟重置窗口
         if now.Sub(lastReset) >= time.Minute {
             requests = make(map[string]int)
             lastReset = now
@@ -143,7 +143,7 @@ func FixedWindowRateLimit() fiber.Handler {
         requests[ip]++
         if requests[ip] > 100 {
             return c.Status(429).JSON(fiber.Map{
-                "error": "Rate limit exceeded",
+                "error": "超出速率限制",
             })
         }
         
@@ -152,8 +152,8 @@ func FixedWindowRateLimit() fiber.Handler {
 }
 ```
 
-### **Sliding Window**
-More accurate but uses more memory:
+### **滑动窗口**
+更精确但占用更多内存：
 
 ```go
 func SlidingWindowRateLimit() fiber.Handler {
@@ -163,7 +163,7 @@ func SlidingWindowRateLimit() fiber.Handler {
         now := time.Now()
         ip := c.IP()
         
-        // Clean old requests
+        // 清理旧请求
         var validRequests []time.Time
         for _, reqTime := range requests[ip] {
             if now.Sub(reqTime) < time.Minute {
@@ -173,7 +173,7 @@ func SlidingWindowRateLimit() fiber.Handler {
         
         if len(validRequests) >= 100 {
             return c.Status(429).JSON(fiber.Map{
-                "error": "Rate limit exceeded",
+                "error": "超出速率限制",
             })
         }
         
@@ -183,20 +183,20 @@ func SlidingWindowRateLimit() fiber.Handler {
 }
 ```
 
-## 🔒 **Error Handling Patterns**
+## 🔒 **错误处理模式**
 
-### **Centralized Error Handler**
-Handle all errors in one place:
+### **集中式错误处理器**
+在一个地方处理所有错误：
 
 ```go
 func ErrorHandlerMiddleware() fiber.Handler {
     return func(c *fiber.Ctx) error {
         defer func() {
             if r := recover(); r != nil {
-                log.Printf("Panic recovered: %v", r)
+                log.Printf("恢复 panic: %v", r)
                 c.Status(500).JSON(fiber.Map{
                     "success": false,
-                    "error": "Internal server error",
+                    "error": "内部服务器错误",
                 })
             }
         }()
@@ -206,8 +206,8 @@ func ErrorHandlerMiddleware() fiber.Handler {
 }
 ```
 
-### **Custom Error Types**
-Create specific error types:
+### **自定义错误类型**
+创建特定的错误类型：
 
 ```go
 type APIError struct {
@@ -228,23 +228,23 @@ func ValidationError(message string) APIError {
 }
 ```
 
-## 🎯 **Context and State Management**
+## 🎯 **上下文与状态管理**
 
-### **Storing Data in Context**
-Share data between middleware:
+### **在上下文中存储数据**
+在中间件之间共享数据：
 
 ```go
-// Store data
+// 存储数据
 c.Locals("user_id", 123)
 c.Locals("request_start", time.Now())
 
-// Retrieve data
+// 获取数据
 userID := c.Locals("user_id").(int)
 startTime := c.Locals("request_start").(time.Time)
 ```
 
-### **Request Scoped Data**
-Keep data tied to specific requests:
+### **请求作用域数据**
+将数据与特定请求关联：
 
 ```go
 type RequestContext struct {
@@ -266,22 +266,22 @@ func ContextMiddleware() fiber.Handler {
 }
 ```
 
-## 📈 **Performance Considerations**
+## 📈 **性能考虑**
 
-### **Efficient Middleware**
-- Avoid heavy computations in middleware
-- Use connection pooling for external services
-- Cache frequently accessed data
-- Clean up resources properly
+### **高效中间件**
+- 避免在中间件中进行耗时计算
+- 对外部服务使用连接池
+- 缓存频繁访问的数据
+- 正确清理资源
 
-### **Memory Management**
+### **内存管理**
 ```go
 func EfficientMiddleware() fiber.Handler {
-    // Initialize outside the handler
+    // 在处理器外部初始化
     cache := make(map[string]interface{})
     
     return func(c *fiber.Ctx) error {
-        // Lightweight operations only
+        // 仅执行轻量级操作
         key := c.Get("Cache-Key")
         if data, exists := cache[key]; exists {
             c.Locals("cached_data", data)
@@ -292,10 +292,10 @@ func EfficientMiddleware() fiber.Handler {
 }
 ```
 
-## 🔧 **Testing Middleware**
+## 🔧 **测试中间件**
 
-### **Unit Testing**
-Test middleware in isolation:
+### **单元测试**
+隔离测试中间件：
 
 ```go
 func TestRequestIDMiddleware(t *testing.T) {
@@ -312,8 +312,8 @@ func TestRequestIDMiddleware(t *testing.T) {
 }
 ```
 
-### **Integration Testing**
-Test middleware chains:
+### **集成测试**
+测试中间件链：
 
 ```go
 func TestMiddlewareChain(t *testing.T) {
@@ -322,7 +322,7 @@ func TestMiddlewareChain(t *testing.T) {
     app.Use(LoggingMiddleware())
     app.Use(AuthMiddleware())
     
-    // Test with valid auth
+    // 使用有效认证测试
     req := httptest.NewRequest("GET", "/protected", nil)
     req.Header.Set("X-API-Key", "valid-key")
     
@@ -331,20 +331,20 @@ func TestMiddlewareChain(t *testing.T) {
 }
 ```
 
-## 🎯 **Best Practices**
+## 🎯 **最佳实践**
 
-1. **Keep middleware focused** - One responsibility per middleware
-2. **Order matters** - Place middleware in logical order
-3. **Handle errors gracefully** - Don't let middleware crash the app
-4. **Use context for sharing** - Store request-scoped data in context
-5. **Test thoroughly** - Unit test each middleware
-6. **Monitor performance** - Track middleware execution time
-7. **Clean up resources** - Release resources in defer statements
+1. **保持中间件专注** - 每个中间件只负责一个职责
+2. **顺序很重要** - 将中间件按逻辑顺序排列
+3. **优雅处理错误** - 不要让中间件导致应用崩溃
+4. **使用上下文共享** - 将请求作用域数据存储在上下文中
+5. **充分测试** - 单元测试每个中间件
+6. **监控性能** - 跟踪中间件执行时间
+7. **清理资源** - 在 defer 语句中释放资源
 
-## 📚 **Next Steps**
+## 📚 **下一步**
 
-After mastering middleware patterns:
-1. **Validation & Error Handling** - Input validation and error responses
-2. **Authentication & Authorization** - JWT tokens and role-based access
-3. **Database Integration** - Connecting to databases
-4. **Testing Strategies** - Comprehensive testing approaches
+掌握中间件模式后：
+1. **验证与错误处理** - 输入验证和错误响应
+2. **认证与授权** - JWT 令牌和基于角色的访问控制
+3. **数据库集成** - 连接数据库
+4. **测试策略** - 全面的测试方法

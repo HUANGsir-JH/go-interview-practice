@@ -1,113 +1,113 @@
-# AI Configuration for Real-Time Code Review
+# AI配置用于实时代码审查
 
-## Setup Instructions
+## 设置说明
 
-### 1. Environment Variables
+### 1. 环境变量
 
-Create a `.env` file in the project root or set these environment variables:
+在项目根目录创建一个`.env`文件或设置这些环境变量：
 
 ```bash
-# Set your preferred AI provider: gemini, openai, claude, or mock
+# 设置您首选的AI提供商：gemini、openai、claude或mock
 export AI_PROVIDER=gemini
 
-# API Keys (only set the one you're using)
+# API密钥（只设置您正在使用的那个）
 export GEMINI_API_KEY=your_gemini_api_key_here
 export OPENAI_API_KEY=your_openai_api_key_here
 export CLAUDE_API_KEY=your_claude_api_key_here
 
-# Optional: Override default models
+# 可选：覆盖默认模型
 export AI_MODEL=gemini-pro
 ```
 
-### 2. Getting API Keys
+### 2. 获取API密钥
 
-#### Gemini (Recommended - Free tier available)
-1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Create a new API key
-3. Set `AI_PROVIDER=gemini` and `GEMINI_API_KEY=your_key`
+#### Gemini（推荐 - 提供免费层级）
+1. 访问 [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. 创建新的API密钥
+3. 设置 `AI_PROVIDER=gemini` 和 `GEMINI_API_KEY=your_key`
 
 #### OpenAI
-1. Go to [OpenAI API Keys](https://platform.openai.com/api-keys)
-2. Create a new API key
-3. Set `AI_PROVIDER=openai` and `OPENAI_API_KEY=your_key`
+1. 访问 [OpenAI API Keys](https://platform.openai.com/api-keys)
+2. 创建新的API密钥
+3. 设置 `AI_PROVIDER=openai` 和 `OPENAI_API_KEY=your_key`
 
 #### Claude
-1. Go to [Anthropic Console](https://console.anthropic.com/)
-2. Create a new API key
-3. Set `AI_PROVIDER=claude` and `CLAUDE_API_KEY=your_key`
+1. 访问 [Anthropic Console](https://console.anthropic.com/)
+2. 创建新的API密钥
+3. 设置 `AI_PROVIDER=claude` 和 `CLAUDE_API_KEY=your_key`
 
-### 3. Development Mode
+### 3. 开发模式
 
-For testing without API keys, use mock AI:
+在没有API密钥的情况下进行测试，使用模拟AI：
 ```bash
 export AI_PROVIDER=mock
 ```
 
-This provides realistic-looking responses without making external API calls.
+这提供了逼真的响应，而无需进行外部API调用。
 
-### 4. Starting the Server
+### 4. 启动服务器
 
 ```bash
 cd web-ui
 go run main.go
 ```
 
-The AI features will be available at:
-- `POST /api/ai/code-review` - Real-time code analysis
-- `POST /api/ai/interviewer-questions` - Generate follow-up questions  
-- `POST /api/ai/code-hint` - Context-aware hints
+AI功能将在以下位置可用：
+- `POST /api/ai/code-review` - 实时代码分析
+- `POST /api/ai/interviewer-questions` - 生成后续问题
+- `POST /api/ai/code-hint` - 上下文感知提示
 
-## Features ✅ WORKING
+## 功能 ✅ 正常工作
 
-### Real-Time Code Review ✅
-- **Overall Score**: 0-100 rating of code quality  
-- **Issues Detection**: Bugs, performance, style, logic issues
-- **Suggestions**: Optimization and best practice recommendations
-- **Complexity Analysis**: Time/space complexity evaluation
-- **Interviewer Feedback**: What a real interviewer would say
-- **Security**: All content is HTML-escaped for safety
+### 实时代码审核 ✅
+- **总体评分**：0-100的代码质量评分
+- **问题检测**：错误、性能、风格、逻辑问题
+- **建议**：优化和最佳实践推荐
+- **复杂度分析**：时间/空间复杂度评估
+- **面试官反馈**：真实面试官会说的话
+- **安全性**：所有内容都经过HTML转义以确保安全
 
-### Dynamic Interview Questions ✅  
-- Context-aware questions based on the user's solution
-- Progressive difficulty based on user performance
-- Go-specific technical probing
-- Edge case exploration
-- Array of 5 relevant questions per request
+### 动态面试问题 ✅
+- 基于用户解决方案的上下文感知问题
+- 基于用户表现的渐进难度
+- Go特定的技术探索
+- 边界情况探索
+- 每次请求5个相关问题数组
 
-### Smart Hints System ✅
-- 4 levels of hints (subtle nudge → detailed explanation)
-- Context-aware based on current code
-- Educational approach that teaches concepts
-- Progressive hint buttons (Lv1 → Lv2 → Lv3 → Lv4)
+### 智能提示系统 ✅
+- 4个级别的提示（微妙提示 → 详细解释）
+- 基于当前代码的上下文感知
+- 教授概念的教育方法
+- 渐进式提示按钮（Lv1 → Lv2 → Lv3 → Lv4）
 
-## API Examples
+## API示例
 
-### Code Review
+### 代码审核
 ```javascript
 POST /api/ai/code-review
 {
   "challengeId": 1,
   "code": "func Sum(a, b int) int { return a + b }",
-  "context": "Interview started 5 minutes ago"
+  "context": "面试开始5分钟前"
 }
 ```
 
-### Get Interview Questions
+### 获取面试问题
 ```javascript
 POST /api/ai/interviewer-questions
 {
   "challengeId": 1, 
   "code": "func Sum(a, b int) int { return a + b }",
-  "userProgress": "Completed basic solution"
+  "userProgress": "完成基础解决方案"
 }
 ```
 
-### Get Hint
+### 获取提示
 ```javascript
 POST /api/ai/code-hint
 {
   "challengeId": 1,
-  "code": "func Sum(a, b int) int { // stuck here }",
+  "code": "func Sum(a, b int) int { // 卡在这里 }",
   "hintLevel": 2
 }
 ```

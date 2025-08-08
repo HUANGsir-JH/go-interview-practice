@@ -1,132 +1,132 @@
-# Graph Algorithms: Shortest Path
+# 图算法：最短路径
 
-## Overview
+## 概述
 
-Finding the shortest path in a graph is a fundamental problem in computer science with numerous real-world applications, from routing in computer networks to GPS navigation systems. This document covers three essential shortest path algorithms:
+在图中寻找最短路径是计算机科学中的一个基础问题，具有众多实际应用，从计算机网络中的路由到GPS导航系统。本文档涵盖了三种重要的最短路径算法：
 
-1. **Breadth-First Search (BFS)** - For unweighted graphs
-2. **Dijkstra's Algorithm** - For weighted graphs with non-negative weights
-3. **Bellman-Ford Algorithm** - For weighted graphs that may contain negative weights
+1. **广度优先搜索（BFS）** - 适用于无权图
+2. **Dijkstra算法** - 适用于边权非负的加权图
+3. **Bellman-Ford算法** - 适用于可能包含负权边的加权图
 
-## Shortest Path Algorithms
+## 最短路径算法
 
-### 1. Breadth-First Search (BFS)
+### 1. 广度优先搜索（BFS）
 
-BFS is used to find the shortest path in an **unweighted graph**. It works by exploring all neighbor vertices at the present depth prior to moving on to vertices at the next depth level.
+BFS用于在**无权图**中寻找最短路径。它通过先探索当前深度的所有邻接顶点，再进入下一层深度的顶点来工作。
 
-#### How BFS Works:
+#### BFS的工作原理：
 
-1. Start at the source vertex and mark it as visited
-2. Enqueue the source vertex into a queue
-3. While the queue is not empty:
-   - Dequeue a vertex from the queue
-   - For each unvisited adjacent vertex:
-     - Mark it as visited
-     - Set its distance as current vertex's distance + 1
-     - Set its predecessor as the current vertex
-     - Enqueue it into the queue
+1. 从源顶点开始，并将其标记为已访问
+2. 将源顶点加入队列
+3. 当队列不为空时：
+   - 从队列中取出一个顶点
+   - 对每个未访问的相邻顶点：
+     - 标记为已访问
+     - 设置其距离为当前顶点距离 + 1
+     - 设置其前驱为当前顶点
+     - 将其加入队列
 
-#### Time and Space Complexity:
+#### 时间与空间复杂度：
 
-- **Time Complexity**: O(V + E) where V is the number of vertices and E is the number of edges
-- **Space Complexity**: O(V) for the queue and visited array
+- **时间复杂度**：O(V + E)，其中 V 是顶点数量，E 是边的数量
+- **空间复杂度**：O(V)，用于队列和已访问数组
 
-#### Applications:
+#### 应用场景：
 
-- Social network friend recommendations (shortest connection between users)
-- Web crawling
-- Finding the shortest route in maze solving
-- Network broadcasting
+- 社交网络好友推荐（用户之间的最短连接）
+- 网页爬虫
+- 迷宫求解中的最短路径查找
+- 网络广播
 
-### 2. Dijkstra's Algorithm
+### 2. Dijkstra算法
 
-Dijkstra's algorithm is used to find the shortest path in a **weighted graph with non-negative weights**. It works by greedily selecting the vertex with the minimum distance and relaxing all its outgoing edges.
+Dijkstra算法用于在**边权非负的加权图**中寻找最短路径。它通过贪心地选择距离最小的未访问顶点，并松弛其所有出边来工作。
 
-#### How Dijkstra Works:
+#### Dijkstra的工作原理：
 
-1. Initialize distances to all vertices as infinite and distance to the source as 0
-2. Create a priority queue and insert source with distance 0
-3. While the priority queue is not empty:
-   - Extract the vertex with minimum distance
-   - For each adjacent vertex:
-     - If the distance can be improved by going through the current vertex, update the distance and predecessor
+1. 将所有顶点的距离初始化为无穷大，源顶点的距离设为0
+2. 创建一个优先队列，并将源顶点及其距离0插入其中
+3. 当优先队列不为空时：
+   - 提取距离最小的顶点
+   - 对每个邻接顶点：
+     - 如果通过当前顶点可以缩短到达该顶点的距离，则更新距离和前驱
 
-#### Time and Space Complexity:
+#### 时间与空间复杂度：
 
-- **Time Complexity**: O((V + E) log V) using a binary heap-based priority queue
-- **Space Complexity**: O(V) for the distance array, predecessor array, and priority queue
+- **时间复杂度**：使用二叉堆实现的优先队列时为 O((V + E) log V)
+- **空间复杂度**：O(V)，用于距离数组、前驱数组和优先队列
 
-#### Key Concepts:
-- **Greedy approach**: Always select the closest unvisited vertex
-- **Relaxation**: Update distance if a shorter path is found
-- **Priority queue**: Use to efficiently get the minimum distance vertex
-- **Non-negative weights**: Algorithm doesn't work with negative edge weights
+#### 关键概念：
+- **贪心策略**：始终选择距离最近的未访问顶点
+- **松弛操作**：发现更短路径时更新距离
+- **优先队列**：高效获取距离最小的顶点
+- **非负权重**：算法无法处理负权边
 
-#### Applications:
+#### 应用场景：
 
-- GPS navigation systems
-- Network routing protocols (e.g., OSPF)
-- Flight scheduling
-- Telecommunications networks
+- GPS导航系统
+- 网络路由协议（如 OSPF）
+- 航班调度
+- 电信网络
 
-### 3. Bellman-Ford Algorithm
+### 3. Bellman-Ford算法
 
-The Bellman-Ford algorithm is used to find the shortest path in a **weighted graph that may contain negative weights**. It can also detect negative weight cycles.
+Bellman-Ford算法用于在**可能包含负权边的加权图**中寻找最短路径。它还能检测负权环。
 
-#### How Bellman-Ford Works:
+#### Bellman-Ford的工作原理：
 
-1. Initialize distances to all vertices as infinite and distance to the source as 0
-2. Relax all edges V-1 times (where V is the number of vertices):
-   - For each edge (u, v) with weight w:
-     - If distance[u] + w < distance[v], then update distance[v] = distance[u] + w and predecessor[v] = u
-3. Check for negative weight cycles:
-   - For each edge (u, v) with weight w:
-     - If distance[u] + w < distance[v], then a negative weight cycle exists
+1. 将所有顶点的距离初始化为无穷大，源顶点的距离设为0
+2. 对所有边进行 V-1 次松弛（V 为顶点数量）：
+   - 对每条边 (u, v)，权重为 w：
+     - 如果 distance[u] + w < distance[v]，则更新 distance[v] = distance[u] + w，并设置 predecessor[v] = u
+3. 检测负权环：
+   - 对每条边 (u, v)，权重为 w：
+     - 如果 distance[u] + w < distance[v]，则存在负权环
 
-#### Time and Space Complexity:
+#### 时间与空间复杂度：
 
-- **Time Complexity**: O(V * E) where V is the number of vertices and E is the number of edges
-- **Space Complexity**: O(V) for the distance and predecessor arrays
+- **时间复杂度**：O(V × E)，其中 V 是顶点数，E 是边数
+- **空间复杂度**：O(V)，用于距离数组和前驱数组
 
-#### Key Concepts:
-- **Edge relaxation**: Core operation that updates shortest distances
-- **V-1 iterations**: Maximum number of edges in any shortest path
-- **Negative cycle detection**: Additional iteration to detect negative cycles
-- **Dynamic programming**: Bottom-up approach to shortest paths
+#### 关键概念：
+- **边松弛**：核心操作，用于更新最短距离
+- **V-1 次迭代**：任何最短路径中最多包含 V-1 条边
+- **负环检测**：额外一次迭代用于检测负权环
+- **动态规划**：自底向上的最短路径求解方法
 
-#### Applications:
+#### 应用场景：
 
-- Currency arbitrage detection
-- Network routing with negative weights
-- Finding shortest paths in graphs with negative edge weights
-- Distributed systems algorithms
+- 货币套利检测
+- 包含负权边的网络路由
+- 含有负边权图的最短路径查找
+- 分布式系统算法
 
-## General Concepts
+## 通用概念
 
-### Graph Representation
+### 图的表示方式
 
-Graphs can be represented in several ways:
+图可以用多种方式表示：
 
-1. **Adjacency Matrix**: 2D array where `matrix[i][j]` represents the weight of edge from vertex i to vertex j
-2. **Adjacency List**: Array of lists where each list contains the neighbors of a vertex
-3. **Edge List**: List of all edges in the graph
+1. **邻接矩阵**：二维数组，`matrix[i][j]` 表示从顶点 i 到 j 的边的权重
+2. **邻接表**：数组的列表，每个列表包含某个顶点的邻居
+3. **边列表**：图中所有边的列表
 
-### Path Reconstruction
+### 路径重构
 
-To reconstruct the actual shortest path:
-1. Use a predecessor array to track the previous vertex in the shortest path
-2. Start from the destination and follow predecessors back to the source
-3. Reverse the path to get the correct order
+要重构实际的最短路径：
+1. 使用前驱数组记录最短路径中每个顶点的前一个顶点
+2. 从目标顶点开始，沿着前驱回溯到源顶点
+3. 将路径反转以得到正确的顺序
 
-### When to Use Each Algorithm
+### 各算法适用场景
 
-- **BFS**: Unweighted graphs or when all edges have the same weight
-- **Dijkstra**: Weighted graphs with non-negative weights
-- **Bellman-Ford**: Weighted graphs that may contain negative weights or when you need to detect negative cycles
+- **BFS**：适用于无权图或所有边权重相同的图
+- **Dijkstra**：适用于边权非负的加权图
+- **Bellman-Ford**：适用于可能包含负权边的图，或需要检测负权环的情况
 
-## Further Reading
+## 扩展阅读
 
-- [Introduction to Algorithms (CLRS)](https://mitpress.mit.edu/books/introduction-algorithms-third-edition)
-- [Graph Algorithms Visualization](https://visualgo.net/en/sssp)
-- [Dijkstra's Algorithm Explained](https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/)
-- [Bellman-Ford Algorithm](https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/) 
+- [算法导论（CLRS）](https://mitpress.mit.edu/books/introduction-algorithms-third-edition)
+- [图算法可视化](https://visualgo.net/en/sssp)
+- [Dijkstra算法详解](https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/)
+- [Bellman-Ford算法](https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/)

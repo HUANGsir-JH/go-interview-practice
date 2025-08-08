@@ -1,28 +1,28 @@
-# Learning GORM CRUD Operations
+# 学习 GORM CRUD 操作
 
-## Overview
+## 概述
 
-GORM (Go Object Relational Mapper) is a powerful ORM library for Go that simplifies database operations. This challenge focuses on mastering the fundamental CRUD (Create, Read, Update, Delete) operations using GORM.
+GORM (Go 对象关系映射器) 是 Go 语言中一个功能强大的 ORM 库，可简化数据库操作。本挑战聚焦于掌握使用 GORM 的基本 CRUD（创建、读取、更新、删除）操作。
 
-## What is GORM?
+## 什么是 GORM？
 
-GORM is a feature-rich ORM library for Go that provides:
-- **Auto Migration**: Automatically create database tables from structs
-- **CRUD Operations**: Simple methods for database operations
-- **Hooks**: Lifecycle callbacks (BeforeCreate, AfterUpdate, etc.)
-- **Associations**: Handle relationships between models
-- **Validation**: Built-in validation support
-- **Transactions**: Database transaction support
+GORM 是 Go 语言中一个功能丰富的 ORM 库，提供以下特性：
+- **自动迁移**：从结构体自动生成数据库表
+- **CRUD 操作**：简单的数据库操作方法
+- **钩子**：生命周期回调（BeforeCreate、AfterUpdate 等）
+- **关联**：处理模型之间的关系
+- **验证**：内置验证支持
+- **事务**：数据库事务支持
 
-## Basic Setup
+## 基础设置
 
-### 1. Installation
+### 1. 安装
 ```bash
 go get -u gorm.io/gorm
-go get -u gorm.io/driver/sqlite  # For SQLite
+go get -u gorm.io/driver/sqlite  # 用于 SQLite
 ```
 
-### 2. Database Connection
+### 2. 数据库连接
 ```go
 import (
     "gorm.io/driver/sqlite"
@@ -35,7 +35,7 @@ func ConnectDB() (*gorm.DB, error) {
         return nil, err
     }
     
-    // Auto migrate the schema
+    // 自动迁移模式
     err = db.AutoMigrate(&User{})
     if err != nil {
         return nil, err
@@ -45,9 +45,9 @@ func ConnectDB() (*gorm.DB, error) {
 }
 ```
 
-## Defining Models
+## 定义模型
 
-### Basic Model Structure
+### 基本模型结构
 ```go
 type User struct {
     ID        uint      `gorm:"primaryKey"`
@@ -59,26 +59,26 @@ type User struct {
 }
 ```
 
-### GORM Tags
-- `gorm:"primaryKey"` - Marks field as primary key
-- `gorm:"not null"` - Makes field required
-- `gorm:"unique"` - Makes field unique
-- `gorm:"check:condition"` - Adds check constraint
-- `gorm:"default:value"` - Sets default value
-- `gorm:"index"` - Creates database index
+### GORM 标签
+- `gorm:"primaryKey"` - 将字段标记为主键
+- `gorm:"not null"` - 使字段为必填项
+- `gorm:"unique"` - 使字段唯一
+- `gorm:"check:condition"` - 添加检查约束
+- `gorm:"default:value"` - 设置默认值
+- `gorm:"index"` - 在数据库中创建索引
 
-## CRUD Operations
+## CRUD 操作
 
-### 1. Create (C)
+### 1. 创建 (C)
 ```go
-// Create a single user
+// 创建单个用户
 user := User{Name: "John Doe", Email: "john@example.com", Age: 25}
 result := db.Create(&user)
 if result.Error != nil {
     return result.Error
 }
 
-// Create multiple users
+// 创建多个用户
 users := []User{
     {Name: "User 1", Email: "user1@example.com", Age: 25},
     {Name: "User 2", Email: "user2@example.com", Age: 30},
@@ -86,53 +86,53 @@ users := []User{
 result = db.Create(&users)
 ```
 
-### 2. Read (R)
+### 2. 读取 (R)
 ```go
-// Get first user
+// 获取第一个用户
 var user User
-result := db.First(&user, 1) // Find by primary key
+result := db.First(&user, 1) // 按主键查找
 if result.Error != nil {
     return result.Error
 }
 
-// Get user by condition
+// 按条件获取用户
 var user User
 result = db.Where("email = ?", "john@example.com").First(&user)
 
-// Get all users
+// 获取所有用户
 var users []User
 result = db.Find(&users)
 
-// Get users with conditions
+// 获取满足条件的用户
 var users []User
 result = db.Where("age > ?", 18).Find(&users)
 ```
 
-### 3. Update (U)
+### 3. 更新 (U)
 ```go
-// Update by primary key
+// 按主键更新
 user := User{ID: 1, Name: "Updated Name", Email: "updated@example.com", Age: 30}
 result := db.Save(&user)
 
-// Update specific fields
+// 更新特定字段
 result = db.Model(&user).Update("Name", "New Name")
 
-// Update multiple fields
+// 更新多个字段
 result = db.Model(&user).Updates(User{Name: "New Name", Age: 31})
 
-// Update with conditions
+// 按条件更新
 result = db.Model(&User{}).Where("age < ?", 18).Update("age", 18)
 ```
 
-### 4. Delete (D)
+### 4. 删除 (D)
 ```go
-// Delete by primary key
+// 按主键删除
 result := db.Delete(&User{}, 1)
 
-// Delete with conditions
+// 按条件删除
 result = db.Where("age < ?", 18).Delete(&User{})
 
-// Soft delete (if model has DeletedAt field)
+// 软删除（如果模型包含 DeletedAt 字段）
 type User struct {
     ID        uint      `gorm:"primaryKey"`
     Name      string
@@ -140,33 +140,33 @@ type User struct {
 }
 ```
 
-## Error Handling
+## 错误处理
 
-### Common Error Patterns
+### 常见错误模式
 ```go
-// Check for errors
+// 检查错误
 result := db.Create(&user)
 if result.Error != nil {
-    // Handle error
+    // 处理错误
     return result.Error
 }
 
-// Check for "not found" errors
+// 检查“未找到”错误
 if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-    // Handle not found
-    return fmt.Errorf("user not found")
+    // 处理未找到的情况
+    return fmt.Errorf("用户不存在")
 }
 
-// Check for unique constraint violations
+// 检查唯一性约束冲突
 if strings.Contains(result.Error.Error(), "UNIQUE constraint failed") {
-    // Handle duplicate entry
-    return fmt.Errorf("email already exists")
+    // 处理重复条目
+    return fmt.Errorf("邮箱已存在")
 }
 ```
 
-## Validation
+## 验证
 
-### Built-in Validation
+### 内置验证
 ```go
 type User struct {
     ID    uint   `gorm:"primaryKey"`
@@ -176,60 +176,60 @@ type User struct {
 }
 ```
 
-### Custom Validation
+### 自定义验证
 ```go
 func (u *User) BeforeCreate(tx *gorm.DB) error {
     if u.Age < 0 {
-        return fmt.Errorf("age cannot be negative")
+        return fmt.Errorf("年龄不能为负数")
     }
     if !strings.Contains(u.Email, "@") {
-        return fmt.Errorf("invalid email format")
+        return fmt.Errorf("邮箱格式无效")
     }
     return nil
 }
 ```
 
-## Query Methods
+## 查询方法
 
-### Where Clauses
+### Where 条件
 ```go
-// Basic where
+// 基本 where
 db.Where("name = ?", "John").Find(&users)
 
-// Multiple conditions
+// 多个条件
 db.Where("name = ? AND age > ?", "John", 18).Find(&users)
 
-// IN clause
+// IN 条件
 db.Where("name IN ?", []string{"John", "Jane"}).Find(&users)
 
-// LIKE clause
+// LIKE 条件
 db.Where("name LIKE ?", "%John%").Find(&users)
 ```
 
-### Ordering and Limiting
+### 排序与限制
 ```go
-// Order by
+// 按某字段排序
 db.Order("age DESC").Find(&users)
 
-// Limit and offset
+// 限制数量和偏移
 db.Limit(10).Offset(20).Find(&users)
 
-// Select specific fields
+// 选择特定字段
 db.Select("name, email").Find(&users)
 ```
 
-## Transactions
+## 事务
 
-### Basic Transaction
+### 基本事务
 ```go
 func CreateUserWithProfile(db *gorm.DB, user *User, profile *Profile) error {
     return db.Transaction(func(tx *gorm.DB) error {
-        // Create user
+        // 创建用户
         if err := tx.Create(user).Error; err != nil {
             return err
         }
         
-        // Create profile
+        // 创建资料
         profile.UserID = user.ID
         if err := tx.Create(profile).Error; err != nil {
             return err
@@ -240,7 +240,7 @@ func CreateUserWithProfile(db *gorm.DB, user *User, profile *Profile) error {
 }
 ```
 
-### Manual Transaction
+### 手动事务
 ```go
 tx := db.Begin()
 defer func() {
@@ -259,18 +259,18 @@ if err := tx.Commit().Error; err != nil {
 }
 ```
 
-## Best Practices
+## 最佳实践
 
-### 1. Use Pointers for Models
+### 1. 使用指针表示模型
 ```go
-// Good
+// 正确做法
 func GetUser(db *gorm.DB, id uint) (*User, error) {
     var user User
     result := db.First(&user, id)
     return &user, result.Error
 }
 
-// Bad
+// 错误做法
 func GetUser(db *gorm.DB, id uint) (User, error) {
     var user User
     result := db.First(&user, id)
@@ -278,48 +278,48 @@ func GetUser(db *gorm.DB, id uint) (User, error) {
 }
 ```
 
-### 2. Handle Errors Properly
+### 2. 正确处理错误
 ```go
-// Always check for errors
+// 始终检查错误
 result := db.Create(&user)
 if result.Error != nil {
     return result.Error
 }
 ```
 
-### 3. Use Appropriate Query Methods
+### 3. 使用合适的查询方法
 ```go
-// Use First() for single records
+// 单条记录使用 First()
 var user User
 db.First(&user, id)
 
-// Use Find() for multiple records
+// 多条记录使用 Find()
 var users []User
 db.Find(&users)
 
-// Use Take() when order doesn't matter
+// 顺序无关时使用 Take()
 var user User
 db.Take(&user)
 ```
 
-### 4. Optimize Queries
+### 4. 优化查询
 ```go
-// Select only needed fields
+// 仅选择所需字段
 db.Select("id, name").Find(&users)
 
-// Use preloading for relationships
+// 使用预加载处理关联关系
 db.Preload("Posts").Find(&users)
 
-// Use transactions for multiple operations
+// 多个操作使用事务
 db.Transaction(func(tx *gorm.DB) error {
-    // Multiple operations
+    // 多个操作
     return nil
 })
 ```
 
-## Common Patterns
+## 常见模式
 
-### CRUD Service Pattern
+### CRUD 服务模式
 ```go
 type UserService struct {
     db *gorm.DB
@@ -347,7 +347,7 @@ func (s *UserService) Delete(id uint) error {
 }
 ```
 
-### Repository Pattern
+### 仓库模式
 ```go
 type UserRepository interface {
     Create(user *User) error
@@ -366,20 +366,20 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 }
 ```
 
-## Resources
+## 资源
 
-- [GORM Documentation](https://gorm.io/docs/)
-- [GORM CRUD Operations](https://gorm.io/docs/create.html)
-- [GORM Query Interface](https://gorm.io/docs/query.html)
-- [GORM Hooks](https://gorm.io/docs/hooks.html)
-- [GORM Transactions](https://gorm.io/docs/transactions.html)
+- [GORM 文档](https://gorm.io/docs/)
+- [GORM CRUD 操作](https://gorm.io/docs/create.html)
+- [GORM 查询接口](https://gorm.io/docs/query.html)
+- [GORM 钩子](https://gorm.io/docs/hooks.html)
+- [GORM 事务](https://gorm.io/docs/transactions.html)
 
-## Practice Exercises
+## 练习题
 
-1. Create a simple user management system
-2. Implement CRUD operations for a blog post system
-3. Build a product catalog with categories
-4. Create a task management application
-5. Implement a simple inventory system
+1. 创建一个简单的用户管理系统
+2. 实现博客文章系统的 CRUD 操作
+3. 构建带分类的产品目录
+4. 创建一个任务管理应用程序
+5. 实现一个简单的库存系统
 
-These exercises will help you master GORM CRUD operations and understand database interactions in Go applications. 
+这些练习将帮助你掌握 GORM 的 CRUD 操作，并理解 Go 应用程序中的数据库交互。

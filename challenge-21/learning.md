@@ -1,91 +1,91 @@
-# Learning Materials for Binary Search
+# 二分查找学习资料
 
-## Understanding Binary Search
+## 理解二分查找
 
-Binary search is a fundamental algorithm in computer science that efficiently finds an element in a sorted array by repeatedly dividing the search interval in half. It's a perfect example of the divide-and-conquer algorithmic paradigm.
+二分查找是计算机科学中的一个基础算法，它通过反复将搜索区间一分为二，在已排序的数组中高效地查找元素。它是分治算法范式的完美示例。
 
-### How Binary Search Works
+### 二分查找的工作原理
 
-1. Start with the middle element of the array
-2. If the target value equals the middle element, we're done
-3. If the target value is less than the middle element, search the left half
-4. If the target value is greater than the middle element, search the right half
-5. Repeat until the element is found or the search space is empty
+1. 从数组的中间元素开始
+2. 如果目标值等于中间元素，则查找完成
+3. 如果目标值小于中间元素，则在左半部分进行搜索
+4. 如果目标值大于中间元素，则在右半部分进行搜索
+5. 重复此过程，直到找到元素或搜索空间为空
 
-Binary search has a time complexity of O(log n), which is much more efficient than linear search (O(n)) for large datasets.
+二分查找的时间复杂度为 O(log n)，对于大数据集而言，远比线性查找（O(n)）高效。
 
-### Implementation Approaches
+### 实现方法
 
-**Iterative Implementation:**
-- Use a loop with left and right pointers
-- Calculate middle index in each iteration
-- Adjust pointers based on comparison with target
-- Continue until element is found or search space is exhausted
+**迭代实现：**
+- 使用带有左右指针的循环
+- 在每次迭代中计算中间索引
+- 根据与目标值的比较结果调整指针
+- 继续直到找到元素或搜索空间耗尽
 
-**Recursive Implementation:**
-- Base case: search space is empty (left > right)
-- Calculate middle index and compare with target
-- Recursively search appropriate half based on comparison
-- Return result from recursive call
+**递归实现：**
+- 基础情况：搜索空间为空（left > right）
+- 计算中间索引并与其比较
+- 根据比较结果递归搜索相应的一半
+- 返回递归调用的结果
 
-### Key Implementation Concepts
+### 关键实现概念
 
-**Middle Index Calculation:**
+**中间索引计算：**
 ```go
-mid := left + (right - left) / 2  // Avoid potential overflow
+mid := left + (right - left) / 2  // 避免潜在的溢出
 ```
-This approach prevents integer overflow that could occur with `(left + right) / 2` for large arrays.
+这种方法可防止在大数组中使用 `(left + right) / 2` 时发生整数溢出。
 
-**Loop Condition:**
-Use `left <= right` for the loop condition to ensure all elements are checked.
+**循环条件：**
+使用 `left <= right` 作为循环条件，以确保检查所有元素。
 
-**Pointer Updates:**
-- If target is greater than middle: `left = mid + 1`
-- If target is less than middle: `right = mid - 1`
+**指针更新：**
+- 如果目标值大于中间值：`left = mid + 1`
+- 如果目标值小于中间值：`right = mid - 1`
 
-## Binary Search Edge Cases
+## 二分查找的边界情况
 
-When implementing binary search, be mindful of these common edge cases:
+在实现二分查找时，请注意以下常见边界情况：
 
-1. **Empty array**: Check if the array is empty before searching
-2. **Single element array**: Make sure your algorithm works for arrays with just one element
-3. **Target smaller than all elements**: Handle the case when the target is smaller than the smallest element
-4. **Target larger than all elements**: Handle the case when the target is larger than the largest element
-5. **Duplicate elements**: Decide how to handle multiple occurrences of the target value
-6. **Integer overflow**: When calculating the middle index, use proper overflow-safe arithmetic
+1. **空数组**：搜索前检查数组是否为空
+2. **单元素数组**：确保算法对仅包含一个元素的数组也适用
+3. **目标值小于所有元素**：处理目标值小于最小元素的情况
+4. **目标值大于所有元素**：处理目标值大于最大元素的情况
+5. **重复元素**：决定如何处理目标值的多个重复出现
+6. **整数溢出**：计算中间索引时，使用安全的溢出避免运算
 
-## Binary Search Applications
+## 二分查找的应用场景
 
-Binary search is used in many real-world applications:
+二分查找被广泛应用于许多实际应用中：
 
-1. **Database Systems**: For indexing and searching records
-2. **Debugging**: For finding bugs in large codebases (binary bug search)
-3. **Machine Learning**: For hyperparameter tuning
-4. **Library Functions**: Used in standard library functions like `sort.Search` in Go
-5. **Computer Graphics**: For ray tracing and collision detection algorithms
+1. **数据库系统**：用于索引和记录搜索
+2. **调试**：用于在大型代码库中定位错误（二分法找 bug）
+3. **机器学习**：用于超参数调优
+4. **标准库函数**：Go 语言中的 `sort.Search` 等标准库函数就使用了二分查找
+5. **计算机图形学**：用于光线追踪和碰撞检测算法
 
-## Binary Search Variants
+## 二分查找的变体
 
-There are several variants of binary search:
+二分查找有多种变体：
 
-1. **First occurrence**: Find the first occurrence of an element if duplicates exist
-2. **Last occurrence**: Find the last occurrence of an element if duplicates exist
-3. **Closest element**: Find the element closest to the target value
-4. **Rotated sorted array**: Find an element in a sorted array that has been rotated
-5. **2D binary search**: Binary search in a 2D sorted matrix
-6. **Insertion position**: Find where an element should be inserted to maintain sorted order
+1. **首次出现**：当存在重复元素时，查找第一个出现的位置
+2. **最后一次出现**：当存在重复元素时，查找最后一个出现的位置
+3. **最接近元素**：查找与目标值最接近的元素
+4. **旋转有序数组**：在已被旋转的有序数组中查找元素
+5. **二维二分查找**：在二维有序矩阵中进行二分查找
+6. **插入位置**：查找元素应插入的位置以保持有序
 
-## Algorithm Analysis
+## 算法分析
 
-- **Time Complexity**: O(log n) - The search space is halved in each iteration
-- **Space Complexity**: 
-  - Iterative: O(1) - Uses only a constant amount of extra space
-  - Recursive: O(log n) - Due to the recursive call stack
+- **时间复杂度**：O(log n) —— 每次迭代都将搜索空间减半
+- **空间复杂度**：
+  - 迭代版本：O(1) —— 仅使用常量级别的额外空间
+  - 递归版本：O(log n) —— 由于递归调用栈导致
 
-## Further Reading
+## 进一步阅读
 
-1. [Binary Search Algorithm (GeeksforGeeks)](https://www.geeksforgeeks.org/binary-search/)
-2. [Binary Search in Go (GoLang Docs)](https://pkg.go.dev/sort#Search)
-3. [Divide and Conquer Algorithms (Khan Academy)](https://www.khanacademy.org/computing/computer-science/algorithms/merge-sort/a/divide-and-conquer-algorithms)
-4. [Advanced Binary Search Techniques (Topcoder)](https://www.topcoder.com/community/competitive-programming/tutorials/binary-search/)
-5. [Binary Search Cookbook (Codeforces)](https://codeforces.com/blog/entry/9901) 
+1. [二分查找算法（GeeksforGeeks）](https://www.geeksforgeeks.org/binary-search/)
+2. [Go 语言中的二分查找（GoLang 文档）](https://pkg.go.dev/sort#Search)
+3. [分治算法（Khan Academy）](https://www.khanacademy.org/computing/computer-science/algorithms/merge-sort/a/divide-and-conquer-algorithms)
+4. [高级二分查找技巧（Topcoder）](https://www.topcoder.com/community/competitive-programming/tutorials/binary-search/)
+5. [二分查找菜谱（Codeforces）](https://codeforces.com/blog/entry/9901)

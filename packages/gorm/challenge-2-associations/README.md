@@ -1,17 +1,17 @@
-# Challenge 2: Associations & Relationships
+# 挑战 2：关联与关系
 
-Build a **Blog System** using GORM that demonstrates database relationships and associations between models.
+使用 GORM 构建一个 **博客系统**，以展示模型之间的数据库关系和关联。
 
-## Challenge Requirements
+## 挑战要求
 
-Create a Go application that implements:
+创建一个 Go 应用程序，实现以下功能：
 
-1. **One-to-Many Relationship** - Users can have multiple posts
-2. **Many-to-Many Relationship** - Posts can have multiple tags
-3. **Association Operations** - Create, query, and manage related data
-4. **Preloading** - Efficiently load related data
+1. **一对多关系** - 用户可以拥有多个文章
+2. **多对多关系** - 文章可以有多个标签
+3. **关联操作** - 创建、查询和管理相关数据
+4. **预加载** - 高效地加载相关数据
 
-## Data Models
+## 数据模型
 
 ```go
 type User struct {
@@ -41,24 +41,24 @@ type Tag struct {
 }
 ```
 
-## Required Functions
+## 必需函数
 
-Implement these functions:
-- `ConnectDB() (*gorm.DB, error)` - Database connection with auto-migration
-- `CreateUserWithPosts(db *gorm.DB, user *User) error` - Create user with posts
-- `GetUserWithPosts(db *gorm.DB, userID uint) (*User, error)` - Get user with posts
-- `CreatePostWithTags(db *gorm.DB, post *Post, tagNames []string) error` - Create post with tags
-- `GetPostsByTag(db *gorm.DB, tagName string) ([]Post, error)` - Get posts by tag
-- `AddTagsToPost(db *gorm.DB, postID uint, tagNames []string) error` - Add tags to existing post
-- `GetPostWithUserAndTags(db *gorm.DB, postID uint) (*Post, error)` - Get post with user and tags
+实现以下函数：
+- `ConnectDB() (*gorm.DB, error)` - 数据库连接并自动迁移
+- `CreateUserWithPosts(db *gorm.DB, user *User) error` - 创建用户及其文章
+- `GetUserWithPosts(db *gorm.DB, userID uint) (*User, error)` - 获取用户及其文章
+- `CreatePostWithTags(db *gorm.DB, post *Post, tagNames []string) error` - 创建文章并添加标签
+- `GetPostsByTag(db *gorm.DB, tagName string) ([]Post, error)` - 根据标签获取文章
+- `AddTagsToPost(db *gorm.DB, postID uint, tagNames []string) error` - 为已有文章添加标签
+- `GetPostWithUserAndTags(db *gorm.DB, postID uint) (*Post, error)` - 获取文章及其作者和标签
 
-## Testing Requirements
+## 测试要求
 
-Your solution must pass tests for:
-- Creating users with associated posts
-- Creating posts with multiple tags
-- Querying users with their posts (preloading)
-- Querying posts by tag
-- Adding tags to existing posts
-- Loading posts with user and tag associations
-- Proper foreign key constraints and relationships 
+你的解决方案必须通过以下测试：
+- 创建带有相关文章的用户
+- 创建包含多个标签的文章
+- 查询用户及其文章（预加载）
+- 根据标签查询文章
+- 为已有文章添加标签
+- 加载文章及其作者和标签关联
+- 正确的外键约束和关系

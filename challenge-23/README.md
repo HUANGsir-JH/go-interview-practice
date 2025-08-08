@@ -1,16 +1,16 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 23: String Pattern Matching
+# 挑战 23：字符串模式匹配
 
-## Problem Statement
+## 问题描述
 
-Implement efficient string pattern matching algorithms to find all occurrences of a pattern in a text. In this challenge, you'll implement three different pattern matching algorithms:
+实现高效的字符串模式匹配算法，以查找文本中所有模式出现的位置。在此挑战中，你需要实现三种不同的模式匹配算法：
 
-1. `NaivePatternMatch` - A simple brute force approach that checks every possible position.
-2. `KMPSearch` - The Knuth-Morris-Pratt algorithm that avoids unnecessary comparisons by using a preprocessed prefix table.
-3. `RabinKarpSearch` - The Rabin-Karp algorithm that uses hashing to find patterns efficiently.
+1. `NaivePatternMatch` - 一种简单的暴力方法，检查每个可能的位置。
+2. `KMPSearch` - Knuth-Morris-Pratt 算法，通过使用预处理的前缀表避免不必要的比较。
+3. `RabinKarpSearch` - Rabin-Karp 算法，利用哈希技术高效地查找模式。
 
-## Function Signatures
+## 函数签名
 
 ```go
 func NaivePatternMatch(text, pattern string) []int
@@ -18,96 +18,96 @@ func KMPSearch(text, pattern string) []int
 func RabinKarpSearch(text, pattern string) []int
 ```
 
-## Input Format
+## 输入格式
 
-- `text` - The main text string in which to search for the pattern.
-- `pattern` - The pattern string to search for.
+- `text` - 要搜索模式的主要文本字符串。
+- `pattern` - 要搜索的模式字符串。
 
-## Output Format
+## 输出格式
 
-- All functions should return a slice of integers containing the starting indices of all occurrences of the pattern in the text.
-- If no matches are found, return an empty slice.
-- Indices should be 0-based (the first character is at position 0).
+- 所有函数应返回一个整数切片，包含文本中所有模式出现位置的起始索引。
+- 如果未找到匹配项，则返回空切片。
+- 索引应为 0 基（第一个字符位于位置 0）。
 
-## Requirements
+## 要求
 
-1. `NaivePatternMatch` should implement a straightforward brute force algorithm.
-2. `KMPSearch` should implement the Knuth-Morris-Pratt algorithm.
-3. `RabinKarpSearch` should implement the Rabin-Karp algorithm.
-4. All three functions should return the same correct results.
-5. Pay attention to edge cases like empty strings, patterns longer than the text, etc.
+1. `NaivePatternMatch` 应实现一个直接的暴力算法。
+2. `KMPSearch` 应实现 Knuth-Morris-Pratt 算法。
+3. `RabinKarpSearch` 应实现 Rabin-Karp 算法。
+4. 三个函数都应返回相同且正确的结果。
+5. 注意边界情况，如空字符串、模式长度超过文本等情况。
 
-## Sample Input and Output
+## 示例输入与输出
 
-### Sample Input 1
+### 示例输入 1
 
 ```
 NaivePatternMatch("ABABDABACDABABCABAB", "ABABCABAB")
 ```
 
-### Sample Output 1
+### 示例输出 1
 
 ```
 [10]
 ```
 
-### Sample Input 2
+### 示例输入 2
 
 ```
 KMPSearch("AABAACAADAABAABA", "AABA")
 ```
 
-### Sample Output 2
+### 示例输出 2
 
 ```
 [0, 9, 12]
 ```
 
-### Sample Input 3
+### 示例输入 3
 
 ```
 RabinKarpSearch("GEEKSFORGEEKS", "GEEK")
 ```
 
-### Sample Output 3
+### 示例输出 3
 
 ```
 [0, 8]
 ```
 
-### Sample Input 4
+### 示例输入 4
 
 ```
 NaivePatternMatch("AAAAAA", "AA")
 ```
 
-### Sample Output 4
+### 示例输出 4
 
 ```
 [0, 1, 2, 3, 4]
 ```
 
-## Instructions
+## 指导说明
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-23/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the required functions.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 仓库。
+- **Clone** 你的副本到本地机器。
+- 在 `challenge-23/submissions/` 目录下创建一个以你的 GitHub 用户名命名的文件夹。
+- 将 `solution-template.go` 文件复制到你的提交目录中。
+- **实现** 所需的函数。
+- **本地测试** 你的解决方案，运行测试文件。
+- **Commit** 并 **push** 代码到你的副本。
+- **创建** 一个拉取请求以提交你的解决方案。
 
-## Testing Your Solution Locally
+## 本地测试你的解决方案
 
-Run the following command in the `challenge-23/` directory:
+在 `challenge-23/` 目录下运行以下命令：
 
 ```bash
 go test -v
 ```
 
-## Performance Expectations
+## 性能预期
 
-- **Naive Algorithm**: O(n*m) time complexity where n is the length of the text and m is the length of the pattern.
-- **KMP Algorithm**: O(n+m) time complexity.
-- **Rabin-Karp Algorithm**: Average case O(n+m) time complexity, worst case O(n*m). 
+- **朴素算法**：时间复杂度为 O(n*m)，其中 n 是文本长度，m 是模式长度。
+- **KMP 算法**：时间复杂度为 O(n+m)。
+- **Rabin-Karp 算法**：平均情况下时间复杂度为 O(n+m)，最坏情况下为 O(n*m)。

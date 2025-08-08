@@ -1,18 +1,18 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 24: Dynamic Programming - Longest Increasing Subsequence
+# 挑战 24：动态规划 - 最长递增子序列
 
-## Problem Statement
+## 问题描述
 
-The Longest Increasing Subsequence (LIS) problem is a classic dynamic programming problem. Given a sequence of integers, find the length of the longest subsequence such that all elements of the subsequence are sorted in increasing order. A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
+最长递增子序列（LIS）问题是经典的动态规划问题。给定一个整数序列，找出最长的子序列，使得子序列中的所有元素按递增顺序排列。子序列是指可以从另一个序列中删除一些或不删除任何元素，而不改变剩余元素顺序得到的序列。
 
-In this challenge, you will implement three different approaches to solve the LIS problem:
+在此挑战中，你将实现三种不同的方法来解决 LIS 问题：
 
-1. `DPLongestIncreasingSubsequence` - A standard dynamic programming solution with O(n²) time complexity.
-2. `OptimizedLIS` - An optimized solution with O(n log n) time complexity using binary search.
-3. `GetLISElements` - A function that returns the actual elements of the LIS, not just its length.
+1. `DPLongestIncreasingSubsequence` - 标准的动态规划解决方案，时间复杂度为 O(n²)。
+2. `OptimizedLIS` - 使用二分查找优化的解决方案，时间复杂度为 O(n log n)。
+3. `GetLISElements` - 返回 LIS 的实际元素，而不仅仅是其长度。
 
-## Function Signatures
+## 函数签名
 
 ```go
 func DPLongestIncreasingSubsequence(nums []int) int
@@ -20,96 +20,96 @@ func OptimizedLIS(nums []int) int
 func GetLISElements(nums []int) []int
 ```
 
-## Input Format
+## 输入格式
 
-- `nums` - A slice of integers representing the sequence.
+- `nums` - 表示序列的整数切片。
 
-## Output Format
+## 输出格式
 
-- `DPLongestIncreasingSubsequence` - Returns an integer representing the length of the LIS.
-- `OptimizedLIS` - Returns an integer representing the length of the LIS.
-- `GetLISElements` - Returns a slice of integers representing the elements of one possible LIS.
+- `DPLongestIncreasingSubsequence` - 返回一个整数，表示 LIS 的长度。
+- `OptimizedLIS` - 返回一个整数，表示 LIS 的长度。
+- `GetLISElements` - 返回一个整数切片，表示某个可能的 LIS 的元素。
 
-## Requirements
+## 要求
 
-1. `DPLongestIncreasingSubsequence` should implement the standard dynamic programming solution with O(n²) time complexity.
-2. `OptimizedLIS` should implement an optimized solution with O(n log n) time complexity.
-3. `GetLISElements` should return the actual elements of the LIS, not just its length.
-4. Handle edge cases such as empty slices or slices with a single element.
-5. If multiple LIS exist with the same length, returning any valid LIS is acceptable.
+1. `DPLongestIncreasingSubsequence` 应实现标准的动态规划解决方案，时间复杂度为 O(n²)。
+2. `OptimizedLIS` 应实现优化的解决方案，时间复杂度为 O(n log n)。
+3. `GetLISElements` 应返回 LIS 的实际元素，而不仅仅是其长度。
+4. 处理空切片或仅包含单个元素的切片等边界情况。
+5. 如果存在多个相同长度的 LIS，返回任意一个有效的 LIS 均可。
 
-## Sample Input and Output
+## 示例输入与输出
 
-### Sample Input 1
+### 示例输入 1
 
 ```
 DPLongestIncreasingSubsequence([]int{10, 9, 2, 5, 3, 7, 101, 18})
 ```
 
-### Sample Output 1
+### 示例输出 1
 
 ```
 4
 ```
 
-### Sample Input 2
+### 示例输入 2
 
 ```
 OptimizedLIS([]int{0, 1, 0, 3, 2, 3})
 ```
 
-### Sample Output 2
+### 示例输出 2
 
 ```
 4
 ```
 
-### Sample Input 3
+### 示例输入 3
 
 ```
 GetLISElements([]int{10, 9, 2, 5, 3, 7, 101, 18})
 ```
 
-### Sample Output 3
+### 示例输出 3
 
 ```
 [2, 5, 7, 101]
 ```
-Note: [2, 3, 7, 18] or [2, 3, 7, 101] would also be valid outputs as they are also valid LIS.
+注意：[2, 3, 7, 18] 或 [2, 3, 7, 101] 也是有效输出，因为它们同样是有效的 LIS。
 
-### Sample Input 4
+### 示例输入 4
 
 ```
 DPLongestIncreasingSubsequence([]int{7, 7, 7, 7, 7, 7, 7})
 ```
 
-### Sample Output 4
+### 示例输出 4
 
 ```
 1
 ```
 
-## Instructions
+## 指令
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-24/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the required functions.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 仓库。
+- **Clone** 你的副本到本地机器。
+- 在 `challenge-24/submissions/` 目录下创建一个以你的 GitHub 用户名命名的文件夹。
+- 将 `solution-template.go` 文件复制到你的提交目录中。
+- 实现所需的函数。
+- 通过运行测试文件在本地测试你的解决方案。
+- **Commit** 并 **push** 代码到你的副本。
+- **创建** 一个拉取请求以提交你的解决方案。
 
-## Testing Your Solution Locally
+## 本地测试你的解决方案
 
-Run the following command in the `challenge-24/` directory:
+在 `challenge-24/` 目录下运行以下命令：
 
 ```bash
 go test -v
 ```
 
-## Performance Expectations
+## 性能预期
 
-- **DPLongestIncreasingSubsequence**: O(n²) time complexity, O(n) space complexity.
-- **OptimizedLIS**: O(n log n) time complexity, O(n) space complexity.
-- **GetLISElements**: O(n²) or O(n log n) time complexity, depending on the approach. 
+- **DPLongestIncreasingSubsequence**：时间复杂度 O(n²)，空间复杂度 O(n)。
+- **OptimizedLIS**：时间复杂度 O(n log n)，空间复杂度 O(n)。
+- **GetLISElements**：时间复杂度为 O(n²) 或 O(n log n)，具体取决于所采用的方法。

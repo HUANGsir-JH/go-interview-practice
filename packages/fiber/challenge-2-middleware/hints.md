@@ -1,24 +1,24 @@
-# Hints for Challenge 2: Middleware & Request/Response Handling
+# 挑战 2 提示：中间件与请求/响应处理
 
-## Hint 1: Setting up Fiber App
+## 提示 1：设置 Fiber 应用
 
-Start with a clean Fiber app:
+从一个干净的 Fiber 应用开始：
 
 ```go
 app := fiber.New(fiber.Config{
     ErrorHandler: func(c *fiber.Ctx, err error) error {
-        // Custom error handler
+        // 自定义错误处理器
         return c.Status(500).JSON(fiber.Map{
             "success": false,
-            "error": "Internal server error",
+            "error": "内部服务器错误",
         })
     },
 })
 ```
 
-## Hint 2: Middleware Order
+## 提示 2：中间件顺序
 
-Apply middleware in the correct order:
+按正确顺序应用中间件：
 
 ```go
 app.Use(ErrorHandlerMiddleware())
@@ -28,9 +28,9 @@ app.Use(CORSMiddleware())
 app.Use(RateLimitMiddleware())
 ```
 
-## Hint 3: Request ID Generation
+## 提示 3：请求 ID 生成
 
-Use UUID for unique request IDs:
+使用 UUID 生成唯一的请求 ID：
 
 ```go
 func RequestIDMiddleware() fiber.Handler {
@@ -43,9 +43,9 @@ func RequestIDMiddleware() fiber.Handler {
 }
 ```
 
-## Hint 4: Custom Logging
+## 提示 4：自定义日志记录
 
-Log requests with timing information:
+记录请求并包含耗时信息：
 
 ```go
 func LoggingMiddleware() fiber.Handler {
@@ -70,9 +70,9 @@ func LoggingMiddleware() fiber.Handler {
 }
 ```
 
-## Hint 5: Rate Limiting
+## 提示 5：限流
 
-Implement simple in-memory rate limiting:
+实现简单的内存限流：
 
 ```go
 var rateLimitMap = make(map[string][]time.Time)
@@ -86,7 +86,7 @@ func RateLimitMiddleware() fiber.Handler {
         rateLimitMutex.Lock()
         defer rateLimitMutex.Unlock()
         
-        // Clean old entries
+        // 清理旧条目
         if times, exists := rateLimitMap[ip]; exists {
             var validTimes []time.Time
             for _, t := range times {
@@ -97,15 +97,15 @@ func RateLimitMiddleware() fiber.Handler {
             rateLimitMap[ip] = validTimes
         }
         
-        // Check limit
+        // 检查限制
         if len(rateLimitMap[ip]) >= 100 {
             return c.Status(429).JSON(fiber.Map{
                 "success": false,
-                "error": "Rate limit exceeded",
+                "error": "请求频率超出限制",
             })
         }
         
-        // Add current request
+        // 添加当前请求
         rateLimitMap[ip] = append(rateLimitMap[ip], now)
         
         return c.Next()
@@ -113,18 +113,18 @@ func RateLimitMiddleware() fiber.Handler {
 }
 ```
 
-## Hint 6: Route Groups
+## 提示 6：路由分组
 
-Organize routes using groups:
+使用分组组织路由：
 
 ```go
-// Public routes
+// 公共路由
 public := app.Group("/")
 public.Get("/ping", pingHandler)
 public.Get("/articles", getArticlesHandler)
 public.Get("/articles/:id", getArticleHandler)
 
-// Protected routes
+// 受保护的路由
 protected := app.Group("/", AuthMiddleware())
 protected.Post("/articles", createArticleHandler)
 protected.Put("/articles/:id", updateArticleHandler)

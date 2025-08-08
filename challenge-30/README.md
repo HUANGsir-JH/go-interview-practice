@@ -1,83 +1,82 @@
- # Challenge 30: Context Management Implementation
+# 挑战 30：上下文管理实现
 
-## Overview
+## 概述
 
-Implement a context manager that demonstrates essential Go `context` package patterns. The `context` package is fundamental for managing cancellation signals, timeouts, and request-scoped values in Go applications.
+实现一个上下文管理器，展示 Go `context` 包的核心模式。`context` 包是管理取消信号、超时和请求范围值的基础，在 Go 应用程序中至关重要。
 
-## Your Task
+## 你的任务
 
-Implement a `ContextManager` interface with **6 core methods** and **2 helper functions**:
+实现一个 `ContextManager` 接口，包含 **6 个核心方法** 和 **2 个辅助函数**：
 
-### ContextManager Interface
+### ContextManager 接口
 
 ```go
 type ContextManager interface {
-    // Create a cancellable context from a parent context
+    // 从父上下文中创建可取消的上下文
     CreateCancellableContext(parent context.Context) (context.Context, context.CancelFunc)
     
-    // Create a context with timeout
+    // 创建带有超时的上下文
     CreateTimeoutContext(parent context.Context, timeout time.Duration) (context.Context, context.CancelFunc)
     
-    // Add a value to context
+    // 向上下文中添加值
     AddValue(parent context.Context, key, value interface{}) context.Context
     
-    // Get a value from context
+    // 从上下文中获取值
     GetValue(ctx context.Context, key interface{}) (interface{}, bool)
     
-    // Execute a task with context cancellation support
+    // 使用上下文取消支持执行任务
     ExecuteWithContext(ctx context.Context, task func() error) error
     
-    // Wait for a duration or until context is cancelled
+    // 等待一段时间或直到上下文被取消
     WaitForCompletion(ctx context.Context, duration time.Duration) error
 }
 ```
 
-### Helper Functions
+### 辅助函数
 
 ```go
-// Simulate work that can be cancelled
+// 模拟可被取消的工作
 func SimulateWork(ctx context.Context, workDuration time.Duration, description string) error
 
-// Process multiple items with context awareness
+// 具有上下文感知能力地处理多个项目
 func ProcessItems(ctx context.Context, items []string) ([]string, error)
 ```
 
-## Requirements
+## 要求
 
-### Core Functionality
-1. **Context Cancellation**: Handle manual cancellation via `context.WithCancel`
-2. **Context Timeouts**: Implement timeout behavior via `context.WithTimeout`
-3. **Value Storage**: Store and retrieve values via `context.WithValue`
-4. **Task Execution**: Execute functions with cancellation support
-5. **Wait Operations**: Wait for durations while respecting cancellation
+### 核心功能
+1. **上下文取消**：通过 `context.WithCancel` 处理手动取消
+2. **上下文超时**：通过 `context.WithTimeout` 实现超时行为
+3. **值存储**：通过 `context.WithValue` 存储和检索值
+4. **任务执行**：支持取消的函数执行
+5. **等待操作**：在尊重取消的前提下等待指定时长
 
-### Implementation Details
+### 实现细节
 
-- Use Go's standard `context` package functions
-- Handle both `context.Canceled` and `context.DeadlineExceeded` errors
-- Return appropriate boolean flags for value existence
-- Support goroutine-based task execution with proper synchronization
-- Process items in batches with cancellation checks between items
+- 使用 Go 标准库中的 `context` 包函数
+- 正确处理 `context.Canceled` 和 `context.DeadlineExceeded` 错误
+- 返回适当的布尔标志以表示值是否存在
+- 支持基于 goroutine 的任务执行，并进行适当的同步
+- 分批处理项目，并在每个项目之间检查取消状态
 
-## Test Coverage
+## 测试覆盖率
 
-Your implementation will be tested with **13 test cases** covering:
+你的实现将通过 **13 个测试用例** 进行测试，涵盖：
 
-- Context creation and cancellation
-- Timeout behavior
-- Value storage and retrieval
-- Task execution scenarios (success, error, cancellation)
-- Waiting operations (completion and cancellation)
-- Helper function behavior
-- Integration scenarios
+- 上下文创建与取消
+- 超时行为
+- 值的存储与检索
+- 任务执行场景（成功、错误、取消）
+- 等待操作（完成与取消）
+- 辅助函数行为
+- 集成场景
 
+## 开始准备
 
-## Getting Started
+1. 查看解决方案模板和测试文件
+2. 从简单的 `AddValue` 和 `GetValue` 方法开始
+3. 逐步实现取消和超时上下文
+4. 实现带有适当 goroutine 处理的任务执行
+5. 频繁运行测试，使用 `go test -v`
 
-1. Examine the solution template and test file
-2. Start with simple methods like `AddValue` and `GetValue`
-3. Progress to cancellation and timeout contexts
-4. Implement task execution with proper goroutine handling
-5. Run tests frequently with `go test -v`
-
-**Tip**: Check the `learning.md` file for comprehensive context patterns and examples!
+**提示**：查看 `learning.md` 文件以获取完整的上下文模式和示例！

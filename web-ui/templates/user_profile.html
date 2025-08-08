@@ -3,8 +3,8 @@
     <div class="col">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Challenges</a></li>
-                <li class="breadcrumb-item active">Profile: {{.Username}}</li>
+                <li class="breadcrumb-item"><a href="/">挑战</a></li>
+                <li class="breadcrumb-item active">个人资料：{{.Username}}</li>
             </ol>
         </nav>
     </div>
@@ -15,7 +15,7 @@
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">
-                    <i class="bi bi-person-circle"></i> {{.Username}}'s Profile
+                    <i class="bi bi-person-circle"></i> {{.Username}} 的个人资料
                 </h5>
             </div>
             <div class="card-body">
@@ -25,15 +25,15 @@
                     <div>
                         <h5 class="mb-1">{{.Username}}</h5>
                         <a href="https://github.com/{{.Username}}" target="_blank" class="text-decoration-none">
-                            <i class="bi bi-github"></i> GitHub Profile
+                            <i class="bi bi-github"></i> GitHub 个人主页
                         </a>
                     </div>
                 </div>
                 
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted">Repository synchronization:</span>
+                    <span class="text-muted">仓库同步：</span>
                     <button id="refresh-btn" class="btn btn-sm btn-outline-primary">
-                        <i class="bi bi-arrow-clockwise"></i> Sync with Repo
+                        <i class="bi bi-arrow-clockwise"></i> 同步到仓库
                     </button>
                 </div>
                 
@@ -44,7 +44,7 @@
                          aria-valuenow="{{.Progress.TotalSolved}}" 
                          aria-valuemin="0" 
                          aria-valuemax="{{len .Challenges}}">
-                        {{.Progress.TotalSolved}}/{{len .Challenges}} Challenges Completed
+                        {{.Progress.TotalSolved}}/{{len .Challenges}} 个挑战已完成
                     </div>
                 </div>
                 
@@ -53,26 +53,26 @@
                         <div class="p-3 border rounded mb-2">
                             <h3 class="mb-0">{{.Progress.TotalSolved}}</h3>
                         </div>
-                        <span class="text-muted">Solved</span>
+                        <span class="text-muted">已解决</span>
                     </div>
                     <div class="col-4">
                         <div class="p-3 border rounded mb-2">
                             <h3 class="mb-0">{{countByDifficulty .SolvedChallenges .Challenges "Beginner"}}</h3>
                         </div>
-                        <span class="text-success">Beginner</span>
+                        <span class="text-success">初级</span>
                     </div>
                     <div class="col-4">
                         <div class="p-3 border rounded mb-2">
                             <h3 class="mb-0">{{countByDifficulty .SolvedChallenges .Challenges "Advanced"}}</h3>
                         </div>
-                        <span class="text-danger">Advanced</span>
+                        <span class="text-danger">高级</span>
                     </div>
                 </div>
                 
                 {{if .Progress.GitUrl}}
                 <div class="mt-3">
                     <a href="{{.Progress.GitUrl}}" target="_blank" class="btn btn-outline-primary d-block">
-                        <i class="bi bi-git"></i> View Git Repository
+                        <i class="bi bi-git"></i> 查看 Git 仓库
                     </a>
                 </div>
                 {{end}}
@@ -83,7 +83,7 @@
     <div class="col-md-8">
         <div class="card shadow-sm mb-4">
             <div class="card-header">
-                <h5 class="mb-0">Challenge Progress</h5>
+                <h5 class="mb-0">挑战进度</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -91,11 +91,11 @@
                         <thead class="table-light">
                             <tr>
                                 <th>#</th>
-                                <th>Challenge</th>
-                                <th>Difficulty</th>
-                                <th>Status</th>
-                                <th>Last Attempt</th>
-                                <th>Actions</th>
+                                <th>挑战</th>
+                                <th>难度</th>
+                                <th>状态</th>
+                                <th>最近尝试</th>
+                                <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,11 +110,11 @@
                                 </td>
                                 <td>
                                     {{if index $.Progress.Submissions $id}}
-                                    <span class="badge bg-success">Completed</span>
+                                    <span class="badge bg-success">已完成</span>
                                     {{else if index $.Progress.LastSubmitted $id}}
-                                    <span class="badge bg-warning text-dark">Attempted</span>
+                                    <span class="badge bg-warning text-dark">已尝试</span>
                                     {{else}}
-                                    <span class="badge bg-secondary">Not Started</span>
+                                    <span class="badge bg-secondary">未开始</span>
                                     {{end}}
                                 </td>
                                 <td>
@@ -128,13 +128,13 @@
                                     <div class="btn-group btn-group-sm" role="group">
                                         <a href="/challenge/{{$id}}" class="btn btn-outline-primary">
                                             {{if index $.Progress.Submissions $id}}
-                                            Review
+                                            查看
                                             {{else}}
-                                            Start
+                                            开始
                                             {{end}}
                                         </a>
                                         {{if index $.Progress.Submissions $id}}
-                                        <a href="/scoreboard/{{$id}}" class="btn btn-outline-success">Scoreboard</a>
+                                        <a href="/scoreboard/{{$id}}" class="btn btn-outline-success">排行榜</a>
                                         {{end}}
                                     </div>
                                 </td>
@@ -148,7 +148,7 @@
         
         <div class="card shadow-sm">
             <div class="card-header">
-                <h5 class="mb-0">Recent Submissions</h5>
+                <h5 class="mb-0">最近提交</h5>
             </div>
             <div class="card-body p-0">
                 {{if .Submissions}}
@@ -156,10 +156,10 @@
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Challenge</th>
-                                <th>Submitted</th>
-                                <th>Status</th>
-                                <th>Execution Time</th>
+                                <th>挑战</th>
+                                <th>提交时间</th>
+                                <th>状态</th>
+                                <th>执行时间</th>
                                 <th>Git</th>
                             </tr>
                         </thead>
@@ -168,15 +168,15 @@
                             <tr>
                                 <td>
                                     <a href="/challenge/{{.ChallengeID}}">
-                                        Challenge {{.ChallengeID}}: {{index $.Challenges .ChallengeID | title}}
+                                        挑战 {{.ChallengeID}}: {{index $.Challenges .ChallengeID | title}}
                                     </a>
                                 </td>
                                 <td>{{.SubmittedAt | formatDate}}</td>
                                 <td>
                                     {{if .Passed}}
-                                    <span class="badge bg-success">Passed</span>
+                                    <span class="badge bg-success">通过</span>
                                     {{else}}
-                                    <span class="badge bg-danger">Failed</span>
+                                    <span class="badge bg-danger">失败</span>
                                     {{end}}
                                 </td>
                                 <td>{{.ExecutionMs}}ms</td>
@@ -196,7 +196,7 @@
                 </div>
                 {{else}}
                 <div class="p-4 text-center">
-                    <p class="text-muted">No submissions yet.</p>
+                    <p class="text-muted">暂无提交记录。</p>
                 </div>
                 {{end}}
             </div>
@@ -208,35 +208,35 @@
 {{define "scripts"}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Handle refresh button
+        // 处理刷新按钮
         const refreshBtn = document.getElementById('refresh-btn');
         if (refreshBtn) {
             refreshBtn.addEventListener('click', function() {
-                // Disable button and show loading state
+                // 禁用按钮并显示加载状态
                 refreshBtn.disabled = true;
-                refreshBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Syncing...';
+                refreshBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 正在同步...';
                 
-                // Call API to refresh submissions from repository
+                // 调用 API 从仓库刷新提交记录
                 fetch('/api/refresh', {
                     method: 'POST'
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // Show success message
-                    alert(`Successfully synchronized with repository! Found ${data.count} submissions.`);
-                    // Reload the page to show updated data
+                    // 显示成功消息
+                    alert(`已成功同步到仓库！共发现 ${data.count} 条提交记录。`);
+                    // 重新加载页面以显示更新后的数据
                     window.location.reload();
                 })
                 .catch(error => {
-                    // Show error message
-                    alert('Failed to synchronize with repository: ' + error.message);
+                    // 显示错误消息
+                    alert('与仓库同步失败: ' + error.message);
                     
-                    // Reset button
+                    // 重置按钮
                     refreshBtn.disabled = false;
-                    refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Sync with Repo';
+                    refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> 同步到仓库';
                 });
             });
         }
     });
 </script>
-{{end}} 
+{{end}}

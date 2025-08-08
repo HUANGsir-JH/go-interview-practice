@@ -1,38 +1,38 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 11: Concurrent Web Content Aggregator
+# 挑战 11：并发网页内容聚合器
 
-## Problem Statement
+## 问题描述
 
-Implement a concurrent web content aggregator that fetches, processes, and aggregates data from multiple sources with proper concurrency control and context handling.
+实现一个并发网页内容聚合器，能够从多个来源并发地获取、处理和聚合数据，并具备适当的并发控制和上下文处理能力。
 
-## Requirements
+## 要求
 
-1. Implement a `ContentAggregator` that:
-   - Concurrently fetches content from multiple URLs
-   - Processes the content (extract specific information)
-   - Aggregates results with proper error handling
-   - Uses proper context management for cancellation and timeouts
-   - Implements rate limiting to avoid overwhelming sources
+1. 实现一个 `ContentAggregator`，要求：
+   - 并发地从多个 URL 获取内容
+   - 处理内容（提取特定信息）
+   - 聚合结果并具备完善的错误处理机制
+   - 使用正确的上下文管理来支持取消和超时
+   - 实现请求速率限制，避免对源服务器造成过载
 
-2. You must implement the following concurrency patterns:
-   - **Worker Pool**: Process fetched content using a fixed number of worker goroutines
-   - **Fan-Out, Fan-In**: Distribute processing tasks and collect results
-   - **Context handling**: Proper propagation of cancellation and timeout signals
-   - **Rate Limiting**: Limit the rate of requests using a token bucket or similar approach
-   - **Concurrent data structures**: Safe access to shared data
+2. 必须实现以下并发模式：
+   - **工作池**：使用固定数量的工作 goroutine 来处理获取的内容
+   - **扇出、扇入**：分发处理任务并收集结果
+   - **上下文处理**：正确传播取消和超时信号
+   - **速率限制**：使用令牌桶或其他类似方法限制请求速率
+   - **并发数据结构**：安全访问共享数据
 
-3. The solution should demonstrate understanding of:
-   - Goroutines and channel management
-   - Proper error handling in concurrent code
-   - Synchronization primitives (Mutex, RWMutex, WaitGroup)
-   - Context package for managing request lifecycles
-   - Graceful shutdown
+3. 解决方案应体现对以下内容的理解：
+   - goroutine 和 channel 管理
+   - 并发代码中的正确错误处理
+   - 同步原语（Mutex、RWMutex、WaitGroup）
+   - 使用 context 包管理请求生命周期
+   - 优雅关闭
 
-## Function Signatures
+## 函数签名
 
 ```go
-// Core types
+// 核心类型
 type ContentFetcher interface {
     Fetch(ctx context.Context, url string) ([]byte, error)
 }
@@ -50,10 +50,10 @@ type ProcessedData struct {
 }
 
 type ContentAggregator struct {
-    // Add fields as needed
+    // 根据需要添加字段
 }
 
-// Constructor function
+// 构造函数
 func NewContentAggregator(
     fetcher ContentFetcher, 
     processor ContentProcessor, 
@@ -61,7 +61,7 @@ func NewContentAggregator(
     requestsPerSecond int,
 ) *ContentAggregator
 
-// Methods
+// 方法
 func (ca *ContentAggregator) FetchAndProcess(
     ctx context.Context, 
     urls []string,
@@ -69,7 +69,7 @@ func (ca *ContentAggregator) FetchAndProcess(
 
 func (ca *ContentAggregator) Shutdown() error
 
-// Helper functions for different concurrency patterns
+// 不同并发模式的辅助函数
 func (ca *ContentAggregator) workerPool(
     ctx context.Context, 
     jobs <-chan string, 
@@ -83,70 +83,70 @@ func (ca *ContentAggregator) fanOut(
 ) ([]ProcessedData, []error)
 ```
 
-## Constraints
+## 约束条件
 
-- The solution must handle errors gracefully and never lose error information
-- Implement proper resource cleanup (close channels, release locks, etc.)
-- The number of concurrent requests should be configurable
-- The request rate limiting must be implemented
-- Timeout and cancellation must be properly handled
-- The code should guard against goroutine leaks
+- 解决方案必须能优雅处理错误，且绝不丢失错误信息
+- 实现正确的资源清理（关闭 channel、释放锁等）
+- 并发请求数量应可配置
+- 必须实现请求速率限制
+- 超时和取消必须得到妥善处理
+- 代码应防止 goroutine 泄漏
 
-## Sample Usage
+## 示例用法
 
 ```go
-// Create content fetcher and processor
+// 创建内容获取器和处理器
 fetcher := &HTTPFetcher{
     Client: &http.Client{Timeout: 5 * time.Second},
 }
 processor := &HTMLProcessor{}
 
-// Create aggregator with 5 workers and 10 requests per second limit
+// 创建聚合器，设置 5 个工作线程，每秒最多 10 个请求
 aggregator := NewContentAggregator(fetcher, processor, 5, 10)
 
-// Context with timeout
+// 带超时的上下文
 ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 defer cancel()
 
-// URLs to fetch and process
+// 需要获取和处理的 URL 列表
 urls := []string{
     "https://example.com",
     "https://example.org",
     "https://example.net",
-    // Add more URLs as needed
+    // 根据需要添加更多 URL
 }
 
-// Fetch and process in parallel with rate limiting
+// 并行获取和处理，同时进行速率限制
 results, err := aggregator.FetchAndProcess(ctx, urls)
 if err != nil {
-    log.Fatalf("Error in aggregate operation: %v", err)
+    log.Fatalf("聚合操作出错: %v", err)
 }
 
-// Process results
+// 处理结果
 for _, data := range results {
-    fmt.Printf("Title: %s\nSource: %s\nKeywords: %v\n\n", 
+    fmt.Printf("标题: %s\n来源: %s\n关键词: %v\n\n", 
         data.Title, data.Source, data.Keywords)
 }
 
-// Clean up
+// 清理资源
 aggregator.Shutdown()
 ```
 
-## Instructions
+## 指令
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-11/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the required interfaces and types.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 该仓库。
+- **Clone** 你的 fork 到本地机器。
+- 在 `challenge-11/submissions/` 目录下创建一个以你的 GitHub 用户名命名的文件夹。
+- 将 `solution-template.go` 文件复制到你的提交目录中。
+- **实现** 所需的接口和类型。
+- **本地测试** 你的解决方案，运行测试文件。
+- **Commit** 并 **push** 你的代码到你的 fork。
+- **创建** 一个 pull request 提交你的解决方案。
 
-## Testing Your Solution Locally
+## 本地测试你的解决方案
 
-Run the following command in the `challenge-11/` directory:
+在 `challenge-11/` 目录下运行以下命令：
 
 ```bash
 go test -v
-``` 
+```

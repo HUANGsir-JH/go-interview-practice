@@ -1,17 +1,17 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 19: Slice Operations
+# 挑战 19：切片操作
 
-## Problem Statement
+## 问题描述
 
-Write functions to perform common operations on slices (Go's dynamic arrays). You'll implement the following functions:
+编写函数以对切片（Go 的动态数组）执行常见操作。你需要实现以下函数：
 
-1. `FindMax` - Find the maximum value in a slice of integers.
-2. `RemoveDuplicates` - Remove duplicate values from a slice while preserving order.
-3. `ReverseSlice` - Reverse the order of elements in a slice.
-4. `FilterEven` - Create a new slice containing only even numbers from the original slice.
+1. `FindMax` - 在整数切片中查找最大值。
+2. `RemoveDuplicates` - 移除切片中的重复值，同时保持顺序。
+3. `ReverseSlice` - 反转切片中元素的顺序。
+4. `FilterEven` - 创建一个新切片，仅包含原始切片中的偶数。
 
-## Function Signatures
+## 函数签名
 
 ```go
 func FindMax(numbers []int) int
@@ -20,89 +20,89 @@ func ReverseSlice(slice []int) []int
 func FilterEven(numbers []int) []int
 ```
 
-## Input Format
+## 输入格式
 
-- For all functions, a slice of integers.
+- 所有函数的输入均为整数切片。
 
-## Output Format
+## 输出格式
 
-- `FindMax` - A single integer representing the maximum value.
-- `RemoveDuplicates` - A slice of integers with duplicates removed.
-- `ReverseSlice` - A slice of integers in reverse order.
-- `FilterEven` - A slice containing only even integers.
+- `FindMax` - 一个表示最大值的整数。
+- `RemoveDuplicates` - 移除重复项后的整数切片。
+- `ReverseSlice` - 逆序排列的整数切片。
+- `FilterEven` - 仅包含偶数的整数切片。
 
-## Requirements
+## 要求
 
-1. `FindMax` should return the maximum value from the slice. If the slice is empty, return 0.
-2. `RemoveDuplicates` should preserve the original order of elements while removing duplicates.
-3. `ReverseSlice` should create a new slice with elements in reverse order.
-4. `FilterEven` should return a new slice containing only even numbers.
+1. `FindMax` 应返回切片中的最大值。如果切片为空，则返回 0。
+2. `RemoveDuplicates` 应在移除重复项的同时保持元素的原始顺序。
+3. `ReverseSlice` 应创建一个元素顺序相反的新切片。
+4. `FilterEven` 应返回仅包含偶数的新切片。
 
-## Sample Input and Output
+## 示例输入与输出
 
-### Sample Input 1
+### 示例输入 1
 
 ```
 FindMax([]int{3, 1, 4, 1, 5, 9, 2, 6})
 ```
 
-### Sample Output 1
+### 示例输出 1
 
 ```
 9
 ```
 
-### Sample Input 2
+### 示例输入 2
 
 ```
 RemoveDuplicates([]int{3, 1, 4, 1, 5, 9, 2, 6})
 ```
 
-### Sample Output 2
+### 示例输出 2
 
 ```
 [3 1 4 5 9 2 6]
 ```
 
-### Sample Input 3
+### 示例输入 3
 
 ```
 ReverseSlice([]int{1, 2, 3, 4, 5})
 ```
 
-### Sample Output 3
+### 示例输出 3
 
 ```
 [5 4 3 2 1]
 ```
 
-### Sample Input 4
+### 示例输入 4
 
 ```
 FilterEven([]int{1, 2, 3, 4, 5, 6})
 ```
 
-### Sample Output 4
+### 示例输出 4
 
 ```
 [2 4 6]
 ```
 
-## Instructions
+## 指导说明
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-19/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the required functions.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 该仓库。
+- **Clone** 你的副本到本地机器。
+- 在 `challenge-19/submissions/` 目录下创建一个以你的 GitHub 用户名命名的文件夹。
+- 将 `solution-template.go` 文件复制到你的提交目录中。
+- **实现** 所需的函数。
+- **本地测试** 你的解决方案，运行测试文件。
+- **Commit** 并 **push** 代码到你的副本。
+- **创建** 一个拉取请求以提交你的解决方案。
 
-## Testing Your Solution Locally
+## 本地测试你的解决方案
 
-Run the following command in the `challenge-19/` directory:
+在 `challenge-19/` 目录中运行以下命令：
 
 ```bash
 go test -v
-``` 
+```

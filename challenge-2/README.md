@@ -1,79 +1,79 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 2: Reverse a String
+# 挑战 2：反转字符串
 
-## Problem Statement
+## 问题描述
 
-Write a function `ReverseString` that takes a string and returns the string reversed.
+编写一个函数 `ReverseString`，该函数接受一个字符串并返回反转后的字符串。
 
-## Function Signature
+## 函数签名
 
 ```go
 func ReverseString(s string) string
 ```
 
-## Input Format
+## 输入格式
 
-- A single line containing a string `s`.
+- 一行包含一个字符串 `s`。
 
-## Output Format
+## 输出格式
 
-- The reversed string.
+- 反转后的字符串。
 
-## Constraints
+## 约束条件
 
 - `0 <= len(s) <= 1000`
-- The string may contain ASCII letters, digits, and special characters.
+- 字符串可能包含ASCII字母、数字和特殊字符。
 
-## Sample Input and Output
+## 示例输入和输出
 
-### Sample Input 1
+### 示例输入 1
 
 ```
 hello
 ```
 
-### Sample Output 1
+### 示例输出 1
 
 ```
 olleh
 ```
 
-### Sample Input 2
+### 示例输入 2
 
 ```
 Go is fun!
 ```
 
-### Sample Output 2
+### 示例输出 2
 
 ```
 !nuf si oG
 ```
 
-## Instructions
+## 操作说明
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-2/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the `ReverseString` function.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 仓库。
+- **Clone** 您的 fork 到本地机器。
+- **Create** 在 `challenge-2/submissions/` 内创建一个以您的 GitHub 用户名命名的目录。
+- **Copy** 将 `solution-template.go` 文件复制到您的提交目录中。
+- **Implement** 实现 `ReverseString` 函数。
+- **Test** 通过运行测试文件在本地测试您的解决方案。
+- **Commit** 并 **push** 您的代码到您的 fork。
+- **Create** 创建拉取请求以提交您的解决方案。
 
-## Testing Your Solution Locally
+## 在本地测试您的解决方案
 
-1. **Initialize Go Module** (if not already initialized):
+1. **初始化Go模块**（如果尚未初始化）：
 
-   Navigate to the `challenge-2` directory:
+   导航到 `challenge-2` 目录：
 
    ```bash
    cd challenge-2
    go mod init challenge2
    ```
 
-2. **Run the Tests:**
+2. **运行测试：**
 
    ```bash
    go test -v

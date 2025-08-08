@@ -1,92 +1,92 @@
-# Learning: Cobra CLI Framework Fundamentals
+# 学习：Cobra CLI 框架基础
 
-## 🌟 **What is Cobra?**
+## 🌟 **什么是 Cobra？**
 
-Cobra is a powerful library for creating modern command-line interfaces in Go. It's used by many popular CLI tools including Docker, Kubernetes, Hugo, and GitHub CLI.
+Cobra 是一个用于在 Go 语言中创建现代命令行界面的强大库。它被许多流行的 CLI 工具使用，包括 Docker、Kubernetes、Hugo 和 GitHub CLI。
 
-### **Why Cobra?**
-- **Powerful**: Easy to create complex CLI applications with subcommands
-- **User-friendly**: Automatic help generation, shell completion, and man pages
-- **Flexible**: Support for flags, arguments, and nested commands
-- **Well-tested**: Battle-tested in production by major projects
-- **POSIX-compliant**: Follows standard CLI conventions
+### **为什么选择 Cobra？**
+- **功能强大**：轻松创建具有子命令的复杂 CLI 应用
+- **用户友好**：自动生成帮助文档、Shell 补全和手册页
+- **灵活**：支持标志、参数和嵌套命令
+- **经过充分测试**：被大型项目在生产环境中广泛验证
+- **符合 POSIX 标准**：遵循标准 CLI 约定
 
-## 🏗️ **Core Concepts**
+## 🏗️ **核心概念**
 
-### **1. Commands**
-Commands are the core building blocks of a CLI application. Each command can have:
-- A name (e.g., "version", "about")
-- Short and long descriptions
-- A function to execute
-- Subcommands
-- Flags and arguments
+### **1. 命令**
+命令是 CLI 应用的核心构建模块。每个命令可以包含：
+- 名称（例如 "version"、"about"）
+- 简短和长描述
+- 执行函数
+- 子命令
+- 标志和参数
 
 ```go
 var myCmd = &cobra.Command{
     Use:   "mycommand",
-    Short: "A brief description",
-    Long:  "A longer description explaining what this command does",
+    Short: "简要描述",
+    Long:  "更详细的描述，说明此命令的功能",
     Run: func(cmd *cobra.Command, args []string) {
-        // Command implementation
+        // 命令实现
     },
 }
 ```
 
-### **2. Root Command**
-The root command is the main entry point of your CLI application:
+### **2. 根命令**
+根命令是你的 CLI 应用的主要入口点：
 
 ```go
 var rootCmd = &cobra.Command{
     Use:   "myapp",
-    Short: "My application does amazing things",
+    Short: "我的应用能完成惊人的事情",
 }
 ```
 
-### **3. Subcommands**
-You can add subcommands to create hierarchical CLI structures:
+### **3. 子命令**
+你可以添加子命令来创建分层的 CLI 结构：
 
 ```go
 rootCmd.AddCommand(versionCmd)
 rootCmd.AddCommand(configCmd)
 ```
 
-## 📖 **Command Structure**
+## 📖 **命令结构**
 
-### **Command Hierarchy**
+### **命令层级**
 ```
-myapp                    # Root command
-├── version             # Subcommand
-├── config              # Subcommand
-│   ├── set            # Sub-subcommand
-│   └── get            # Sub-subcommand
-└── help               # Auto-generated
+myapp                    # 根命令
+├── version             # 子命令
+├── config              # 子命令
+│   ├── set            # 子子命令
+│   └── get            # 子子命令
+└── help               # 自动生成
 ```
 
-### **Command Properties**
-- **Use**: The command name and syntax
-- **Short**: Brief description (shown in command lists)
-- **Long**: Detailed description (shown in help)
-- **Example**: Usage examples
-- **Run**: Function to execute when command is called
+### **命令属性**
+- **Use**：命令名称和语法
+- **Short**：简要描述（在命令列表中显示）
+- **Long**：详细描述（在帮助信息中显示）
+- **Example**：使用示例
+- **Run**：调用命令时执行的函数
 
-## 🔧 **Building Your First CLI**
+## 🔧 **构建你的第一个 CLI**
 
-### **Step 1: Create Root Command**
+### **步骤 1：创建根命令**
 ```go
 var rootCmd = &cobra.Command{
     Use:   "taskcli",
-    Short: "Task Manager CLI",
-    Long:  "A powerful task management tool for the command line",
+    Short: "任务管理器 CLI",
+    Long:  "一个强大的命令行任务管理工具",
 }
 ```
 
-### **Step 2: Add Subcommands**
+### **步骤 2：添加子命令**
 ```go
 var versionCmd = &cobra.Command{
     Use:   "version",
-    Short: "Show version information",
+    Short: "显示版本信息",
     Run: func(cmd *cobra.Command, args []string) {
-        fmt.Println("taskcli version 1.0.0")
+        fmt.Println("taskcli 版本 1.0.0")
     },
 }
 
@@ -95,7 +95,7 @@ func init() {
 }
 ```
 
-### **Step 3: Execute**
+### **步骤 3：执行**
 ```go
 func main() {
     if err := rootCmd.Execute(); err != nil {
@@ -105,75 +105,75 @@ func main() {
 }
 ```
 
-## 🎯 **Auto-Generated Features**
+## 🎯 **自动生成的功能**
 
-### **Help System**
-Cobra automatically generates:
-- `help` command
-- `-h, --help` flags for all commands
-- Formatted help text with descriptions
-- Usage information
+### **帮助系统**
+Cobra 自动生成：
+- `help` 命令
+- 所有命令的 `-h, --help` 标志
+- 格式化的帮助文本，包含描述
+- 使用说明
 
-### **Completion**
-Cobra provides shell completion for:
+### **补全功能**
+Cobra 提供以下 Shell 补全支持：
 - Bash
 - Zsh
 - Fish
 - PowerShell
 
-### **Error Handling**
-Cobra provides built-in error handling for:
-- Unknown commands
-- Invalid flags
-- Missing required arguments
+### **错误处理**
+Cobra 提供内置错误处理功能，包括：
+- 未知命令
+- 无效标志
+- 缺少必需参数
 
-## 💡 **Best Practices**
+## 💡 **最佳实践**
 
-### **1. Command Naming**
-- Use clear, descriptive names
-- Follow verb-noun pattern (e.g., `list tasks`, `create user`)
-- Keep names short but meaningful
+### **1. 命令命名**
+- 使用清晰、描述性的名称
+- 遵循 动词-名词 模式（例如 `list tasks`、`create user`）
+- 保持名称简短但有意义
 
-### **2. Descriptions**
-- Write helpful short descriptions for command lists
-- Provide detailed long descriptions with examples
-- Include usage examples when helpful
+### **2. 描述信息**
+- 为命令列表编写有用的简短描述
+- 提供包含示例的详细长描述
+- 在有帮助时提供使用示例
 
-### **3. Error Messages**
-- Provide clear, actionable error messages
-- Suggest correct usage when possible
-- Use consistent error formatting
+### **3. 错误消息**
+- 提供清晰、可操作的错误信息
+- 尽可能建议正确的用法
+- 使用一致的错误格式
 
-### **4. Output Formatting**
-- Use consistent output formatting
-- Consider structured output (JSON/YAML) for automation
-- Provide human-readable output by default
+### **4. 输出格式**
+- 使用一致的输出格式
+- 考虑为自动化提供结构化输出（JSON/YAML）
+- 默认提供人类可读的输出
 
-## 🚀 **Advanced Features**
+## 🚀 **高级功能**
 
-### **PreRun Hooks**
-Execute code before command runs:
+### **PreRun 钩子**
+在命令运行前执行代码：
 ```go
 PreRun: func(cmd *cobra.Command, args []string) {
-    // Setup or validation code
+    // 设置或验证代码
 },
 ```
 
-### **Persistent Flags**
-Flags available to command and all subcommands:
+### **持久性标志**
+可在命令及其所有子命令中使用的标志：
 ```go
-rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file")
+rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "配置文件")
 ```
 
-### **Required Commands**
-Make subcommands required:
+### **必选命令**
+使子命令成为必选：
 ```go
 cmd.MarkFlagRequired("name")
 ```
 
-## 📚 **Real-World Examples**
+## 📚 **真实世界示例**
 
-### **Docker CLI Structure**
+### **Docker CLI 结构**
 ```
 docker
 ├── build
@@ -185,7 +185,7 @@ docker
     └── prune
 ```
 
-### **Kubernetes CLI Structure**
+### **Kubernetes CLI 结构**
 ```
 kubectl
 ├── get
@@ -197,43 +197,43 @@ kubectl
     └── set-context
 ```
 
-## 🔗 **Resources**
+## 🔗 **资源**
 
-- [Official Cobra Documentation](https://cobra.dev/)
-- [Cobra GitHub Repository](https://github.com/spf13/cobra)
-- [Cobra Generator](https://github.com/spf13/cobra-cli)
-- [CLI Design Guidelines](https://clig.dev/)
+- [官方 Cobra 文档](https://cobra.dev/)
+- [Cobra GitHub 仓库](https://github.com/spf13/cobra)
+- [Cobra 生成器](https://github.com/spf13/cobra-cli)
+- [CLI 设计指南](https://clig.dev/)
 
-## 🎪 **Common Patterns**
+## 🎪 **常见模式**
 
-### **Version Command**
-Every CLI should have a version command:
+### **版本命令**
+每个 CLI 都应包含一个版本命令：
 ```go
 var versionCmd = &cobra.Command{
     Use:   "version",
-    Short: "Print version information",
+    Short: "打印版本信息",
     Run: func(cmd *cobra.Command, args []string) {
-        fmt.Printf("%s version %s\n", appName, version)
+        fmt.Printf("%s 版本 %s\n", appName, version)
     },
 }
 ```
 
-### **Configuration Command**
-Many CLIs need configuration management:
+### **配置命令**
+许多 CLI 需要配置管理：
 ```go
 var configCmd = &cobra.Command{
     Use:   "config",
-    Short: "Manage configuration",
+    Short: "管理配置",
 }
 ```
 
-### **List Commands**
-Common pattern for listing resources:
+### **列表命令**
+列出资源的常见模式：
 ```go
 var listCmd = &cobra.Command{
     Use:   "list",
-    Short: "List items",
+    Short: "列出项目",
     Run: func(cmd *cobra.Command, args []string) {
-        // List implementation
+        // 列出实现
     },
-} 
+}

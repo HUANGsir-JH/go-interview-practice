@@ -1,24 +1,24 @@
-# Hints for Challenge 2: Middleware & Request/Response Handling
+# 挑战 2 提示：中间件与请求/响应处理
 
-## Hint 1: Understanding Middleware
+## 提示 1：理解中间件
 
-Middleware functions run before your route handlers. They follow this pattern:
+中间件函数在路由处理器之前运行。它们遵循以下模式：
 
 ```go
 func MyMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
-        // Pre-processing logic here
+        // 在此处编写预处理逻辑
         
-        c.Next() // IMPORTANT: Call this to continue the chain
+        c.Next() // 重要：调用此方法以继续执行链
         
-        // Post-processing logic here (runs after handler)
+        // 在此处编写后处理逻辑（在处理器之后运行）
     }
 }
 ```
 
-## Hint 2: Request ID Middleware
+## 提示 2：请求 ID 中间件
 
-Create a middleware that adds a unique request ID to each request:
+创建一个为每个请求添加唯一请求 ID 的中间件：
 
 ```go
 import "github.com/google/uuid"
@@ -33,9 +33,9 @@ func RequestIDMiddleware() gin.HandlerFunc {
 }
 ```
 
-## Hint 3: Logging Middleware Structure
+## 提示 3：日志中间件结构
 
-Build a logging middleware that tracks request details:
+构建一个跟踪请求详情的日志中间件：
 
 ```go
 func LoggingMiddleware() gin.HandlerFunc {
@@ -54,9 +54,9 @@ func LoggingMiddleware() gin.HandlerFunc {
 }
 ```
 
-## Hint 4: CORS Middleware Implementation
+## 提示 4：CORS 中间件实现
 
-Handle Cross-Origin Resource Sharing for web client access:
+处理跨域资源共享以支持网页客户端访问：
 
 ```go
 func CORSMiddleware() gin.HandlerFunc {
@@ -75,9 +75,9 @@ func CORSMiddleware() gin.HandlerFunc {
 }
 ```
 
-## Hint 5: Rate Limiting with Memory Store
+## 提示 5：使用内存存储的限流
 
-Implement basic rate limiting using an in-memory store:
+使用内存存储实现基本的请求频率限制：
 
 ```go
 import "golang.org/x/time/rate"
@@ -98,7 +98,7 @@ func RateLimitMiddleware(requestsPerSecond int) gin.HandlerFunc {
         mu.Unlock()
         
         if !limiter.Allow() {
-            c.JSON(429, gin.H{"error": "Rate limit exceeded"})
+            c.JSON(429, gin.H{"error": "请求频率超出限制"})
             c.Abort()
             return
         }
@@ -108,24 +108,24 @@ func RateLimitMiddleware(requestsPerSecond int) gin.HandlerFunc {
 }
 ```
 
-## Hint 6: Setting Up Router with Middleware
+## 提示 6：设置带中间件的路由器
 
-Apply middleware to your router in the correct order:
+按正确顺序将中间件应用到你的路由器：
 
 ```go
 func setupRouter() *gin.Engine {
-    router := gin.New() // Start with clean router
+    router := gin.New() // 从干净的路由器开始
     
-    // Add middleware in order
+    // 按顺序添加中间件
     router.Use(LoggingMiddleware())
     router.Use(RequestIDMiddleware())
     router.Use(CORSMiddleware())
-    router.Use(RateLimitMiddleware(100)) // 100 requests per second
+    router.Use(RateLimitMiddleware(100)) // 每秒 100 次请求
     
-    // Add your routes
+    // 添加你的路由
     router.GET("/users", getUsers)
     router.POST("/users", createUser)
     
     return router
 }
-``` 
+```

@@ -1,18 +1,18 @@
-# Challenge 4: Advanced Queries
+# 挑战 4：高级查询
 
-Build a **Social Media Analytics System** using GORM that demonstrates advanced querying techniques, aggregations, and complex data analysis.
+使用 GORM 构建一个 **社交媒体分析系统**，展示高级查询技术、聚合操作和复杂数据分析。
 
-## Challenge Requirements
+## 挑战要求
 
-Create a Go application that implements:
+创建一个 Go 应用程序，实现以下功能：
 
-1. **Complex Queries** - Advanced filtering, sorting, and pagination
-2. **Aggregations** - Group by, count, sum, average operations
-3. **Subqueries** - Nested queries and correlated subqueries
-4. **Raw SQL** - Custom SQL queries when needed
-5. **Query Optimization** - Efficient data retrieval patterns
+1. **复杂查询** - 高级过滤、排序和分页
+2. **聚合操作** - 分组、计数、求和、平均值运算
+3. **子查询** - 嵌套查询和相关子查询
+4. **原生 SQL** - 必要时使用自定义 SQL 查询
+5. **查询优化** - 高效的数据检索模式
 
-## Data Models
+## 数据模型
 
 ```go
 type User struct {
@@ -50,21 +50,21 @@ type Like struct {
 }
 ```
 
-## Required Functions
+## 必需函数
 
-Implement these functions:
-- `ConnectDB() (*gorm.DB, error)` - Database connection with auto-migration
-- `GetTopUsersByPostCount(db *gorm.DB, limit int) ([]User, error)` - Get users with most posts
-- `GetPostsByCategoryWithUserInfo(db *gorm.DB, category string, page, pageSize int) ([]Post, int64, error)` - Get posts with pagination
-- `GetUserEngagementStats(db *gorm.DB, userID uint) (map[string]interface{}, error)` - Get user engagement statistics
-- `GetPopularPostsByLikes(db *gorm.DB, days int, limit int) ([]Post, error)` - Get popular posts by likes in time period
-- `GetCountryUserStats(db *gorm.DB) ([]map[string]interface{}, error)` - Get user statistics by country
-- `SearchPostsByContent(db *gorm.DB, query string, limit int) ([]Post, error)` - Search posts by content
-- `GetUserRecommendations(db *gorm.DB, userID uint, limit int) ([]User, error)` - Get user recommendations based on similar interests
+实现以下函数：
+- `ConnectDB() (*gorm.DB, error)` - 数据库连接并自动迁移
+- `GetTopUsersByPostCount(db *gorm.DB, limit int) ([]User, error)` - 获取发帖数量最多的用户
+- `GetPostsByCategoryWithUserInfo(db *gorm.DB, category string, page, pageSize int) ([]Post, int64, error)` - 获取指定分类的帖子并分页，包含用户信息
+- `GetUserEngagementStats(db *gorm.DB, userID uint) (map[string]interface{}, error)` - 获取用户的互动统计数据
+- `GetPopularPostsByLikes(db *gorm.DB, days int, limit int) ([]Post, error)` - 获取指定时间段内点赞数最多的热门帖子
+- `GetCountryUserStats(db *gorm.DB) ([]map[string]interface{}, error)` - 按国家统计用户数据
+- `SearchPostsByContent(db *gorm.DB, query string, limit int) ([]Post, error)` - 根据内容搜索帖子
+- `GetUserRecommendations(db *gorm.DB, userID uint, limit int) ([]User, error)` - 根据相似兴趣推荐用户
 
-## Query Examples
+## 查询示例
 
-**Top Users by Post Count:**
+**按发帖数量排名的顶级用户：**
 ```sql
 SELECT users.*, COUNT(posts.id) as post_count 
 FROM users 
@@ -74,7 +74,7 @@ ORDER BY post_count DESC
 LIMIT 10
 ```
 
-**Popular Posts by Likes:**
+**按点赞数排名的热门帖子：**
 ```sql
 SELECT posts.*, COUNT(likes.id) as like_count 
 FROM posts 
@@ -85,14 +85,14 @@ ORDER BY like_count DESC
 LIMIT 20
 ```
 
-## Testing Requirements
+## 测试要求
 
-Your solution must pass tests for:
-- Retrieving top users by post count with proper aggregation
-- Paginated post retrieval with user information
-- User engagement statistics calculation
-- Popular posts filtering by time period and likes
-- Country-based user statistics
-- Full-text search functionality
-- User recommendation algorithm
-- Query performance and optimization 
+你的解决方案必须通过以下测试：
+- 正确聚合计算按发帖数量排名的顶级用户
+- 带用户信息的分页帖子获取
+- 用户互动统计数据的正确计算
+- 按时间段和点赞数筛选热门帖子
+- 按国家划分的用户统计数据
+- 全文搜索功能
+- 用户推荐算法
+- 查询性能与优化

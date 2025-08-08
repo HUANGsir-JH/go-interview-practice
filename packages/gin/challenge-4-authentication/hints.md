@@ -1,8 +1,8 @@
-# Hints for Challenge 4: Authentication & Session Management
+# 挑战 4 提示：认证与会话管理
 
-## Hint 1: Password Strength Validation
+## 提示 1：密码强度验证
 
-Implement comprehensive password strength checking:
+实现全面的密码强度检查：
 
 ```go
 func isStrongPassword(password string) bool {
@@ -32,9 +32,9 @@ func isStrongPassword(password string) bool {
 }
 ```
 
-## Hint 2: Password Hashing with Bcrypt
+## 提示 2：使用 Bcrypt 进行密码哈希
 
-Use bcrypt for secure password hashing:
+使用 bcrypt 实现安全的密码哈希：
 
 ```go
 func hashPassword(password string) (string, error) {
@@ -51,13 +51,13 @@ func verifyPassword(password, hash string) bool {
 }
 ```
 
-## Hint 3: JWT Token Generation
+## 提示 3：JWT 令牌生成
 
-Generate secure JWT tokens with proper claims:
+使用适当的声明生成安全的 JWT 令牌：
 
 ```go
 func generateTokens(userID int, username, role string) (*TokenResponse, error) {
-    // Access Token
+    // 访问令牌
     accessClaims := &JWTClaims{
         UserID:   userID,
         Username: username,
@@ -75,13 +75,13 @@ func generateTokens(userID int, username, role string) (*TokenResponse, error) {
         return nil, err
     }
     
-    // Refresh Token
+    // 刷新令牌
     refreshToken, err := generateRandomToken()
     if err != nil {
         return nil, err
     }
     
-    // Store refresh token
+    // 存储刷新令牌
     refreshTokens[refreshToken] = userID
     
     return &TokenResponse{
@@ -94,15 +94,15 @@ func generateTokens(userID int, username, role string) (*TokenResponse, error) {
 }
 ```
 
-## Hint 4: JWT Token Validation
+## 提示 4：JWT 令牌验证
 
-Validate and parse JWT tokens:
+验证并解析 JWT 令牌：
 
 ```go
 func validateToken(tokenString string) (*JWTClaims, error) {
-    // Check if token is blacklisted
+    // 检查令牌是否在黑名单中
     if blacklistedTokens[tokenString] {
-        return nil, errors.New("token is blacklisted")
+        return nil, errors.New("令牌已被列入黑名单")
     }
     
     token, err := jwt.ParseWithClaims(tokenString, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
@@ -117,13 +117,13 @@ func validateToken(tokenString string) (*JWTClaims, error) {
         return claims, nil
     }
     
-    return nil, errors.New("invalid token")
+    return nil, errors.New("无效的令牌")
 }
 ```
 
-## Hint 5: Authentication Middleware
+## 提示 5：认证中间件
 
-Create middleware to protect routes:
+创建中间件以保护路由：
 
 ```go
 func authMiddleware() gin.HandlerFunc {
@@ -132,7 +132,7 @@ func authMiddleware() gin.HandlerFunc {
         if authHeader == "" {
             c.JSON(401, APIResponse{
                 Success: false,
-                Error:   "Authorization header required",
+                Error:   "需要授权头",
             })
             c.Abort()
             return
@@ -143,13 +143,13 @@ func authMiddleware() gin.HandlerFunc {
         if err != nil {
             c.JSON(401, APIResponse{
                 Success: false,
-                Error:   "Invalid token",
+                Error:   "无效的令牌",
             })
             c.Abort()
             return
         }
         
-        // Set user info in context
+        // 将用户信息设置到上下文中
         c.Set("userID", claims.UserID)
         c.Set("username", claims.Username)
         c.Set("role", claims.Role)
@@ -158,9 +158,9 @@ func authMiddleware() gin.HandlerFunc {
 }
 ```
 
-## Hint 6: Role-Based Authorization
+## 提示 6：基于角色的授权
 
-Implement role-based access control:
+实现基于角色的访问控制：
 
 ```go
 func requireRole(roles ...string) gin.HandlerFunc {
@@ -169,7 +169,7 @@ func requireRole(roles ...string) gin.HandlerFunc {
         if !exists {
             c.JSON(401, APIResponse{
                 Success: false,
-                Error:   "Unauthorized",
+                Error:   "未授权",
             })
             c.Abort()
             return
@@ -185,16 +185,16 @@ func requireRole(roles ...string) gin.HandlerFunc {
         
         c.JSON(403, APIResponse{
             Success: false,
-            Error:   "Insufficient permissions",
+            Error:   "权限不足",
         })
         c.Abort()
     }
 }
 ```
 
-## Hint 7: Account Lockout Management
+## 提示 7：账户锁定管理
 
-Handle failed login attempts and account lockout:
+处理登录失败尝试和账户锁定：
 
 ```go
 func recordFailedAttempt(user *User) {
@@ -218,9 +218,9 @@ func resetFailedAttempts(user *User) {
 }
 ```
 
-## Hint 8: Secure Token Logout
+## 提示 8：安全的令牌登出
 
-Implement secure logout with token blacklisting:
+实现通过令牌黑名单机制的安全登出：
 
 ```go
 func logout(c *gin.Context) {
@@ -228,17 +228,17 @@ func logout(c *gin.Context) {
     if authHeader == "" {
         c.JSON(401, APIResponse{
             Success: false,
-            Error:   "Authorization header required",
+            Error:   "需要授权头",
         })
         return
     }
     
     tokenString := strings.TrimPrefix(authHeader, "Bearer ")
     
-    // Add token to blacklist
+    // 将令牌加入黑名单
     blacklistedTokens[tokenString] = true
     
-    // Remove refresh token if provided
+    // 如果提供了刷新令牌，则删除
     var req struct {
         RefreshToken string `json:"refresh_token,omitempty"`
     }
@@ -250,7 +250,7 @@ func logout(c *gin.Context) {
     
     c.JSON(200, APIResponse{
         Success: true,
-        Message: "Logout successful",
+        Message: "登出成功",
     })
 }
-``` 
+```

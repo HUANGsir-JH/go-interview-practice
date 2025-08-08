@@ -1,63 +1,63 @@
-# Learning Materials for Rate Limiter Implementation
+# 限流实现学习资料
 
-## Introduction to Rate Limiting
+## 限流简介
 
-Rate limiting is a crucial technique used in software systems to control the rate of incoming requests or operations. It protects services from being overwhelmed by too many requests and ensures fair resource allocation among users.
+限流是软件系统中用于控制请求或操作速率的关键技术。它能防止服务因过多请求而过载，并确保用户间公平的资源分配。
 
-## Why Rate Limiting Matters
+## 为何限流至关重要
 
-### 1. **System Protection**
-- Prevents system overload and crashes
-- Maintains service availability during traffic spikes
-- Protects against denial-of-service (DoS) attacks
+### 1. **系统保护**
+- 防止系统过载和崩溃
+- 在流量高峰期间保持服务可用性
+- 抵御拒绝服务（DoS）攻击
 
-### 2. **Resource Management**
-- Ensures fair usage of computational resources
-- Prevents any single user from monopolizing the system
-- Maintains consistent performance for all users
+### 2. **资源管理**
+- 确保计算资源的公平使用
+- 防止单个用户独占系统
+- 保证所有用户的性能一致性
 
-### 3. **Cost Control**
-- Limits resource consumption and associated costs
-- Prevents runaway processes from causing expensive operations
-- Enables predictable infrastructure scaling
+### 3. **成本控制**
+- 限制资源消耗及相关成本
+- 防止失控进程引发昂贵操作
+- 实现可预测的基础设施扩展
 
-### 4. **Service Level Agreements (SLAs)**
-- Enforces agreed-upon usage limits
-- Enables different service tiers with varying limits
-- Provides measurable quality of service
+### 4. **服务水平协议（SLA）**
+- 强制执行约定的使用限制
+- 支持不同层级的服务，具有不同的限制
+- 提供可衡量的服务质量
 
-## Rate Limiting Algorithms
+## 限流算法
 
-### 1. Token Bucket Algorithm
+### 1. 令牌桶算法
 
-The token bucket algorithm is one of the most popular and flexible rate limiting techniques.
+令牌桶算法是最受欢迎且最灵活的限流技术之一。
 
-#### How It Works
+#### 工作原理
 
 ```
 ┌─────────────────┐
-│   Token Bucket  │  ← Tokens added at fixed rate
+│   令牌桶        │  ← 以固定速率添加令牌
 │  [🪙][🪙][🪙]   │
-│  [🪙][🪙][ ]    │  ← Current tokens
+│  [🪙][🪙][ ]    │  ← 当前令牌数
 │  [ ][ ][ ]      │
 └─────────────────┘
         ↓
-   Request consumes token
+   请求消耗一个令牌
 ```
 
-1. **Token Generation**: Tokens are added to a bucket at a fixed rate
-2. **Bucket Capacity**: The bucket has a maximum capacity (burst limit)
-3. **Request Processing**: Each request consumes one or more tokens
-4. **Rate Limiting**: If no tokens are available, the request is denied
+1. **令牌生成**：以固定速率向桶中添加令牌
+2. **桶容量**：桶有最大容量（突发上限）
+3. **请求处理**：每个请求消耗一个或多个令牌
+4. **限流机制**：若无可用令牌，则拒绝请求
 
-#### Implementation Key Points
+#### 实现要点
 
 ```go
 type TokenBucket struct {
-    rate       int       // tokens per second
-    burst      int       // maximum bucket capacity
-    tokens     float64   // current token count
-    lastRefill time.Time // last token refill time
+    rate       int       // 每秒令牌数
+    burst      int       // 桶的最大容量
+    tokens     float64   // 当前令牌数量
+    lastRefill time.Time // 上次填充时间
     mutex      sync.Mutex
 }
 
@@ -65,19 +65,19 @@ func (tb *TokenBucket) Allow() bool {
     tb.mutex.Lock()
     defer tb.mutex.Unlock()
     
-    // Calculate elapsed time and add tokens
+    // 计算经过时间并添加令牌
     now := time.Now()
     elapsed := now.Sub(tb.lastRefill).Seconds()
     tb.tokens += elapsed * float64(tb.rate)
     
-    // Cap at burst capacity
+    // 限制在突发容量内
     if tb.tokens > float64(tb.burst) {
         tb.tokens = float64(tb.burst)
     }
     
     tb.lastRefill = now
     
-    // Check if request can be allowed
+    // 检查是否允许请求
     if tb.tokens >= 1.0 {
         tb.tokens -= 1.0
         return true
@@ -87,39 +87,39 @@ func (tb *TokenBucket) Allow() bool {
 }
 ```
 
-#### Advantages
-- **Burst Handling**: Allows temporary traffic spikes up to burst capacity
-- **Smooth Rate**: Provides consistent long-term rate limiting
-- **Flexibility**: Configurable rate and burst parameters
-- **Efficiency**: O(1) time complexity for operations
+#### 优点
+- **突发处理**：允许在突发容量范围内临时流量激增
+- **平滑速率**：提供长期一致的限流效果
+- **灵活性**：可配置速率和突发参数
+- **高效性**：操作时间复杂度为 O(1)
 
-#### Disadvantages
-- **Memory Usage**: Requires floating-point arithmetic for precise timing
-- **Complexity**: More complex than simpler algorithms
+#### 缺点
+- **内存使用**：需要浮点数运算以实现精确计时
+- **复杂性**：比简单算法更复杂
 
-### 2. Sliding Window Algorithm
+### 2. 滑动窗口算法
 
-The sliding window algorithm maintains a more accurate rate limit by tracking requests within a moving time window.
+滑动窗口算法通过跟踪移动时间窗口内的请求，实现更准确的限流。
 
-#### How It Works
+#### 工作原理
 
 ```
-Time: --------|--------|--------|--------|--------
+时间: --------|--------|--------|--------|--------
       10:00   10:01   10:02   10:03   10:04
               
-Current Time: 10:03:30
-Window Size: 1 minute
-Window: [10:02:30 - 10:03:30]
+当前时间: 10:03:30
+窗口大小: 1分钟
+窗口: [10:02:30 - 10:03:30]
 
-Requests in window: ✓✓✓✗✗ (3 requests, limit 5)
+窗口内请求数量: ✓✓✓✗✗ (3个请求，限制5个)
 ```
 
-1. **Window Management**: Maintains a sliding time window of fixed size
-2. **Request Tracking**: Records timestamps of all requests
-3. **Window Sliding**: Continuously removes old requests outside the window
-4. **Rate Checking**: Allows requests if count within window is below limit
+1. **窗口管理**：维护一个固定大小的滑动时间窗口
+2. **请求追踪**：记录所有请求的时间戳
+3. **窗口滑动**：持续移除窗口外的旧请求
+4. **速率检查**：若窗口内请求数低于限制则允许请求
 
-#### Implementation Key Points
+#### 实现要点
 
 ```go
 type SlidingWindow struct {
@@ -136,7 +136,7 @@ func (sw *SlidingWindow) Allow() bool {
     now := time.Now()
     cutoff := now.Add(-sw.windowSize)
     
-    // Remove old requests
+    // 移除旧请求
     validRequests := make([]time.Time, 0)
     for _, req := range sw.requests {
         if req.After(cutoff) {
@@ -145,7 +145,7 @@ func (sw *SlidingWindow) Allow() bool {
     }
     sw.requests = validRequests
     
-    // Check if we can allow the request
+    // 检查是否可以允许请求
     if len(sw.requests) < sw.rate {
         sw.requests = append(sw.requests, now)
         return true
@@ -155,35 +155,35 @@ func (sw *SlidingWindow) Allow() bool {
 }
 ```
 
-#### Advantages
-- **Accuracy**: More precise rate limiting without boundary effects
-- **Fairness**: Smooth distribution of allowed requests
-- **Predictability**: Consistent behavior across time boundaries
+#### 优点
+- **准确性**：避免边界效应，实现更精确的限流
+- **公平性**：允许请求分布更均匀
+- **可预测性**：跨时间边界行为一致
 
-#### Disadvantages
-- **Memory Usage**: Stores timestamps for all requests in the window
-- **Complexity**: O(n) time complexity for cleanup operations
-- **Scalability**: Memory usage grows with request rate
+#### 缺点
+- **内存使用**：需存储窗口内所有请求的时间戳
+- **复杂性**：清理操作时间复杂度为 O(n)
+- **可扩展性**：内存使用随请求率增长
 
-### 3. Fixed Window Algorithm
+### 3. 固定窗口算法
 
-The fixed window algorithm is the simplest approach, using a counter that resets at fixed intervals.
+固定窗口算法是最简单的方案，使用在固定间隔重置的计数器。
 
-#### How It Works
+#### 工作原理
 
 ```
-Window 1     Window 2     Window 3
+窗口1         窗口2         窗口3
 [10:00-10:01][10:01-10:02][10:02-10:03]
 ✓✓✓✓✓✗✗✗    ✓✓✓✓✓✗      ✓✓✓✓✓
-(5/5 limit)  (5/5 limit) (5/5 limit)
+(5/5限制)  (5/5限制) (5/5限制)
 ```
 
-1. **Time Windows**: Divides time into fixed-size windows
-2. **Counter Reset**: Request counter resets at window boundaries
-3. **Simple Counting**: Increments counter for each request
-4. **Limit Enforcement**: Denies requests when counter exceeds limit
+1. **时间窗口**：将时间划分为固定大小的窗口
+2. **计数器重置**：在窗口边界处重置请求计数器
+3. **简单计数**：每次请求递增计数器
+4. **限流执行**：当计数器超过限制时拒绝请求
 
-#### Implementation Key Points
+#### 实现要点
 
 ```go
 type FixedWindow struct {
@@ -200,13 +200,13 @@ func (fw *FixedWindow) Allow() bool {
     
     now := time.Now()
     
-    // Check if we're in a new window
+    // 检查是否进入新窗口
     if now.Sub(fw.windowStart) >= fw.windowSize {
         fw.windowStart = now
         fw.requestCount = 0
     }
     
-    // Check if request can be allowed
+    // 检查是否可以允许请求
     if fw.requestCount < fw.rate {
         fw.requestCount++
         return true
@@ -216,26 +216,26 @@ func (fw *FixedWindow) Allow() bool {
 }
 ```
 
-#### Advantages
-- **Simplicity**: Easy to understand and implement
-- **Performance**: O(1) time complexity
-- **Memory Efficiency**: Minimal memory usage
+#### 优点
+- **简单性**：易于理解和实现
+- **性能**：时间复杂度为 O(1)
+- **内存效率**：内存占用极少
 
-#### Disadvantages
-- **Boundary Effects**: Allows bursts at window boundaries
-- **Unfairness**: Can allow 2x rate limit at window transitions
+#### 缺点
+- **边界效应**：在窗口边界处允许突发流量
+- **不公平性**：在窗口切换时可能允许达到2倍速率限制
 
-## Advanced Rate Limiting Concepts
+## 高级限流概念
 
-### 1. Distributed Rate Limiting
+### 1. 分布式限流
 
-When running multiple instances of a service, rate limits need to be coordinated across instances.
+运行多个服务实例时，需要在实例间协调限流。
 
-#### Approaches
+#### 方法
 
-1. **Centralized Storage**: Use Redis or similar for shared state
-2. **Consistent Hashing**: Distribute rate limiting across nodes
-3. **Approximate Algorithms**: Trade accuracy for performance
+1. **集中式存储**：使用 Redis 等共享状态
+2. **一致性哈希**：在节点间分发限流
+3. **近似算法**：在精度与性能之间权衡
 
 ```go
 type DistributedRateLimiter struct {
@@ -252,14 +252,14 @@ func (drl *DistributedRateLimiter) Allow() bool {
         local rate = tonumber(ARGV[2])
         local now = tonumber(ARGV[3])
         
-        -- Remove old entries
+        -- 移除旧条目
         redis.call('zremrangebyscore', key, '-inf', now - window)
         
-        -- Count current entries
+        -- 统计当前条目数
         local count = redis.call('zcard', key)
         
         if count < rate then
-            -- Add current request
+            -- 添加当前请求
             redis.call('zadd', key, now, now)
             redis.call('expire', key, window)
             return 1
@@ -276,15 +276,15 @@ func (drl *DistributedRateLimiter) Allow() bool {
 }
 ```
 
-### 2. Adaptive Rate Limiting
+### 2. 自适应限流
 
-Adjusts rate limits based on system conditions and performance metrics.
+根据系统状态和性能指标动态调整限流阈值。
 
-#### Strategies
+#### 策略
 
-1. **Load-Based**: Adjust limits based on CPU, memory, or latency
-2. **Queue-Based**: Use queue length as an indicator
-3. **Success Rate**: Reduce limits when error rates increase
+1. **负载驱动**：基于 CPU、内存或延迟调整限制
+2. **队列驱动**：使用队列长度作为指标
+3. **成功率驱动**：错误率上升时降低限制
 
 ```go
 type AdaptiveRateLimiter struct {
@@ -299,27 +299,27 @@ func (arl *AdaptiveRateLimiter) adjustRate() {
     arl.mutex.Lock()
     defer arl.mutex.Unlock()
     
-    // Get current system metrics
+    // 获取当前系统指标
     cpuUsage := arl.metrics.GetCPUUsage()
     errorRate := arl.metrics.GetErrorRate()
     
-    // Adjust rate based on conditions
+    // 根据条件调整速率
     if cpuUsage > 0.8 || errorRate > 0.1 {
-        // Reduce rate when system is stressed
+        // 系统压力大时降低速率
         arl.currentRate = int(float64(arl.baseRate) * 0.5)
     } else if cpuUsage < 0.4 && errorRate < 0.01 {
-        // Increase rate when system is healthy
+        // 系统健康时提高速率
         arl.currentRate = int(float64(arl.baseRate) * 1.2)
     }
     
-    // Update the underlying limiter
-    // (implementation depends on limiter type)
+    // 更新底层限流器
+    // （实现取决于限流器类型）
 }
 ```
 
-### 3. Rate Limiting Patterns
+### 3. 限流模式
 
-#### Per-User Rate Limiting
+#### 按用户限流
 
 ```go
 type PerUserRateLimiter struct {
@@ -336,7 +336,7 @@ func (purl *PerUserRateLimiter) Allow(userID string) bool {
     
     if !exists {
         purl.mutex.Lock()
-        // Double-check pattern
+        // 双重检查模式
         if limiter, exists = purl.limiters[userID]; !exists {
             limiter, _ = purl.factory.CreateLimiter(purl.config)
             purl.limiters[userID] = limiter
@@ -348,7 +348,7 @@ func (purl *PerUserRateLimiter) Allow(userID string) bool {
 }
 ```
 
-#### Hierarchical Rate Limiting
+#### 分层限流
 
 ```go
 type HierarchicalRateLimiter struct {
@@ -357,16 +357,16 @@ type HierarchicalRateLimiter struct {
 }
 
 func (hrl *HierarchicalRateLimiter) Allow(userID string) bool {
-    // Check global limit first
+    // 先检查全局限制
     if !hrl.globalLimiter.Allow() {
         return false
     }
     
-    // Then check per-user limit
+    // 再检查用户级限制
     userLimiter := hrl.getUserLimiter(userID)
     if !userLimiter.Allow() {
-        // Return token to global limiter if user limit exceeded
-        // (implementation depends on limiter type)
+        // 用户限制超限时返回令牌到全局限流器
+        // （实现取决于限流器类型）
         return false
     }
     
@@ -374,19 +374,19 @@ func (hrl *HierarchicalRateLimiter) Allow(userID string) bool {
 }
 ```
 
-## Concurrency and Thread Safety
+## 并发与线程安全
 
-### Key Considerations
+### 关键考虑因素
 
-1. **Race Conditions**: Multiple goroutines accessing shared state
-2. **Atomic Operations**: Use atomic operations for simple counters
-3. **Mutex Protection**: Protect complex state with mutexes
-4. **Lock-Free Algorithms**: Consider lock-free approaches for high performance
+1. **竞态条件**：多个 goroutine 访问共享状态
+2. **原子操作**：对简单计数器使用原子操作
+3. **互斥锁保护**：用互斥锁保护复杂状态
+4. **无锁算法**：高并发场景下考虑无锁方案
 
-### Thread-Safe Implementation Patterns
+### 线程安全实现模式
 
 ```go
-// Using atomic operations for simple counters
+// 使用原子操作处理简单计数器
 type AtomicCounter struct {
     count int64
     limit int64
@@ -398,12 +398,12 @@ func (ac *AtomicCounter) Allow() bool {
         return false
     }
     
-    // Try to increment atomically
+    // 尝试原子递增
     newCount := atomic.AddInt64(&ac.count, 1)
     return newCount <= ac.limit
 }
 
-// Using read-write mutexes for better read performance
+// 使用读写锁提升读性能
 type RWMutexLimiter struct {
     mu    sync.RWMutex
     count int
@@ -423,14 +423,14 @@ func (rwl *RWMutexLimiter) Allow() bool {
 }
 ```
 
-## Performance Optimization
+## 性能优化
 
-### 1. Minimize Lock Contention
+### 1. 减少锁竞争
 
 ```go
-// Use separate locks for different operations
+// 对不同操作使用独立锁
 type OptimizedLimiter struct {
-    // Separate mutexes for different concerns
+    // 不同关注点使用独立互斥锁
     tokenMu   sync.Mutex
     metricsMu sync.Mutex
     
@@ -439,7 +439,7 @@ type OptimizedLimiter struct {
 }
 ```
 
-### 2. Batch Operations
+### 2. 批量操作
 
 ```go
 func (tb *TokenBucket) AllowN(n int) bool {
@@ -457,10 +457,10 @@ func (tb *TokenBucket) AllowN(n int) bool {
 }
 ```
 
-### 3. Lazy Cleanup
+### 3. 延迟清理
 
 ```go
-// Only clean up old requests when necessary
+// 仅在必要时清理旧请求
 func (sw *SlidingWindow) cleanupIfNeeded() {
     if len(sw.requests) > sw.maxSize {
         sw.cleanup()
@@ -468,22 +468,22 @@ func (sw *SlidingWindow) cleanupIfNeeded() {
 }
 ```
 
-## Testing Rate Limiters
+## 测试限流器
 
-### Unit Testing Strategies
+### 单元测试策略
 
-1. **Basic Functionality**: Test allow/deny behavior
-2. **Timing Tests**: Verify rate limiting over time
-3. **Concurrency Tests**: Test thread safety
-4. **Edge Cases**: Test boundary conditions
+1. **基本功能**：测试允许/拒绝行为
+2. **定时测试**：验证时间上的限流效果
+3. **并发测试**：测试线程安全性
+4. **边界情况**：测试边界条件
 
-### Integration Testing
+### 集成测试
 
 ```go
 func TestRateLimiterWithRealTraffic(t *testing.T) {
     limiter := NewTokenBucketLimiter(100, 10)
     
-    // Simulate realistic traffic patterns
+    // 模拟真实流量模式
     var wg sync.WaitGroup
     clients := 50
     duration := 5 * time.Second
@@ -503,13 +503,13 @@ func TestRateLimiterWithRealTraffic(t *testing.T) {
     
     wg.Wait()
     
-    // Verify metrics and behavior
+    // 验证指标和行为
     metrics := limiter.GetMetrics()
-    // Assert expected behavior
+    // 断言预期行为
 }
 ```
 
-### Performance Benchmarking
+### 性能基准测试
 
 ```go
 func BenchmarkRateLimiter(b *testing.B) {
@@ -524,9 +524,9 @@ func BenchmarkRateLimiter(b *testing.B) {
 }
 ```
 
-## Real-World Applications
+## 实际应用场景
 
-### 1. API Rate Limiting
+### 1. API 限流
 
 ```go
 func APIRateLimitMiddleware(limiter RateLimiter) gin.HandlerFunc {
@@ -536,7 +536,7 @@ func APIRateLimitMiddleware(limiter RateLimiter) gin.HandlerFunc {
             c.Header("X-RateLimit-Remaining", "0")
             c.Header("Retry-After", "1")
             c.AbortWithStatusJSON(429, gin.H{
-                "error": "Rate limit exceeded",
+                "error": "速率限制已超出",
             })
             return
         }
@@ -546,7 +546,7 @@ func APIRateLimitMiddleware(limiter RateLimiter) gin.HandlerFunc {
 }
 ```
 
-### 2. Database Connection Limiting
+### 2. 数据库连接限流
 
 ```go
 type DBConnectionLimiter struct {
@@ -559,7 +559,7 @@ func (dcl *DBConnectionLimiter) Query(query string, args ...interface{}) error {
     defer cancel()
     
     if err := dcl.limiter.Wait(ctx); err != nil {
-        return fmt.Errorf("database rate limit exceeded: %w", err)
+        return fmt.Errorf("数据库速率限制超出: %w", err)
     }
     
     _, err := dcl.db.QueryContext(ctx, query, args...)
@@ -567,7 +567,7 @@ func (dcl *DBConnectionLimiter) Query(query string, args ...interface{}) error {
 }
 ```
 
-### 3. Background Job Processing
+### 3. 后台任务处理
 
 ```go
 type JobProcessor struct {
@@ -580,34 +580,34 @@ func (jp *JobProcessor) processJobs() {
         if jp.limiter.Allow() {
             go jp.processJob(job)
         } else {
-            // Queue job for later or drop it
+            // 将任务重新入队或丢弃
             jp.requeueJob(job)
         }
     }
 }
 ```
 
-## Best Practices
+## 最佳实践
 
-### 1. Configuration
+### 1. 配置
 
-- **Choose Appropriate Algorithm**: Token bucket for burst, sliding window for accuracy
-- **Set Reasonable Limits**: Based on system capacity and SLA requirements
-- **Monitor and Adjust**: Continuously monitor and tune rate limits
+- **选择合适的算法**：令牌桶适合突发，滑动窗口适合精度
+- **设置合理限制**：基于系统容量和 SLA 要求
+- **监控与调整**：持续监控并调优限流参数
 
-### 2. Error Handling
+### 2. 错误处理
 
-- **Graceful Degradation**: Provide meaningful error messages
-- **Retry Logic**: Implement exponential backoff for clients
-- **Circuit Breaking**: Combine with circuit breaker patterns
+- **优雅降级**：提供有意义的错误信息
+- **重试逻辑**：为客户端实现指数退避
+- **熔断机制**：结合熔断器模式
 
-### 3. Observability
+### 3. 可观测性
 
-- **Metrics Collection**: Track allowed/denied requests, wait times
-- **Logging**: Log rate limiting events for debugging
-- **Alerting**: Alert on unusual rate limiting patterns
+- **指标收集**：跟踪允许/拒绝的请求数、等待时间
+- **日志记录**：记录限流事件用于调试
+- **告警机制**：对异常限流模式发出告警
 
-### 4. Client-Side Considerations
+### 4. 客户端注意事项
 
 ```go
 type RateLimitedClient struct {
@@ -618,41 +618,41 @@ type RateLimitedClient struct {
 func (rlc *RateLimitedClient) Do(req *http.Request) (*http.Response, error) {
     ctx := req.Context()
     
-    // Wait for rate limiter approval
+    // 等待限流器批准
     if err := rlc.limiter.Wait(ctx); err != nil {
-        return nil, fmt.Errorf("rate limit wait failed: %w", err)
+        return nil, fmt.Errorf("限流等待失败: %w", err)
     }
     
     return rlc.client.Do(req)
 }
 ```
 
-## Common Pitfalls and Solutions
+## 常见陷阱与解决方案
 
-### 1. Clock Skew in Distributed Systems
-- **Problem**: Different servers have different times
-- **Solution**: Use logical clocks or synchronized time sources
+### 1. 分布式系统中的时钟偏差
+- **问题**：不同服务器时间不同步
+- **解决方案**：使用逻辑时钟或同步时间源
 
-### 2. Memory Leaks
-- **Problem**: Storing too much historical data
-- **Solution**: Implement cleanup mechanisms and bounded storage
+### 2. 内存泄漏
+- **问题**：存储过多历史数据
+- **解决方案**：实现清理机制和有限存储
 
-### 3. Thundering Herd
-- **Problem**: Many requests hitting at window boundary
-- **Solution**: Use jitter or staggered resets
+### 3. 雷霆之 herd（雪崩效应）
+- **问题**：大量请求同时在窗口边界到达
+- **解决方案**：使用抖动或错开重置
 
-### 4. Precision vs Performance
-- **Problem**: High precision requires complex calculations
-- **Solution**: Balance precision needs with performance requirements
+### 4. 精度与性能权衡
+- **问题**：高精度需要复杂计算
+- **解决方案**：在精度需求与性能要求之间取得平衡
 
-## Further Reading
+## 进一步阅读
 
-- [Go's golang.org/x/time/rate package](https://pkg.go.dev/golang.org/x/time/rate)
-- [Rate Limiting Algorithms](https://en.wikipedia.org/wiki/Rate_limiting)
-- [The Go Memory Model](https://golang.org/ref/mem)
-- [Effective Go - Concurrency](https://golang.org/doc/effective_go#concurrency)
-- [Concurrency in Go (Book)](https://www.oreilly.com/library/view/concurrency-in-go/9781491941294/)
+- [Go 的 golang.org/x/time/rate 包](https://pkg.go.dev/golang.org/x/time/rate)
+- [限流算法](https://zh.wikipedia.org/wiki/限流)
+- [Go 内存模型](https://golang.org/ref/mem)
+- [Effective Go - 并发](https://golang.org/doc/effective_go#concurrency)
+- [Go 中的并发（书籍）](https://www.oreilly.com/library/view/concurrency-in-go/9781491941294/)
 
-## Conclusion
+## 结论
 
-Rate limiting is a critical component of robust, scalable systems. Understanding different algorithms and their trade-offs allows you to choose the right approach for your specific use case. Remember to always test your rate limiters under realistic conditions and monitor their behavior in production. 
+限流是构建健壮、可扩展系统的关键组件。理解不同算法及其权衡，有助于为特定用例选择合适的方法。始终记得在真实条件下测试你的限流器，并在生产环境中监控其行为。

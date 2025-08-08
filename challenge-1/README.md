@@ -1,69 +1,69 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 1: Sum of Two Numbers
+# 挑战 1：两数之和
 
-## Problem Statement
+## 问题描述
 
-Write a function `Sum` that takes two integers and returns their sum.
+编写一个函数 `Sum`，该函数接受两个整数并返回它们的和。
 
-## Function Signature
+## 函数签名
 
 ```go
 func Sum(a int, b int) int
 ```
 
-## Input Format
+## 输入格式
 
-- Two integers `a` and `b`.
+- 两个整数 `a` 和 `b`。
 
-## Output Format
+## 输出格式
 
-- An integer representing the sum of `a` and `b`.
+- 一个整数，表示 `a` 和 `b` 的和。
 
-## Constraints
+## 约束条件
 
 - `-10^9 <= a, b <= 10^9`
 
-## Sample Input and Output
+## 示例输入和输出
 
-### Sample Input 1
+### 示例输入 1
 
 ```
 2, 3
 ```
 
-### Sample Output 1
+### 示例输出 1
 
 ```
 5
 ```
 
-### Sample Input 2
+### 示例输入 2
 
 ```
 -5, 10
 ```
 
-### Sample Output 2
+### 示例输出 2
 
 ```
 5
 ```
 
-## Instructions
+## 操作说明
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-1/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the `Sum` function.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 仓库。
+- **Clone** 您的 fork 到本地机器。
+- **Create** 在 `challenge-1/submissions/` 内创建一个以您的 GitHub 用户名命名的目录。
+- **Copy** 将 `solution-template.go` 文件复制到您的提交目录中。
+- **Implement** 实现 `Sum` 函数。
+- **Test** 通过运行测试文件在本地测试您的解决方案。
+- **Commit** 并 **push** 您的代码到您的 fork。
+- **Create** 创建拉取请求以提交您的解决方案。
 
-## Testing Your Solution Locally
+## 在本地测试您的解决方案
 
-Run the following command in the `challenge-1/` directory:
+在 `challenge-1/` 目录中运行以下命令：
 
 ```bash
 go test -v

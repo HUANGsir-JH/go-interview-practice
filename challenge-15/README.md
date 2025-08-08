@@ -1,31 +1,31 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 15: OAuth2 Authentication System
+# 挑战 15：OAuth2 认证系统
 
-In this challenge, you will implement an OAuth2 authentication system using Go. You'll create a server that supports the OAuth2 authorization code flow, allowing third-party applications to authenticate users without directly handling their credentials.
+在此挑战中，你将使用 Go 实现一个 OAuth2 认证系统。你需要创建一个支持 OAuth2 授权码流程的服务器，使第三方应用程序能够在不直接处理用户凭据的情况下对用户进行认证。
 
-## Requirements
+## 要求
 
-1. Implement an OAuth2 server that supports:
-   - Client registration and management
-   - Authorization endpoint for user consent
-   - Token endpoint for exchanging codes for tokens
-   - Token validation and introspection
-   
-2. Your implementation should support the following OAuth2 flows:
-   - Authorization code grant
-   - Refresh token flow
-   
-3. Implement security best practices:
-   - PKCE (Proof Key for Code Exchange) support
-   - Token expiration and revocation
-   - Scope-based permissions
-   - Secure storage of client secrets and tokens
-   
-4. Create a simple demo client application that:
-   - Redirects users to the authorization endpoint
-   - Exchanges authorization codes for tokens
-   - Uses tokens to access protected resources
-   - Refreshes tokens when they expire
-   
-5. The included test file has scenarios covering normal flows, error cases, and security edge cases 
+1. 实现一个支持以下功能的 OAuth2 服务器：
+   - 客户端注册与管理
+   - 用户授权同意的授权端点
+   - 用于交换代码获取令牌的令牌端点
+   - 令牌验证与探查功能
+
+2. 你的实现应支持以下 OAuth2 流程：
+   - 授权码授予（Authorization Code Grant）
+   - 刷新令牌流程（Refresh Token Flow）
+
+3. 实现安全最佳实践：
+   - 支持 PKCE（代码交换的证明密钥）
+   - 令牌过期与撤销机制
+   - 基于作用域的权限控制
+   - 安全存储客户端密钥和令牌
+
+4. 创建一个简单的演示客户端应用，该应用需具备：
+   - 将用户重定向到授权端点
+   - 用授权码换取令牌
+   - 使用令牌访问受保护的资源
+   - 在令牌过期时刷新令牌
+
+5. 包含的测试文件涵盖了正常流程、错误情况以及安全边界情况的测试场景

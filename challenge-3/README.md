@@ -1,64 +1,70 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 3: Employee Data Management
+# 挑战 3：回文检查
 
-## Problem Statement
+## 问题描述
 
-You are tasked with managing a list of employees with the following details: `ID`, `Name`, `Age`, and `Salary`. Implement a `Manager` struct that provides the following functionalities:
+编写一个函数 `IsPalindrome`，检查给定字符串是否是回文，忽略大小写和非字母数字字符。
 
-1. **AddEmployee**: Add a new employee to the list.
-2. **RemoveEmployee**: Remove an employee based on their ID.
-3. **GetAverageSalary**: Calculate the average salary of all employees.
-4. **FindEmployeeByID**: Retrieve an employee's details by their ID.
-
-## Structures and Function Signatures
-
-Define the following structures:
+## 函数签名
 
 ```go
-type Employee struct {
-    ID     int
-    Name   string
-    Age    int
-    Salary float64
-}
-
-type Manager struct {
-    Employees []Employee
-}
+func IsPalindrome(s string) bool
 ```
 
-Implement the following methods:
+## 输入格式
 
-```go
-func (m *Manager) AddEmployee(e Employee)
-func (m *Manager) RemoveEmployee(id int)
-func (m *Manager) GetAverageSalary() float64
-func (m *Manager) FindEmployeeByID(id int) *Employee
+- 包含字符串 `s` 的单行。
+
+## 输出格式
+
+- 如果字符串是回文，则为 `true`，否则为 `false`。
+
+## 约束条件
+
+- `1 <= len(s) <= 2 * 10^5`
+- 字符串由可打印的ASCII字符组成。
+
+## 示例输入和输出
+
+### 示例输入 1
+
+```
+A man, a plan, a canal: Panama
 ```
 
-## Instructions
+### 示例输出 1
 
-- **Fork** the repository and **clone** your fork.
-- **Create** your submission directory inside `challenge-3/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- Implement and **test** your solution using the test file.
-- **Submit** your solution by creating a pull request.
-
-## Sample Usage
-
-```go
-manager := Manager{}
-manager.AddEmployee(Employee{ID: 1, Name: "Alice", Age: 30, Salary: 70000})
-manager.AddEmployee(Employee{ID: 2, Name: "Bob", Age: 25, Salary: 65000})
-manager.RemoveEmployee(1)
-averageSalary := manager.GetAverageSalary()
-employee := manager.FindEmployeeByID(2)
+```
+true
 ```
 
-## Testing Your Solution Locally
+### 示例输入 2
 
-Run the following command in the `challenge-3` directory:
+```
+race a car
+```
+
+### 示例输出 2
+
+```
+false
+```
+
+## 如何运行
+
+- **Fork** 仓库。
+- **Clone** 您的 fork 到本地机器。
+- **Create** 在 `challenge-3/submissions/` 内创建一个以您的 GitHub 用户名命名的目录。
+- **Copy** 将 `solution-template.go` 文件复制到您的提交目录中。
+- **Implement** 实现 `IsPalindrome` 函数。
+- **Test** 通过运行测试文件在本地测试您的解决方案。
+- **Commit** 并 **push** 您的代码到您的 fork。
+- **Create** 创建拉取请求以提交您的解决方案。
+
+## 如何在本地测试您的解决方案
+
+导航到 `challenge-3/` 目录并运行：
 
 ```bash
 go test -v

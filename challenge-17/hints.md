@@ -1,10 +1,10 @@
-# Hints for Palindrome Checker
+# 回文检查器提示
 
-## Hint 1: Understanding Palindromes
-A palindrome reads the same forwards and backwards. Examples: "racecar", "A man a plan a canal Panama" (ignoring spaces and case).
+## 提示 1：理解回文
+回文正读和反读都相同。示例："racecar"，"A man a plan a canal Panama"（忽略空格和大小写）。
 
-## Hint 2: String Normalization
-Convert the string to lowercase and remove non-alphanumeric characters:
+## 提示 2：字符串规范化
+将字符串转换为小写并移除非字母数字字符：
 ```go
 func normalize(s string) string {
     var result strings.Builder
@@ -17,8 +17,8 @@ func normalize(s string) string {
 }
 ```
 
-## Hint 3: Two-Pointer Approach
-Use two pointers from both ends moving inward:
+## 提示 3：双指针方法
+使用两个指针从两端向中间移动：
 ```go
 func isPalindrome(s string) bool {
     normalized := normalize(s)
@@ -35,14 +35,14 @@ func isPalindrome(s string) bool {
 }
 ```
 
-## Hint 4: Rune Conversion Alternative
-For Unicode safety, convert to runes:
+## 提示 4：Rune 转换替代方案
+为了 Unicode 安全性，转换为 runes：
 ```go
 runes := []rune(normalized)
 ```
 
-## Hint 5: Simple Reverse Comparison
-Alternative approach - reverse the string and compare:
+## 提示 5：简单的反转比较
+替代方法——反转字符串并进行比较：
 ```go
 func reverse(s string) string {
     runes := []rune(s)
@@ -51,4 +51,4 @@ func reverse(s string) string {
     }
     return string(runes)
 }
-``` 
+```

@@ -1,35 +1,35 @@
-# Hints for Challenge 3: Subcommands & Data Persistence
+# 挑战3提示：子命令与数据持久化
 
-## Hint 1: Setting up the Root Command
+## 提示1：设置根命令
 
-Configure the inventory CLI root command:
+配置库存CLI的根命令：
 
 ```go
 var rootCmd = &cobra.Command{
     Use:   "inventory",
-    Short: "Inventory Management CLI - Manage your products and categories",
-    Long:  "A complete inventory management system with product and category management, data persistence, and search capabilities.",
+    Short: "库存管理CLI - 管理您的产品和分类",
+    Long:  "一个完整的库存管理系统，支持产品和分类管理、数据持久化以及搜索功能。",
 }
 ```
 
-## Hint 2: Creating Nested Command Structure
+## 提示2：创建嵌套命令结构
 
-Use `AddCommand()` to create hierarchical commands:
+使用 `AddCommand()` 创建分层命令：
 
 ```go
 func init() {
-    // Add product subcommands
+    // 添加产品子命令
     productCmd.AddCommand(productAddCmd)
     productCmd.AddCommand(productListCmd)
     productCmd.AddCommand(productGetCmd)
     productCmd.AddCommand(productUpdateCmd)
     productCmd.AddCommand(productDeleteCmd)
     
-    // Add category subcommands
+    // 添加分类子命令
     categoryCmd.AddCommand(categoryAddCmd)
     categoryCmd.AddCommand(categoryListCmd)
     
-    // Add all commands to root
+    // 将所有命令添加到根命令
     rootCmd.AddCommand(productCmd)
     rootCmd.AddCommand(categoryCmd)
     rootCmd.AddCommand(searchCmd)
@@ -37,19 +37,19 @@ func init() {
 }
 ```
 
-## Hint 3: Adding Flags to Commands
+## 提示3：为命令添加标志
 
-Add flags for user input:
+添加用户输入的标志：
 
 ```go
 func init() {
-    // Product add flags
-    productAddCmd.Flags().StringP("name", "n", "", "Product name (required)")
-    productAddCmd.Flags().Float64P("price", "p", 0, "Product price (required)")
-    productAddCmd.Flags().StringP("category", "c", "", "Product category (required)")
-    productAddCmd.Flags().IntP("stock", "s", 0, "Stock quantity (required)")
+    // 产品添加标志
+    productAddCmd.Flags().StringP("name", "n", "", "产品名称（必需）")
+    productAddCmd.Flags().Float64P("price", "p", 0, "产品价格（必需）")
+    productAddCmd.Flags().StringP("category", "c", "", "产品分类（必需）")
+    productAddCmd.Flags().IntP("stock", "s", 0, "库存数量（必需）")
     
-    // Mark required flags
+    // 标记必需标志
     productAddCmd.MarkFlagRequired("name")
     productAddCmd.MarkFlagRequired("price")
     productAddCmd.MarkFlagRequired("category")
@@ -57,14 +57,14 @@ func init() {
 }
 ```
 
-## Hint 4: JSON Data Persistence
+## 提示4：JSON数据持久化
 
-Implement JSON file operations:
+实现JSON文件操作：
 
 ```go
 func LoadInventory() error {
     if _, err := os.Stat(inventoryFile); os.IsNotExist(err) {
-        // Create default inventory
+        // 创建默认库存
         inventory = &Inventory{
             Products:   []Product{},
             Categories: []Category{},
@@ -91,9 +91,9 @@ func SaveInventory() error {
 }
 ```
 
-## Hint 5: Getting Flag Values in Commands
+## 提示5：在命令中获取标志值
 
-Access flag values in command execution:
+在命令执行中访问标志值：
 
 ```go
 Run: func(cmd *cobra.Command, args []string) {
@@ -114,15 +114,15 @@ Run: func(cmd *cobra.Command, args []string) {
     inventory.NextID++
     
     SaveInventory()
-    fmt.Printf("✅ Product added successfully!\n")
-    fmt.Printf("ID: %d, Name: %s, Price: $%.2f, Category: %s, Stock: %d\n", 
+    fmt.Printf("✅ 产品添加成功！\n")
+    fmt.Printf("ID: %d, 名称: %s, 价格: $%.2f, 分类: %s, 库存: %d\n", 
         product.ID, product.Name, product.Price, product.Category, product.Stock)
 },
 ```
 
-## Hint 6: Implementing Nested Key Access
+## 提示6：实现嵌套键访问
 
-Support dot notation for configuration-like access:
+支持类似配置的点号表示法访问：
 
 ```go
 func GetNestedValue(key string) (interface{}, bool) {
@@ -130,7 +130,7 @@ func GetNestedValue(key string) (interface{}, bool) {
     
     for _, product := range inventory.Products {
         if parts[0] == "product" && len(parts) > 1 {
-            // Handle product.field access
+            // 处理 product.field 访问
             if fmt.Sprintf("%d", product.ID) == parts[1] {
                 if len(parts) > 2 {
                     switch parts[2] {
@@ -138,7 +138,7 @@ func GetNestedValue(key string) (interface{}, bool) {
                         return product.Name, true
                     case "price":
                         return product.Price, true
-                    // ... other fields
+                    // ... 其他字段
                     }
                 }
                 return product, true
@@ -150,19 +150,19 @@ func GetNestedValue(key string) (interface{}, bool) {
 }
 ```
 
-## Hint 7: Implementing Search Functionality
+## 提示7：实现搜索功能
 
-Add search flags and filtering logic:
+添加搜索标志和过滤逻辑：
 
 ```go
 func init() {
-    searchCmd.Flags().StringP("name", "n", "", "Search by product name")
-    searchCmd.Flags().StringP("category", "c", "", "Search by category")
-    searchCmd.Flags().Float64("min-price", 0, "Minimum price")
-    searchCmd.Flags().Float64("max-price", 0, "Maximum price")
+    searchCmd.Flags().StringP("name", "n", "", "按产品名称搜索")
+    searchCmd.Flags().StringP("category", "c", "", "按分类搜索")
+    searchCmd.Flags().Float64("min-price", 0, "最低价格")
+    searchCmd.Flags().Float64("max-price", 0, "最高价格")
 }
 
-// In search command Run function:
+// 在搜索命令的 Run 函数中：
 Run: func(cmd *cobra.Command, args []string) {
     name, _ := cmd.Flags().GetString("name")
     category, _ := cmd.Flags().GetString("category")
@@ -192,15 +192,15 @@ Run: func(cmd *cobra.Command, args []string) {
         }
     }
     
-    // Display results
-    fmt.Printf("🔍 Found %d product(s):\n", len(results))
-    // ... format and display results
+    // 显示结果
+    fmt.Printf("🔍 找到 %d 个产品:\n", len(results))
+    // ... 格式化并显示结果
 },
 ```
 
-## Hint 8: Calculating Statistics
+## 提示8：计算统计信息
 
-Implement comprehensive statistics:
+实现全面的统计功能：
 
 ```go
 Run: func(cmd *cobra.Command, args []string) {
@@ -221,18 +221,18 @@ Run: func(cmd *cobra.Command, args []string) {
         }
     }
     
-    fmt.Println("📊 Inventory Statistics:")
-    fmt.Printf("- Total Products: %d\n", totalProducts)
-    fmt.Printf("- Total Categories: %d\n", totalCategories)
-    fmt.Printf("- Total Value: $%.2f\n", totalValue)
-    fmt.Printf("- Low Stock Items (< 5): %d\n", lowStockCount)
-    fmt.Printf("- Out of Stock Items: %d\n", outOfStockCount)
+    fmt.Println("📊 库存统计信息:")
+    fmt.Printf("- 总产品数: %d\n", totalProducts)
+    fmt.Printf("- 总分类数: %d\n", totalCategories)
+    fmt.Printf("- 总价值: $%.2f\n", totalValue)
+    fmt.Printf("- 低库存项 (< 5): %d\n", lowStockCount)
+    fmt.Printf("- 缺货项: %d\n", outOfStockCount)
 },
 ```
 
-## Hint 9: Error Handling
+## 提示9：错误处理
 
-Add proper error handling throughout:
+在整个代码中添加适当的错误处理：
 
 ```go
 func FindProductByID(id int) (*Product, int) {
@@ -244,22 +244,22 @@ func FindProductByID(id int) (*Product, int) {
     return nil, -1
 }
 
-// In commands:
+// 在命令中：
 product, index := FindProductByID(id)
 if product == nil {
-    fmt.Printf("❌ Product with ID %d not found\n", id)
+    fmt.Printf("❌ 找不到ID为 %d 的产品\n", id)
     return
 }
 ```
 
-## Hint 10: Table Formatting
+## 提示10：表格格式化
 
-Create nicely formatted table output:
+创建格式美观的表格输出：
 
 ```go
 func displayProductsTable(products []Product) {
-    fmt.Println("📦 Inventory Products:")
-    fmt.Printf("%-4s | %-15s | %-8s | %-12s | %-5s\n", "ID", "Name", "Price", "Category", "Stock")
+    fmt.Println("📦 库存产品列表:")
+    fmt.Printf("%-4s | %-15s | %-8s | %-12s | %-5s\n", "ID", "名称", "价格", "分类", "库存")
     fmt.Println("-----|-----------------|----------|--------------|-------")
     
     for _, product := range products {
@@ -269,4 +269,4 @@ func displayProductsTable(products []Product) {
 }
 ```
 
-Remember to call `LoadInventory()` in the `init()` function and handle all file operations with proper error checking! 
+记得在 `init()` 函数中调用 `LoadInventory()`，并对所有文件操作进行适当的错误检查！

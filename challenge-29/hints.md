@@ -1,35 +1,35 @@
-# Hints for Challenge 29: Rate Limiter Implementation
+# 挑战29：速率限制器实现提示
 
-## Hint 1: Token Bucket Algorithm
-The token bucket allows controlled bursts while maintaining average rate limits:
+## 提示1：令牌桶算法
+令牌桶允许在保持平均速率限制的同时进行受控的突发流量：
 
-**Core Concept:**
-- **Bucket**: Holds tokens (capacity = burst size)
-- **Refill Rate**: Tokens added per second (rate limit)
-- **Consumption**: Each request consumes 1+ tokens
-- **Burst Handling**: Full bucket allows temporary spikes
+**核心概念：**
+- **桶**：存储令牌（容量 = 突发大小）
+- **填充速率**：每秒添加的令牌数（速率限制）
+- **消耗**：每次请求消耗1个或更多令牌
+- **突发处理**：满桶允许临时峰值
 
-**Key Implementation Points:**
-- Track current token count and last refill time
-- Calculate tokens to add based on elapsed time
-- Allow request only if sufficient tokens available
+**关键实现要点：**
+- 跟踪当前令牌数量和上次填充时间
+- 根据经过的时间计算应添加的令牌数
+- 仅当有足够的令牌时才允许请求
 
 ```go
 type TokenBucket struct {
-    tokens     float64    // Current tokens
-    capacity   float64    // Max tokens (burst)
-    refillRate float64    // Tokens per second
-    lastRefill time.Time  // Last refill timestamp
+    tokens     float64    // 当前令牌数
+    capacity   float64    // 最大令牌数（突发）
+    refillRate float64    // 每秒令牌数
+    lastRefill time.Time  // 上次填充时间戳
 }
 
-// Refill based on elapsed time
+// 根据经过的时间进行填充
 tokensToAdd := elapsed.Seconds() * refillRate
 tokens = min(capacity, tokens + tokensToAdd)
 ```
 ```
 
-## Hint 2: Token Bucket - Allow and Wait Methods
-Implement the core rate limiting logic:
+## 提示2：令牌桶 - 允许和等待方法
+实现核心的速率限制逻辑：
 ```go
 func (tb *TokenBucketLimiter) Allow() bool {
     return tb.AllowN(1)
@@ -62,10 +62,10 @@ func (tb *TokenBucketLimiter) WaitN(ctx context.Context, n int) error {
         }
         
         select {
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             return ctx.Err()
-        case &lt;-time.After(time.Millisecond * 10):
-            // Small sleep to avoid busy waiting
+        case <-time.After(time.Millisecond * 10):
+            // 小睡眠以避免忙等待
         }
     }
 }
@@ -88,33 +88,33 @@ func (tb *TokenBucketLimiter) Reset() {
 }
 ```
 
-## Hint 3: Sliding Window Algorithm
-More precise than fixed windows, avoids boundary effects:
+## 提示3：滑动窗口算法
+比固定窗口更精确，避免边界效应：
 
-**Key Insight:** 
-- Track timestamps of recent requests in a sliding time window
-- Before each request, remove timestamps older than window size
-- Allow request if remaining count < rate limit
+**关键洞察：**
+- 在滑动时间窗口内跟踪最近请求的时间戳
+- 每次请求前，移除超过窗口大小的老请求时间戳
+- 如果剩余请求数小于速率限制，则允许请求
 
-**Advantages over Fixed Window:**
-- No burst at window boundaries
-- More accurate rate limiting
-- Smooths traffic over time
+**相比固定窗口的优势：**
+- 避免窗口边界处的突发流量
+- 更准确的速率限制
+- 流量随时间更平滑
 
 ```go
-// Clean old requests outside window
+// 清理窗口外的旧请求
 cutoff := now.Add(-windowSize)
 requests = removeOlderThan(requests, cutoff)
 
-// Check if within rate limit
+// 检查是否在速率限制范围内
 if len(requests) < rateLimit {
     requests = append(requests, now)
-    return true  // Allow
+    return true  // 允许
 }
 ```
 
-## Hint 4: Fixed Window Rate Limiter
-Implement simple counter-based rate limiting:
+## 提示4：固定窗口速率限制器
+实现基于计数器的简单速率限制：
 ```go
 type FixedWindowLimiter struct {
     mu          sync.Mutex
@@ -168,7 +168,7 @@ func (fw *FixedWindowLimiter) WaitN(ctx context.Context, n int) error {
             return nil
         }
         
-        // Calculate time until next window
+        // 计算到下一个窗口的时间
         fw.mu.Lock()
         nextWindow := fw.windowStart.Add(fw.windowSize)
         fw.mu.Unlock()
@@ -179,17 +179,17 @@ func (fw *FixedWindowLimiter) WaitN(ctx context.Context, n int) error {
         }
         
         select {
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             return ctx.Err()
-        case &lt;-time.After(waitTime):
-            // Window has reset, try again
+        case <-time.After(waitTime):
+            // 窗口已重置，重新尝试
         }
     }
 }
 ```
 
-## Hint 5: Rate Limiter Factory Pattern
-Create flexible factory for different rate limiter types:
+## 提示5：速率限制器工厂模式
+创建灵活的工厂以支持不同类型的速率限制器：
 ```go
 type RateLimiterConfig struct {
     Algorithm  string
@@ -225,13 +225,13 @@ func (f *RateLimiterFactory) CreateLimiter(config RateLimiterConfig) (RateLimite
         return NewFixedWindowLimiter(config.Rate, config.WindowSize), nil
         
     default:
-        return nil, fmt.Errorf("unknown algorithm: %s", config.Algorithm)
+        return nil, fmt.Errorf("未知算法: %s", config.Algorithm)
     }
 }
 ```
 
-## Hint 6: HTTP Middleware Implementation
-Add rate limiting to HTTP handlers:
+## 提示6：HTTP中间件实现
+为HTTP处理器添加速率限制：
 ```go
 func RateLimitMiddleware(limiter RateLimiter) func(http.Handler) http.Handler {
     return func(next http.Handler) http.Handler {
@@ -240,7 +240,7 @@ func RateLimitMiddleware(limiter RateLimiter) func(http.Handler) http.Handler {
                 w.Header().Set("X-RateLimit-Limit", fmt.Sprintf("%d", limiter.Limit()))
                 w.Header().Set("X-RateLimit-Remaining", "0")
                 w.Header().Set("Retry-After", "1")
-                http.Error(w, "Rate limit exceeded", http.StatusTooManyRequests)
+                http.Error(w, "速率限制已超出", http.StatusTooManyRequests)
                 return
             }
             
@@ -250,7 +250,7 @@ func RateLimitMiddleware(limiter RateLimiter) func(http.Handler) http.Handler {
     }
 }
 
-// Per-IP rate limiting middleware
+// 基于IP的速率限制中间件
 func PerIPRateLimitMiddleware(factory *RateLimiterFactory, config RateLimiterConfig) func(http.Handler) http.Handler {
     limiters := sync.Map{}
     
@@ -266,7 +266,7 @@ func PerIPRateLimitMiddleware(factory *RateLimiterFactory, config RateLimiterCon
             limiter := limiterInterface.(RateLimiter)
             
             if !limiter.Allow() {
-                http.Error(w, "Rate limit exceeded", http.StatusTooManyRequests)
+                http.Error(w, "速率限制已超出", http.StatusTooManyRequests)
                 return
             }
             
@@ -284,8 +284,8 @@ func getClientIP(r *http.Request) string {
 }
 ```
 
-## Hint 7: Metrics and Monitoring
-Add metrics collection for rate limiter performance:
+## 提示7：指标与监控
+为速率限制器性能添加指标收集功能：
 ```go
 type RateLimiterMetrics struct {
     TotalRequests   int64
@@ -306,11 +306,11 @@ func (m *RateLimiterMetrics) RecordRequest(allowed bool, waitTime time.Duration)
         m.DeniedRequests++
     }
     
-    // Update moving average of wait time
+    // 更新等待时间的移动平均值
     if m.TotalRequests == 1 {
         m.AverageWaitTime = waitTime
     } else {
-        // Simple moving average
+        // 简单移动平均
         m.AverageWaitTime = time.Duration(
             (int64(m.AverageWaitTime)*9 + int64(waitTime)) / 10,
         )
@@ -333,7 +333,7 @@ func (m *RateLimiterMetrics) SuccessRate() float64 {
     return float64(m.AllowedRequests) / float64(m.TotalRequests)
 }
 
-// Enhanced rate limiter with metrics
+// 增强版速率限制器，带指标
 type MetricsRateLimiter struct {
     limiter RateLimiter
     metrics *RateLimiterMetrics
@@ -355,11 +355,11 @@ func (m *MetricsRateLimiter) Allow() bool {
 }
 ```
 
-## Key Rate Limiting Concepts:
-- **Token Bucket**: Allows bursts while maintaining average rate
-- **Sliding Window**: Precise rate limiting without boundary effects  
-- **Fixed Window**: Simple and efficient but allows bursts at boundaries
-- **Thread Safety**: Use mutexes for concurrent access
-- **Context Cancellation**: Support timeouts in Wait methods
-- **HTTP Integration**: Middleware for web applications with proper headers
-</rewritten_file> 
+## 速率限制核心概念：
+- **令牌桶**：在保持平均速率的同时允许突发流量
+- **滑动窗口**：精确的速率限制，无边界效应  
+- **固定窗口**：简单高效，但在边界处允许突发流量
+- **线程安全**：使用互斥锁处理并发访问
+- **上下文取消**：在Wait方法中支持超时
+- **HTTP集成**：为Web应用提供中间件，并设置正确的响应头
+</rewritten_file>

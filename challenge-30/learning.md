@@ -1,16 +1,16 @@
-# Learning Guide: Go Context Package
+# 学习指南：Go Context 包
 
-## What is Context?
+## 什么是 Context？
 
-The `context` package in Go provides a way to carry **cancellation signals**, **timeouts**, and **request-scoped values** across API boundaries and goroutines. It's one of the most important packages in Go for building robust, production-ready applications.
+Go 中的 `context` 包提供了一种在 API 边界和 goroutine 之间传递 **取消信号**、**超时** 和 **请求范围值** 的方式。它是构建健壮、生产级应用程序最重要的包之一。
 
-### Why Context Matters
+### 为什么 Context 至关重要
 
 ```go
-// Without context - no way to cancel or timeout
+// 无 context - 无法取消或设置超时
 func fetchData() ([]byte, error) {
     resp, err := http.Get("https://api.example.com/data")
-    // What if this takes 5 minutes? No way to cancel!
+    // 如果耗时 5 分钟怎么办？根本无法取消！
     if err != nil {
         return nil, err
     }
@@ -18,7 +18,7 @@ func fetchData() ([]byte, error) {
     return io.ReadAll(resp.Body)
 }
 
-// With context - cancellable and time-bounded
+// 使用 context - 可取消且有时间限制
 func fetchDataWithContext(ctx context.Context) ([]byte, error) {
     req, err := http.NewRequestWithContext(ctx, "GET", "https://api.example.com/data", nil)
     if err != nil {
@@ -27,103 +27,103 @@ func fetchDataWithContext(ctx context.Context) ([]byte, error) {
     
     resp, err := http.DefaultClient.Do(req)
     if err != nil {
-        return nil, err // Could be context.DeadlineExceeded or context.Canceled
+        return nil, err // 可能是 context.DeadlineExceeded 或 context.Canceled
     }
     defer resp.Body.Close()
     return io.ReadAll(resp.Body)
 }
 ```
 
-## Core Context Types
+## 核心 Context 类型
 
-### 1. Background Context
-The root of all contexts - never cancelled, has no deadline, carries no values.
+### 1. 背景 Context
+所有 context 的根节点 - 永远不会被取消，没有截止时间，不携带任何值。
 
 ```go
 ctx := context.Background()
-// Use this as the top-level context in main(), tests, or initialization
+// 在 main()、测试或初始化中用作顶层 context
 ```
 
 ### 2. TODO Context
-A placeholder when you're unsure which context to use.
+当你不确定使用哪个 context 时的占位符。
 
 ```go
 ctx := context.TODO()
-// Use this during development when context isn't clear yet
+// 在开发阶段 context 尚不明确时使用
 ```
 
-### 3. Cancellation Context
-Can be manually cancelled to signal goroutines to stop work.
+### 3. 取消 Context
+可手动取消以通知 goroutine 停止工作。
 
 ```go
 ctx, cancel := context.WithCancel(context.Background())
-defer cancel() // Always call cancel to prevent memory leaks
+defer cancel() // 始终调用 cancel 以防止内存泄漏
 
 go func() {
     select {
     case <-ctx.Done():
-        fmt.Println("Work cancelled:", ctx.Err())
+        fmt.Println("工作已取消:", ctx.Err())
         return
     case <-time.After(5 * time.Second):
-        fmt.Println("Work completed")
+        fmt.Println("工作已完成")
     }
 }()
 
-// Cancel after 2 seconds
+// 2 秒后取消
 time.Sleep(2 * time.Second)
-cancel() // This triggers ctx.Done()
+cancel() // 触发 ctx.Done()
 ```
 
-### 4. Deadline/Timeout Context
-Automatically cancelled after a specific time.
+### 4. 截止时间/超时 Context
+在特定时间后自动取消。
 
 ```go
-// WithDeadline - cancel at specific time
+// WithDeadline - 在指定时间取消
 deadline := time.Now().Add(30 * time.Second)
 ctx, cancel := context.WithDeadline(context.Background(), deadline)
 defer cancel()
 
-// WithTimeout - cancel after duration
+// WithTimeout - 经过一段时间后取消
 ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 defer cancel()
 ```
 
-### 5. Value Context
-Carries request-scoped data across function calls.
+### 5. 值 Context
+在函数调用间传递请求范围的数据。
 
 ```go
 ctx := context.WithValue(context.Background(), "userID", "12345")
 ctx = context.WithValue(ctx, "requestID", "req-abc-123")
 
-// Retrieve values
+// 获取值
 userID := ctx.Value("userID").(string)
 requestID := ctx.Value("requestID").(string)
 ```
 
-## Context Patterns
+## Context 模式
 
-### Pattern 1: Checking for Cancellation
+### 模式 1：检查取消状态
 
 ```go
 func doWork(ctx context.Context) error {
     for i := 0; i < 1000; i++ {
-        // Check for cancellation periodically
+        // 定期检查是否被取消
         select {
         case <-ctx.Done():
-            return ctx.Err() // context.Canceled or context.DeadlineExceeded
+            return ctx.Err() // context.Canceled 或 context.DeadlineExceeded
         default:
-            // Continue work
+            // 继续工作
         }
         
-        // Simulate work
+        // 模拟工作
         time.Sleep(10 * time.Millisecond)
-        fmt.Printf("Processed item %d\n", i)
+        fmt.Printf("处理项目 %d\n", i)
     }
     return nil
 }
 ```
 
-### Pattern 2: Context with Goroutines
+### 模式 2：与 Goroutine 配合使用的 Context
 
 ```go
 func processInParallel(ctx context.Context, items []string) error {
@@ -141,7 +141,7 @@ func processInParallel(ctx context.Context, items []string) error {
         }(item)
     }
     
-    // Wait for all goroutines
+    // 等待所有 goroutine 完成
     for i := 0; i < len(items); i++ {
         if err := <-errChan; err != nil {
             return err
@@ -152,7 +152,7 @@ func processInParallel(ctx context.Context, items []string) error {
 }
 ```
 
-### Pattern 3: Context Racing
+### 模式 3：Context 竞争
 
 ```go
 func executeWithTimeout(ctx context.Context, task func() error) error {
@@ -164,32 +164,32 @@ func executeWithTimeout(ctx context.Context, task func() error) error {
     
     select {
     case err := <-done:
-        return err // Task completed first
+        return err // 任务先完成
     case <-ctx.Done():
-        return ctx.Err() // Context cancelled/timeout first
+        return ctx.Err() // Context 先被取消/超时
     }
 }
 ```
 
-## Real-World Examples
+## 实际应用示例
 
-### Web Server with Request Timeouts
+### 带请求超时的 Web 服务器
 
 ```go
 func handler(w http.ResponseWriter, r *http.Request) {
-    // Create context with timeout for this request
+    // 为本次请求创建带超时的 context
     ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
     defer cancel()
     
-    // Add request-specific values
+    // 添加请求特定的值
     ctx = context.WithValue(ctx, "requestID", generateRequestID())
     ctx = context.WithValue(ctx, "userID", getUserID(r))
     
-    // Process request with context
+    // 使用 context 处理请求
     result, err := processRequest(ctx, r)
     if err != nil {
         if ctx.Err() == context.DeadlineExceeded {
-            http.Error(w, "Request timeout", http.StatusRequestTimeout)
+            http.Error(w, "请求超时", http.StatusRequestTimeout)
             return
         }
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -200,19 +200,19 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func processRequest(ctx context.Context, r *http.Request) (interface{}, error) {
-    // Extract values from context
+    // 从 context 中提取值
     requestID := ctx.Value("requestID").(string)
     userID := ctx.Value("userID").(string)
     
-    log.Printf("Processing request %s for user %s", requestID, userID)
+    log.Printf("正在处理请求 %s 的用户 %s", requestID, userID)
     
-    // Make database call with context
+    // 使用 context 执行数据库调用
     data, err := fetchFromDatabase(ctx, userID)
     if err != nil {
         return nil, err
     }
     
-    // Make external API call with context
+    // 使用 context 执行外部 API 调用
     enriched, err := enrichData(ctx, data)
     if err != nil {
         return nil, err
@@ -222,7 +222,7 @@ func processRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 }
 ```
 
-### Worker Pool with Graceful Shutdown
+### 带优雅关闭的 Worker 池
 
 ```go
 type WorkerPool struct {
@@ -249,13 +249,13 @@ func (wp *WorkerPool) Start() {
 }
 
 func (wp *WorkerPool) worker(id int) {
-    log.Printf("Worker %d started", id)
-    defer log.Printf("Worker %d stopped", id)
+    log.Printf("Worker %d 已启动", id)
+    defer log.Printf("Worker %d 已停止", id)
     
     for {
         select {
         case <-wp.ctx.Done():
-            log.Printf("Worker %d shutting down: %v", id, wp.ctx.Err())
+            log.Printf("Worker %d 正在关闭: %v", id, wp.ctx.Err())
             return
         case job := <-wp.jobs:
             wp.processJob(job)
@@ -264,30 +264,30 @@ func (wp *WorkerPool) worker(id int) {
 }
 
 func (wp *WorkerPool) processJob(job Job) {
-    // Create context with timeout for this job
+    // 为该任务创建带超时的 context
     ctx, cancel := context.WithTimeout(wp.ctx, job.Timeout)
     defer cancel()
     
     err := job.Execute(ctx)
     if err != nil {
         if ctx.Err() == context.DeadlineExceeded {
-            log.Printf("Job %s timed out", job.ID)
+            log.Printf("任务 %s 超时", job.ID)
         } else {
-            log.Printf("Job %s failed: %v", job.ID, err)
+            log.Printf("任务 %s 失败: %v", job.ID, err)
         }
     }
 }
 
 func (wp *WorkerPool) Shutdown() {
-    wp.cancel() // This will cause all workers to stop
+    wp.cancel() // 这将导致所有 worker 停止
 }
 ```
 
-### Database Operations with Context
+### 带 Context 的数据库操作
 
 ```go
 func getUserOrders(ctx context.Context, db *sql.DB, userID string) ([]Order, error) {
-    // Create query with context
+    // 创建带 context 的查询
     query := `
         SELECT id, user_id, product_name, amount, created_at 
         FROM orders 
@@ -295,16 +295,16 @@ func getUserOrders(ctx context.Context, db *sql.DB, userID string) ([]Order, err
         ORDER BY created_at DESC
     `
     
-    // Execute query with context (will be cancelled if context is cancelled)
+    // 使用 context 执行查询（如果 context 被取消，则查询也会被取消）
     rows, err := db.QueryContext(ctx, query, userID)
     if err != nil {
-        return nil, fmt.Errorf("query failed: %w", err)
+        return nil, fmt.Errorf("查询失败: %w", err)
     }
     defer rows.Close()
     
     var orders []Order
     for rows.Next() {
-        // Check for cancellation while processing rows
+        // 在处理行时检查是否被取消
         select {
         case <-ctx.Done():
             return nil, ctx.Err()
@@ -314,7 +314,7 @@ func getUserOrders(ctx context.Context, db *sql.DB, userID string) ([]Order, err
         var order Order
         err := rows.Scan(&order.ID, &order.UserID, &order.ProductName, &order.Amount, &order.CreatedAt)
         if err != nil {
-            return nil, fmt.Errorf("scan failed: %w", err)
+            return nil, fmt.Errorf("扫描失败: %w", err)
         }
         orders = append(orders, order)
     }
@@ -323,23 +323,23 @@ func getUserOrders(ctx context.Context, db *sql.DB, userID string) ([]Order, err
 }
 ```
 
-## Context Best Practices
+## Context 最佳实践
 
-### ✅ DO:
+### ✅ 应该：
 
-1. **Pass context as first parameter**
+1. **将 context 作为第一个参数传递**
 ```go
-func ProcessData(ctx context.Context, data []byte) error // ✅ Good
-func ProcessData(data []byte, ctx context.Context) error // ❌ Bad
+func ProcessData(ctx context.Context, data []byte) error // ✅ 良好
+func ProcessData(data []byte, ctx context.Context) error // ❌ 不好
 ```
 
-2. **Always call cancel() to prevent memory leaks**
+2. **始终调用 cancel() 以防止内存泄漏**
 ```go
 ctx, cancel := context.WithTimeout(parent, 30*time.Second)
-defer cancel() // ✅ Always do this
+defer cancel() // ✅ 始终这样做
 ```
 
-3. **Check ctx.Done() in loops and long operations**
+3. **在循环和长时间操作中检查 ctx.Done()**
 ```go
 for i := 0; i < len(items); i++ {
     select {
@@ -351,59 +351,59 @@ for i := 0; i < len(items); i++ {
 }
 ```
 
-4. **Use context for request-scoped values**
+4. **使用 context 传递请求范围的值**
 ```go
 ctx = context.WithValue(ctx, "traceID", "abc123")
 ctx = context.WithValue(ctx, "userID", "user456")
 ```
 
-5. **Derive child contexts from parent contexts**
+5. **从父 context 衍生子 context**
 ```go
 childCtx, cancel := context.WithTimeout(parentCtx, 10*time.Second)
 ```
 
-### ❌ DON'T:
+### ❌ 不应该：
 
-1. **Don't store contexts in structs** (with rare exceptions)
+1. **不要将 context 存储在结构体中**（极少数例外情况除外）
 ```go
-// ❌ Bad - context stored in struct
+// ❌ 不好 - context 存储在结构体中
 type Server struct {
     ctx context.Context
 }
 
-// ✅ Good - context passed as parameter
+// ✅ 好 - context 作为参数传递
 func (s *Server) ProcessRequest(ctx context.Context) error
 ```
 
-2. **Don't pass nil context**
+2. **不要传递 nil context**
 ```go
-ProcessData(nil, data) // ❌ Bad
-ProcessData(context.Background(), data) // ✅ Good
+ProcessData(nil, data) // ❌ 不好
+ProcessData(context.Background(), data) // ✅ 好
 ```
 
-3. **Don't use context for optional parameters**
+3. **不要用 context 传递可选参数**
 ```go
-// ❌ Bad - using context for config
+// ❌ 不好 - 用 context 传递配置
 ctx = context.WithValue(ctx, "retryCount", 3)
 
-// ✅ Good - use struct for config
+// ✅ 好 - 使用结构体传递配置
 type Config struct {
     RetryCount int
 }
 func ProcessData(ctx context.Context, cfg Config) error
 ```
 
-4. **Don't ignore context cancellation**
+4. **不要忽略 context 取消**
 ```go
-// ❌ Bad - ignoring context
+// ❌ 不好 - 忽略 context
 func doWork(ctx context.Context) {
     for i := 0; i < 1000; i++ {
-        // No context checking
+        // 未检查 context
         time.Sleep(100 * time.Millisecond)
     }
 }
 
-// ✅ Good - respecting context
+// ✅ 好 - 尊重 context
 func doWork(ctx context.Context) error {
     for i := 0; i < 1000; i++ {
         select {
@@ -417,46 +417,46 @@ func doWork(ctx context.Context) error {
 }
 ```
 
-## Common Errors and Solutions
+## 常见错误及解决方案
 
-### Error 1: Memory Leaks from Not Calling Cancel
+### 错误 1：未调用 cancel 导致内存泄漏
 
 ```go
-// ❌ Memory leak - cancel not called
+// ❌ 内存泄漏 - 未调用 cancel
 func badExample() {
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-    // cancel() never called - goroutine and timer leak!
+    // cancel() 从未被调用 - goroutine 和定时器泄漏！
     doWork(ctx)
 }
 
-// ✅ Fixed - always call cancel
+// ✅ 修复 - 始终调用 cancel
 func goodExample() {
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-    defer cancel() // Always call cancel
+    defer cancel() // 始终调用 cancel
     doWork(ctx)
 }
 ```
 
-### Error 2: Race Conditions with Context Values
+### 错误 2：Context 值的竞态条件
 
 ```go
-// ❌ Race condition - value might change
+// ❌ 竞态条件 - 值可能改变
 func badExample(ctx context.Context) {
     go func() {
-        userID := ctx.Value("userID").(string) // Might panic if nil
+        userID := ctx.Value("userID").(string) // 如果为 nil 可能 panic
         processUser(userID)
     }()
 }
 
-// ✅ Safe value extraction
+// ✅ 安全的值提取
 func goodExample(ctx context.Context) {
     userIDValue := ctx.Value("userID")
     if userIDValue == nil {
-        return // Handle missing value
+        return // 处理缺失的值
     }
     userID, ok := userIDValue.(string)
     if !ok {
-        return // Handle wrong type
+        return // 处理类型错误
     }
     
     go func() {
@@ -465,33 +465,33 @@ func goodExample(ctx context.Context) {
 }
 ```
 
-### Error 3: Context Inheritance Issues
+### 错误 3：Context 继承问题
 
 ```go
-// ❌ Bad - creating independent contexts
+// ❌ 不好 - 创建独立的 context
 func badChain() {
     ctx1, cancel1 := context.WithTimeout(context.Background(), 10*time.Second)
     defer cancel1()
     
-    ctx2, cancel2 := context.WithTimeout(context.Background(), 5*time.Second) // Independent!
+    ctx2, cancel2 := context.WithTimeout(context.Background(), 5*time.Second) // 独立！
     defer cancel2()
     
-    doWork(ctx2) // Won't inherit ctx1's cancellation
+    doWork(ctx2) // 不会继承 ctx1 的取消
 }
 
-// ✅ Good - proper context chaining
+// ✅ 好 - 正确的 context 链接
 func goodChain() {
     ctx1, cancel1 := context.WithTimeout(context.Background(), 10*time.Second)
     defer cancel1()
     
-    ctx2, cancel2 := context.WithTimeout(ctx1, 5*time.Second) // Inherits from ctx1
+    ctx2, cancel2 := context.WithTimeout(ctx1, 5*time.Second) // 从 ctx1 继承
     defer cancel2()
     
-    doWork(ctx2) // Will be cancelled when ctx1 OR ctx2 times out
+    doWork(ctx2) // 当 ctx1 或 ctx2 超时时都会被取消
 }
 ```
 
-## Testing with Context
+## 使用 Context 进行测试
 
 ```go
 func TestWithTimeout(t *testing.T) {
@@ -500,7 +500,7 @@ func TestWithTimeout(t *testing.T) {
     
     err := doSlowWork(ctx)
     if err != context.DeadlineExceeded {
-        t.Errorf("Expected timeout, got %v", err)
+        t.Errorf("期望超时，实际得到 %v", err)
     }
 }
 
@@ -514,14 +514,14 @@ func TestWithCancellation(t *testing.T) {
     
     err := doWork(ctx)
     if err != context.Canceled {
-        t.Errorf("Expected cancellation, got %v", err)
+        t.Errorf("期望取消，实际得到 %v", err)
     }
 }
 ```
 
-## Advanced Context Patterns
+## 高级 Context 模式
 
-### Custom Context Types (Advanced)
+### 自定义 Context 类型（高级）
 
 ```go
 type contextKey string
@@ -531,7 +531,7 @@ const (
     UserIDKey   contextKey = "userID"
 )
 
-// Type-safe context helpers
+// 类型安全的 context 辅助函数
 func WithRequestID(ctx context.Context, requestID string) context.Context {
     return context.WithValue(ctx, RequestIDKey, requestID)
 }
@@ -542,49 +542,49 @@ func GetRequestID(ctx context.Context) (string, bool) {
 }
 ```
 
-### Context Middleware
+### Context 中间件
 
 ```go
 func contextMiddleware(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // Add request ID to context
+        // 将请求 ID 添加到 context
         requestID := generateRequestID()
         ctx := WithRequestID(r.Context(), requestID)
         
-        // Add user info to context
+        // 将用户信息添加到 context
         if userID := getUserFromAuth(r); userID != "" {
             ctx = context.WithValue(ctx, UserIDKey, userID)
         }
         
-        // Set response header
+        // 设置响应头
         w.Header().Set("X-Request-ID", requestID)
         
-        // Call next handler with enriched context
+        // 使用增强后的 context 调用下一个处理器
         next.ServeHTTP(w, r.WithContext(ctx))
     })
 }
 ```
 
-## Performance Considerations
+## 性能考虑
 
-1. **Context overhead is minimal** - Don't worry about performance for normal use
-2. **Avoid excessive context chaining** - Each WithValue creates a new context
-3. **Use context values sparingly** - They're not meant for large data
-4. **Be careful with context in hot paths** - Profile if you suspect issues
+1. **Context 开销极小** - 正常使用无需担心性能
+2. **避免过度 context 链接** - 每次 WithValue 都会创建新 context
+3. **谨慎使用 context 值** - 它们并非用于存储大量数据
+4. **在热点路径中注意 context** - 若怀疑有问题，请进行性能分析
 
-## Resources for Further Learning
+## 进一步学习资源
 
-- [Go Context Package Documentation](https://pkg.go.dev/context)
-- [Go Blog: Go Concurrency Patterns: Context](https://go.dev/blog/context)
-- [Effective Go: Concurrency](https://go.dev/doc/effective_go#concurrency)
-- [Go Wiki: Context](https://github.com/golang/go/wiki/Context)
+- [Go Context 包文档](https://pkg.go.dev/context)
+- [Go 博客：Go 并发模式：Context](https://go.dev/blog/context)
+- [Effective Go：并发](https://go.dev/doc/effective_go#concurrency)
+- [Go Wiki：Context](https://github.com/golang/go/wiki/Context)
 
-## Summary
+## 总结
 
-The context package is essential for:
-- **Cancellation**: Stop work when it's no longer needed
-- **Timeouts**: Prevent operations from running too long
-- **Request-scoped values**: Pass data across function boundaries
-- **Graceful shutdowns**: Coordinate cleanup across goroutines
+context 包对于以下方面至关重要：
+- **取消**：当不再需要工作时停止执行
+- **超时**：防止操作运行过久
+- **请求范围值**：跨函数边界传递数据
+- **优雅关闭**：协调多个 goroutine 的清理工作
 
-Master these patterns and you'll write more robust, maintainable Go applications! 
+掌握这些模式，你就能编写出更健壮、更易维护的 Go 应用程序！

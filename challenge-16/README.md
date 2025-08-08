@@ -1,28 +1,28 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 16: Performance Optimization with Benchmarking
+# 挑战 16：使用基准测试进行性能优化
 
-In this challenge, you will optimize several Go functions for performance, using benchmarking to measure your improvements. You'll work with a set of common but inefficient implementations and apply various techniques to make them faster without changing their functionality.
+在此挑战中，你将通过基准测试来衡量改进效果，对多个 Go 函数进行性能优化。你将处理一组常见但效率低下的实现，并应用各种技术使其更快，同时保持其功能不变。
 
-## Requirements
+## 要求
 
-1. Optimize the following functions while preserving their behavior:
-   - `SlowSort`: An inefficient sorting implementation
-   - `InefficientStringBuilder`: A function that builds large strings inefficiently
-   - `ExpensiveCalculation`: A CPU-intensive calculation with unnecessary work
-   - `HighAllocationSearch`: A search function that allocates excessively
-   
-2. For each optimization:
-   - Use Go's benchmarking tools to measure performance before and after
-   - Document the approach you took and the improvement achieved
-   - Ensure the function still passes all tests
-   
-3. Apply techniques such as:
-   - Reducing memory allocations
-   - Using more efficient algorithms
-   - Taking advantage of Go's standard library
-   - Removing redundant calculations
-   - Using appropriate data structures
-   
-4. Run benchmarks with different input sizes to analyze algorithmic complexity
-5. The included test file verifies both correctness and performance improvement 
+1. 优化以下函数，同时保留其行为：
+   - `SlowSort`：一种低效的排序实现
+   - `InefficientStringBuilder`：一种低效构建大字符串的函数
+   - `ExpensiveCalculation`：一个 CPU 密集型计算，包含不必要的工作
+   - `HighAllocationSearch`：一个过度分配内存的搜索函数
+
+2. 对每个优化：
+   - 使用 Go 的基准测试工具测量优化前后的性能
+   - 记录你采用的方法以及取得的改进
+   - 确保函数仍然通过所有测试
+
+3. 应用以下技术：
+   - 减少内存分配
+   - 使用更高效的算法
+   - 利用 Go 标准库的优势
+   - 移除冗余计算
+   - 使用适当的的数据结构
+
+4. 使用不同大小的输入运行基准测试，以分析算法复杂度
+5. 包含的测试文件验证正确性以及性能提升

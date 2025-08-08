@@ -1,16 +1,16 @@
-# Hints for Sum of Two Numbers
+# 两数之和 提示
 
-## Hint 1: Function Signature
-Look at the required function signature: `func Sum(a int, b int) int`. You need to take two integer parameters and return one integer.
+## 提示 1：函数签名
+查看所需的函数签名：`func Sum(a int, b int) int`。你需要接受两个整数参数并返回一个整数。
 
-## Hint 2: Basic Arithmetic
-This challenge requires the simplest arithmetic operation. You need to add the two input numbers together.
+## 提示 2：基本运算
+此挑战需要最基础的算术运算。你需要将两个输入数字相加。
 
-## Hint 3: Return Statement
-Use the `return` keyword to return the result. You can either store the sum in a variable first, or return the calculation directly.
+## 提示 3：返回语句
+使用 `return` 关键字返回结果。你可以先将和存储在变量中，也可以直接返回计算出的结果。
 
-## Hint 4: One-Line Solution
-This can be solved in a single line:
+## 提示 4：一行解法
+这个问题可以用一行代码解决：
 ```go
 return a + b
-``` 
+```

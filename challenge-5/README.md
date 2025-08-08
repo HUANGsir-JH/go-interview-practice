@@ -1,15 +1,15 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 5: HTTP Authentication Middleware
+# 挑战 5：HTTP 认证中间件
 
-In this challenge, you must implement an HTTP middleware in Go that checks each incoming request for a valid authentication token. If the token is invalid, the middleware should return an HTTP 401 Unauthorized response. If valid, it should pass the request to the next handler.
+在这个挑战中，你必须用Go实现一个HTTP中间件，用于检查每个传入请求的有效认证令牌。如果令牌无效，中间件应返回HTTP 401未授权响应。如果有效，它应该将请求传递给下一个处理程序。
 
-## Requirements
+## 要求
 
-1. The middleware looks for an HTTP header "X-Auth-Token".  
-2. If the header is present and equals a predefined "secret", the request is allowed and should pass to the final handler.  
-3. Otherwise, return 401 Unauthorized.  
-4. The router has two endpoints:  
-   - GET /hello -> returns "Hello!"  
-   - GET /secure -> returns "You are authorized!"  
-5. The included test file has 10 scenarios checking correct behavior for valid tokens, invalid tokens, missing headers, etc.
+1. 中间件查找HTTP头"X-Auth-Token"。  
+2. 如果头存在且等于预定义的"secret"，请求被允许并应传递给最终处理程序。  
+3. 否则，返回401未授权。  
+4. 路由器有两个端点：  
+   - GET /hello -> 返回 "Hello!"  
+   - GET /secure -> 返回 "You are authorized!"  
+5. 包含的测试文件有10个场景，检查有效令牌、无效令牌、缺失头等的正确行为。

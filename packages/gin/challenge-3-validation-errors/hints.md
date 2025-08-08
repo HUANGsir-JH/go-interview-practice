@@ -1,8 +1,8 @@
-# Hints for Challenge 3: JSON API with Validation & Error Handling
+# 挑战3提示：带验证和错误处理的JSON API
 
-## Hint 1: Implementing SKU Format Validation
+## 提示1：实现SKU格式验证
 
-Use regular expressions to validate the SKU format ABC-123-XYZ:
+使用正则表达式来验证SKU格式 ABC-123-XYZ：
 
 ```go
 func isValidSKU(sku string) bool {
@@ -11,9 +11,9 @@ func isValidSKU(sku string) bool {
 }
 ```
 
-## Hint 2: Currency and Category Validation
+## 提示2：货币和分类验证
 
-Use slice lookup for predefined valid values:
+使用切片查找预定义的有效值：
 
 ```go
 func isValidCurrency(currency string) bool {
@@ -35,41 +35,41 @@ func isValidCategory(categoryName string) bool {
 }
 ```
 
-## Hint 3: Building Comprehensive Product Validation
+## 提示3：构建全面的产品验证
 
-Create a validation function that checks all business rules:
+创建一个检查所有业务规则的验证函数：
 
 ```go
 func validateProduct(product *Product) []ValidationError {
     var errors []ValidationError
     
-    // SKU validation
+    // SKU验证
     if !isValidSKU(product.SKU) {
         errors = append(errors, ValidationError{
             Field:   "sku",
             Value:   product.SKU,
             Tag:     "sku_format",
-            Message: "SKU must follow ABC-123-XYZ format",
+            Message: "SKU必须符合ABC-123-XYZ格式",
         })
     }
     
-    // Currency validation
+    // 货币验证
     if !isValidCurrency(product.Currency) {
         errors = append(errors, ValidationError{
             Field:   "currency",
             Value:   product.Currency,
             Tag:     "iso4217",
-            Message: "Must be a valid ISO 4217 currency code",
+            Message: "必须是有效的ISO 4217货币代码",
         })
     }
     
-    // Cross-field validation
+    // 跨字段验证
     if product.Inventory.Reserved > product.Inventory.Quantity {
         errors = append(errors, ValidationError{
             Field:   "inventory.reserved",
             Value:   product.Inventory.Reserved,
             Tag:     "max",
-            Message: "Reserved inventory cannot exceed total quantity",
+            Message: "预留库存不能超过总数量",
         })
     }
     
@@ -77,25 +77,25 @@ func validateProduct(product *Product) []ValidationError {
 }
 ```
 
-## Hint 4: Input Sanitization Implementation
+## 提示4：输入数据净化实现
 
-Clean and normalize input data before validation:
+在验证前清理和标准化输入数据：
 
 ```go
 func sanitizeProduct(product *Product) {
-    // Trim whitespace
+    // 去除空白字符
     product.SKU = strings.TrimSpace(product.SKU)
     product.Name = strings.TrimSpace(product.Name)
     product.Description = strings.TrimSpace(product.Description)
     
-    // Normalize case
+    // 标准化大小写
     product.Currency = strings.ToUpper(product.Currency)
     product.Category.Slug = strings.ToLower(product.Category.Slug)
     
-    // Calculate computed fields
+    // 计算计算字段
     product.Inventory.Available = product.Inventory.Quantity - product.Inventory.Reserved
     
-    // Set timestamps
+    // 设置时间戳
     now := time.Now()
     if product.ID == 0 {
         product.CreatedAt = now
@@ -104,21 +104,21 @@ func sanitizeProduct(product *Product) {
 }
 ```
 
-## Hint 5: Slug Format Validation
+## 提示5：Slug格式验证
 
-Validate URL-friendly slug format:
+验证适合URL的slug格式：
 
 ```go
 func isValidSlug(slug string) bool {
-    // Slug should be lowercase, alphanumeric with hyphens
+    // Slug应为小写，仅包含字母数字和连字符
     matched, _ := regexp.MatchString(`^[a-z0-9]+(?:-[a-z0-9]+)*$`, slug)
     return matched
 }
 ```
 
-## Hint 6: Warehouse Code Validation
+## 提示6：仓库代码验证
 
-Check warehouse codes against predefined list:
+检查仓库代码是否在预定义列表中：
 
 ```go
 func isValidWarehouseCode(code string) bool {
@@ -131,41 +131,41 @@ func isValidWarehouseCode(code string) bool {
 }
 ```
 
-## Hint 7: Handling Gin Validation Errors
+## 提示7：处理Gin验证错误
 
-Convert Gin's validation errors to your custom format:
+将Gin的验证错误转换为自定义格式：
 
 ```go
 func createProduct(c *gin.Context) {
     var product Product
     
     if err := c.ShouldBindJSON(&product); err != nil {
-        // Handle Gin validation errors
+        // 处理Gin验证错误
         var ginErrors []ValidationError
         
-        // Convert gin validation errors to custom format
-        // This is basic - you can enhance error extraction
+        // 将Gin验证错误转换为自定义格式
+        // 这是基础版本——你可以进一步增强错误提取
         ginErrors = append(ginErrors, ValidationError{
             Field:   "various",
-            Message: "Basic validation failed",
+            Message: "基本验证失败",
             Tag:     "binding",
         })
         
         c.JSON(400, APIResponse{
             Success: false,
-            Message: "Validation failed",
+            Message: "验证失败",
             Errors:  ginErrors,
         })
         return
     }
     
-    // Continue with custom validation...
+    // 继续进行自定义验证...
 }
 ```
 
-## Hint 8: Bulk Operations with Detailed Results
+## 提示8：批量操作并返回详细结果
 
-Process each item individually and collect results:
+逐个处理每个项目并收集结果：
 
 ```go
 func createProductsBulk(c *gin.Context) {
@@ -174,7 +174,7 @@ func createProductsBulk(c *gin.Context) {
     if err := c.ShouldBindJSON(&inputProducts); err != nil {
         c.JSON(400, APIResponse{
             Success: false,
-            Message: "Invalid JSON format",
+            Message: "无效的JSON格式",
         })
         return
     }
@@ -220,7 +220,7 @@ func createProductsBulk(c *gin.Context) {
             "successful": successCount,
             "failed":     len(inputProducts) - successCount,
         },
-        Message: "Bulk operation completed",
+        Message: "批量操作已完成",
     })
 }
-``` 
+```

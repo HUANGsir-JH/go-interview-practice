@@ -1,6 +1,6 @@
 {{define "content"}}
 
-<!-- Package Header -->
+<!-- 包头信息 -->
 <div class="row mb-4">
     <div class="col">
         <div class="card shadow-sm border-0 bg-gradient-primary text-white">
@@ -22,7 +22,7 @@
                         <div class="d-flex gap-4">
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-star-fill text-warning me-2"></i>
-                                <span class="fw-semibold">{{.Package.Stars}} stars</span>
+                                <span class="fw-semibold">{{.Package.Stars}} 个星标</span>
                             </div>
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-tag me-2"></i>
@@ -37,7 +37,7 @@
                     <div class="col-md-4 text-md-end mt-3 mt-md-0">
                         <div class="mb-3">
                             <div class="d-flex justify-content-md-end align-items-center mb-2">
-                                <span class="me-2">Progress</span>
+                                <span class="me-2">进度</span>
                                 <span class="badge bg-light text-primary">{{.UserProgress.CompletedCount}}/{{.TotalChallenges}}</span>
                             </div>
                             <div class="progress mb-3" style="height: 8px;">
@@ -50,7 +50,7 @@
                                 <i class="bi bi-github me-1"></i>GitHub
                             </a>
                             <a href="{{.Package.DocumentationURL}}" class="btn btn-outline-light" target="_blank">
-                                <i class="bi bi-book me-1"></i>Docs
+                                <i class="bi bi-book me-1"></i>文档
                             </a>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
     </div>
 </div>
 
-<!-- Prerequisites & Real-world Usage -->
+<!-- 先决条件 & 现实世界应用 -->
 <div class="row mb-4">
     <div class="col-md-6">
         <div class="prerequisites-container h-100">
@@ -68,7 +68,7 @@
                 <div class="icon">
                     <i class="bi bi-list-check"></i>
                 </div>
-                <h5>Prerequisites</h5>
+                <h5>先决条件</h5>
             </div>
             
             {{if .Package.Prerequisites}}
@@ -89,8 +89,8 @@
                 <div class="icon">
                     <i class="bi bi-info-circle"></i>
                 </div>
-                <h6>No specific prerequisites required</h6>
-                <p>Just basic Go knowledge to get started</p>
+                <h6>无需特定先决条件</h6>
+                <p>只需具备基本的 Go 语言知识即可开始</p>
             </div>
             {{end}}
         </div>
@@ -102,7 +102,7 @@
                 <div class="icon">
                     <i class="bi bi-briefcase"></i>
                 </div>
-                <h5>Real-World Usage</h5>
+                <h5>现实世界应用</h5>
             </div>
             
             {{if .Package.RealWorldUsage}}
@@ -149,20 +149,20 @@
                 <div class="icon">
                     <i class="bi bi-briefcase"></i>
                 </div>
-                <h6>No usage examples available</h6>
-                <p>Check back later for real-world examples</p>
+                <h6>暂无使用示例</h6>
+                <p>稍后查看真实世界的示例</p>
             </div>
             {{end}}
         </div>
     </div>
 </div>
 
-<!-- Learning Path -->
+<!-- 学习路径 -->
 <div class="row mb-4">
     <div class="col">
         <div class="text-center mb-4">
-            <h2 class="fw-bold text-dark mb-2">🚀 Learning Path</h2>
-            <p class="text-muted fs-5">Complete challenges in order to master {{.Package.DisplayName}}</p>
+            <h2 class="fw-bold text-dark mb-2">🚀 学习路径</h2>
+            <p class="text-muted fs-5">完成挑战以掌握 {{.Package.DisplayName}}</p>
         </div>
         
         {{if .Challenges}}
@@ -173,19 +173,19 @@
                     <div class="card-header py-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="badge {{if eq $challenge.Difficulty "Beginner"}}bg-success{{else if eq $challenge.Difficulty "Intermediate"}}bg-warning{{else}}bg-danger{{end}} rounded-pill">{{$challenge.Difficulty}}</span>
-                            <span class="badge bg-secondary rounded-pill">Step {{add $index 1}}</span>
+                            <span class="badge bg-secondary rounded-pill">第 {{add $index 1}} 步</span>
                         </div>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{$challenge.Title}}</h5>
                         
-                        <!-- Challenge Features -->
+                        <!-- 挑战特性 -->
                         <div class="d-flex flex-wrap gap-2 mb-3">
                             <span class="badge bg-light text-dark border">
-                                <i class="bi bi-book me-1"></i>Learning Materials
+                                <i class="bi bi-book me-1"></i>学习资料
                             </span>
                             <span class="badge bg-light text-dark border">
-                                <i class="bi bi-code-slash me-1"></i>Test Cases
+                                <i class="bi bi-code-slash me-1"></i>测试用例
                             </span>
                             {{if $challenge.EstimatedTime}}
                             <span class="badge bg-info bg-opacity-10 text-info border border-info">
@@ -194,33 +194,33 @@
                             {{end}}
                         </div>
                         
-                        <!-- Progress Indicator -->
+                        <!-- 进度指示器 -->
                         <div class="mb-3">
                             {{if index $.PackageAttempts $challenge.ID}}
                             <div class="d-flex align-items-center text-success">
                                 <i class="bi bi-check-circle-fill me-2"></i>
-                                <span class="small fw-semibold">Completed</span>
+                                <span class="small fw-semibold">已完成</span>
                             </div>
                             {{else}}
                             <div class="d-flex align-items-center text-muted">
                                 <i class="bi bi-circle me-2"></i>
-                                <span class="small">Not Started</span>
+                                <span class="small">未开始</span>
                             </div>
                             {{end}}
                         </div>
                         
-                        <!-- Submission Count -->
+                        <!-- 提交次数 -->
                         <div class="text-muted small">
-                            <i class="bi bi-people me-1"></i>{{index $.SubmissionCounts $challenge.ID}} submissions
+                            <i class="bi bi-people me-1"></i>{{index $.SubmissionCounts $challenge.ID}} 次提交
                         </div>
                     </div>
                     <div class="card-footer bg-transparent">
                         <div class="d-flex justify-content-center">
                             <a href="/packages/{{$.Package.Name}}/{{$challenge.ID}}" class="btn btn-primary">
                                 {{if index $.PackageAttempts $challenge.ID}}
-                                <i class="bi bi-arrow-repeat me-1"></i>Retry
+                                <i class="bi bi-arrow-repeat me-1"></i>重试
                                 {{else}}
-                                <i class="bi bi-play-circle me-1"></i>Start Challenge
+                                <i class="bi bi-play-circle me-1"></i>开始挑战
                                 {{end}}
                             </a>
                         </div>
@@ -234,22 +234,22 @@
             <div class="mb-4">
                 <i class="bi bi-exclamation-circle text-muted" style="font-size: 4rem;"></i>
             </div>
-            <h4 class="text-muted mb-3">No Challenges Available</h4>
-            <p class="text-muted fs-5">Challenges for this package are being prepared. Check back soon!</p>
+            <h4 class="text-muted mb-3">暂无挑战</h4>
+            <p class="text-muted fs-5">此包的挑战正在准备中。请稍后再来！</p>
         </div>
         {{end}}
     </div>
 </div>
 
-<!-- Leaderboard Preview -->
+<!-- 排行榜预览 -->
 <div class="row">
     <div class="col">
         <div class="card shadow-sm">
             <div class="card-header bg-white border-0">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">🏆 Top Contributors</h4>
+                    <h4 class="mb-0">🏆 优秀贡献者</h4>
                     <a href="/packages/{{.Package.Name}}/scoreboard" class="btn btn-outline-primary btn-sm">
-                        View Full Leaderboard
+                        查看完整排行榜
                     </a>
                 </div>
             </div>
@@ -259,10 +259,10 @@
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th>Rank</th>
-                                <th>Contributor</th>
-                                <th>Completed</th>
-                                <th>Score</th>
+                                <th>排名</th>
+                                <th>贡献者</th>
+                                <th>已完成</th>
+                                <th>得分</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -271,11 +271,11 @@
                             <tr>
                                 <td>
                                     {{if eq $index 0}}
-                                    <span class="badge bg-warning text-dark">🥇 1st</span>
+                                    <span class="badge bg-warning text-dark">🥇 第1名</span>
                                     {{else if eq $index 1}}
-                                    <span class="badge bg-secondary">🥈 2nd</span>
+                                    <span class="badge bg-secondary">🥈 第2名</span>
                                     {{else if eq $index 2}}
-                                    <span class="badge bg-warning">🥉 3rd</span>
+                                    <span class="badge bg-warning">🥉 第3名</span>
                                     {{else}}
                                     <span class="badge bg-light text-dark">{{add $index 1}}</span>
                                     {{end}}
@@ -302,8 +302,8 @@
                 {{else}}
                 <div class="text-center py-4">
                     <i class="bi bi-trophy text-muted fs-1 mb-3"></i>
-                    <h5 class="text-muted">No submissions yet</h5>
-                    <p class="text-muted">Be the first to complete a challenge!</p>
+                    <h5 class="text-muted">暂无提交记录</h5>
+                    <p class="text-muted">成为第一个完成挑战的人吧！</p>
                 </div>
                 {{end}}
             </div>
@@ -314,7 +314,7 @@
 
 {{define "scripts"}}
 <script>
-    // Add any package-specific JavaScript here
+    // 添加任何包特定的 JavaScript 代码
 </script>
 
 <style>
@@ -335,4 +335,4 @@
         font-weight: 500;
     }
 </style>
-{{end}} 
+{{end}}

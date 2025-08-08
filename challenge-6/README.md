@@ -1,41 +1,41 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 6: Word Frequency Counter
+# 挑战 6：词频统计器
 
-## Problem Statement
+## 问题描述
 
-Write a function `CountWordFrequency` that takes a string containing multiple words and returns a map where each key is a word and the value is the number of times that word appears in the string. The comparison should be case-insensitive, meaning "Hello" and "hello" should be counted as the same word.
+编写一个函数 `CountWordFrequency`，该函数接收一个包含多个单词的字符串，并返回一个映射，其中每个键是一个单词，值是该单词在字符串中出现的次数。比较时应忽略大小写，即 "Hello" 和 "hello" 应被视为同一个单词。
 
-## Function Signature
+## 函数签名
 
 ```go
 func CountWordFrequency(text string) map[string]int
 ```
 
-## Input Format
+## 输入格式
 
-- A string `text` containing multiple words separated by spaces, punctuation, or line breaks.
+- 一个字符串 `text`，包含由空格、标点符号或换行符分隔的多个单词。
 
-## Output Format
+## 输出格式
 
-- A map where keys are lowercase words and values are the frequency counts.
+- 一个映射，键为小写的单词，值为频率计数。
 
-## Constraints
+## 约束条件
 
-- Words are defined as sequences of letters and digits.
-- All words should be converted to lowercase before counting.
-- Ignore all punctuation, spaces, and other non-alphanumeric characters.
+- 单词定义为字母和数字的连续序列。
+- 所有单词在计数前应转换为小写。
+- 忽略所有标点符号、空格及其他非字母数字字符。
 - `0 <= len(text) <= 10000`
 
-## Sample Input and Output
+## 示例输入与输出
 
-### Sample Input 1
+### 示例输入 1
 
 ```
 "The quick brown fox jumps over the lazy dog."
 ```
 
-### Sample Output 1
+### 示例输出 1
 
 ```
 {
@@ -50,13 +50,13 @@ func CountWordFrequency(text string) map[string]int
 }
 ```
 
-### Sample Input 2
+### 示例输入 2
 
 ```
 "Hello, hello! How are you doing today? Today is a great day."
 ```
 
-### Sample Output 2
+### 示例输出 2
 
 ```
 {
@@ -73,21 +73,21 @@ func CountWordFrequency(text string) map[string]int
 }
 ```
 
-## Instructions
+## 操作说明
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-6/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the `CountWordFrequency` function.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 仓库。
+- **Clone** 你的副本到本地机器。
+- 在 `challenge-6/submissions/` 目录下创建一个以你的 GitHub 用户名命名的文件夹。
+- 将 `solution-template.go` 文件复制到你的提交目录中。
+- **实现** `CountWordFrequency` 函数。
+- 通过运行测试文件在本地测试你的解决方案。
+- **Commit** 并 **push** 代码到你的副本。
+- **创建** 一个拉取请求以提交你的解决方案。
 
-## Testing Your Solution Locally
+## 本地测试你的解决方案
 
-Run the following command in the `challenge-6/` directory:
+在 `challenge-6/` 目录下运行以下命令：
 
 ```bash
 go test -v
-``` 
+```

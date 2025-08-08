@@ -1,23 +1,23 @@
-# Hints for Challenge 24: Dynamic Programming - Longest Increasing Subsequence
+# 挑战24提示：动态规划 - 最长递增子序列
 
-## Hint 1: Understanding the DP State
-The key insight is defining what `dp[i]` represents:
-- `dp[i]` = length of the longest increasing subsequence ending at index `i`
-- Every single element forms a subsequence of length 1
-- Base case: initialize all `dp[i] = 1`
+## 提示1：理解DP状态
+关键在于定义 `dp[i]` 的含义：
+- `dp[i]` = 以索引 `i` 结尾的最长递增子序列的长度
+- 每个单独元素都构成一个长度为1的子序列
+- 基础情况：初始化所有 `dp[i] = 1`
 
 ```go
 dp := make([]int, len(nums))
 for i := range dp {
-    dp[i] = 1  // Every element is a subsequence of length 1
+    dp[i] = 1  // 每个元素都是长度为1的子序列
 }
 ```
 
-## Hint 2: DP Transition Logic
-For each position `i`, check all previous positions `j`:
-- If `nums[j] < nums[i]`, we can extend the subsequence ending at `j`
-- Update: `dp[i] = max(dp[i], dp[j] + 1)`
-- Time complexity: O(n²) due to nested loops
+## 提示2：DP转移逻辑
+对于每个位置 `i`，检查所有之前的的位置 `j`：
+- 如果 `nums[j] < nums[i]`，我们可以扩展以 `j` 结尾的子序列
+- 更新：`dp[i] = max(dp[i], dp[j] + 1)`
+- 时间复杂度：O(n²)，由于嵌套循环
 
 ```go
 for i := 1; i < len(nums); i++ {
@@ -29,35 +29,35 @@ for i := 1; i < len(nums); i++ {
 }
 ```
 
-## Hint 3: Optimized Approach with Binary Search
-The O(n²) approach can be optimized to O(n log n) using a "tails" array:
-- `tails[i]` stores the smallest ending element of all subsequences of length `i+1`
-- For each number, use binary search to find where it should be placed
-- This maintains the invariant that `tails` is always sorted
+## 提示3：使用二分查找的优化方法
+O(n²) 方法可以通过使用“tails”数组优化到 O(n log n)：
+- `tails[i]` 存储所有长度为 `i+1` 的子序列中最小的结尾元素
+- 对于每个数字，使用二分查找确定其应放置的位置
+- 这保持了 `tails` 始终有序的性质
 
 ```go
 tails := []int{}
 for _, num := range nums {
     pos := sort.SearchInts(tails, num)
     if pos == len(tails) {
-        tails = append(tails, num)  // Extend the sequence
+        tails = append(tails, num)  // 扩展序列
     } else {
-        tails[pos] = num  // Replace with smaller ending element
+        tails[pos] = num  // 用更小的结尾元素替换
     }
 }
 ```
 
-## Hint 4: Reconstructing the Actual Sequence
-To get the actual LIS elements (not just length):
-- Keep a `parent` array to track the previous element in the sequence
-- During DP, when updating `dp[i]`, also set `parent[i] = j`
-- After DP, find the position with maximum length and backtrack
+## 提示4：重构实际序列
+为了获取实际的LIS元素（而不仅仅是长度）：
+- 使用 `parent` 数组记录序列中每个元素的前驱
+- 在DP过程中，当更新 `dp[i]` 时，同时设置 `parent[i] = j`
+- DP结束后，找到最长长度对应的位置并回溯
 
 ```go
 parent := make([]int, len(nums))
-// During DP: if updating dp[i], set parent[i] = j
+// 在DP过程中：如果更新了dp[i]，则设置parent[i] = j
 
-// Reconstruction: start from maxIndex and follow parent pointers
+// 重构：从maxIndex开始，沿着parent指针回溯
 current := maxIndex
 for i := maxLength - 1; i >= 0; i-- {
     lis[i] = nums[current]
@@ -65,8 +65,8 @@ for i := maxLength - 1; i >= 0; i-- {
 }
 ```
 
-## Key LIS Concepts:
-- **Dynamic Programming**: Build solution from smaller subproblems using optimal substructure
-- **Binary Search**: Use sorted array to find insertion position efficiently (O(log n))
-- **Tails Array**: Maintains smallest tail for each possible LIS length, enabling optimization
-- **Reconstruction**: Use parent pointers to build actual sequence, not just calculate length 
+## LIS核心概念：
+- **动态规划**：通过最优子结构从较小的子问题构建解
+- **二分查找**：利用有序数组高效查找插入位置（O(log n)）
+- **tails数组**：维护每个可能LIS长度的最小尾部元素，实现优化
+- **重构**：使用父指针构建实际序列，而不仅仅是计算长度

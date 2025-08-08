@@ -1,18 +1,18 @@
-# Challenge 3: JSON API with Validation & Error Handling
+# 挑战3：带验证与错误处理的JSON API
 
-Build a **Product Catalog API** with comprehensive input validation, custom validators, and robust error handling.
+构建一个**产品目录API**，包含全面的输入验证、自定义验证器和健壮的错误处理。
 
-## Challenge Requirements
+## 挑战要求
 
-Implement a JSON API with the following endpoints:
+实现一个具有以下端点的JSON API：
 
-- `POST /products` - Create new product with validation
-- `PUT /products/:id` - Update product with validation  
-- `POST /products/bulk` - Create multiple products in one request
-- `GET /products` - Get all products with optional filtering
-- `GET /products/:id` - Get product by ID
+- `POST /products` - 创建新产品并进行验证
+- `PUT /products/:id` - 更新产品并进行验证
+- `POST /products/bulk` - 在一次请求中创建多个产品
+- `GET /products` - 获取所有产品，支持可选过滤
+- `GET /products/:id` - 根据ID获取产品
 
-## Data Structure
+## 数据结构
 
 ```go
 type Product struct {
@@ -27,49 +27,49 @@ type Product struct {
 }
 ```
 
-## Validation Requirements
+## 验证要求
 
-### Built-in Validators
-- **required**: Field must be present
-- **min/max**: String length or numeric range validation
-- **gt**: Greater than (price > 0)
-- **oneof**: Value must be one of specified options
+### 内置验证器
+- **required**：字段必须存在
+- **min/max**：字符串长度或数值范围验证
+- **gt**：大于（价格 > 0）
+- **oneof**：值必须是指定选项之一
 
-### Custom Validators
-- **sku**: SKU format validation (e.g., "PROD-12345")
-- **dive**: Validate each element in slices
+### 自定义验证器
+- **sku**：SKU格式验证（例如："PROD-12345"）
+- **dive**：验证切片中的每个元素
 
-## Error Response Format
+## 错误响应格式
 
 ```json
 {
     "success": false,
-    "error": "Validation failed",
+    "error": "验证失败",
     "details": [
         {
             "field": "name",
             "tag": "required",
             "value": "",
-            "message": "Name is required"
+            "message": "名称为必填项"
         },
         {
             "field": "price",
             "tag": "gt",
             "value": -5.0,
-            "message": "Price must be greater than 0"
+            "message": "价格必须大于0"
         }
     ]
 }
 ```
 
-## Testing Requirements
+## 测试要求
 
-Your solution must handle:
-- Field presence validation (required fields)
-- String length validation (min/max)
-- Numeric range validation (gt, gte, lt, lte)
-- Enum validation (oneof)
-- Custom SKU format validation
-- Slice element validation (dive)
-- Bulk creation with partial failures
-- Proper error response formatting
+你的解决方案必须能够处理：
+- 字段存在性验证（必填字段）
+- 字符串长度验证（min/max）
+- 数值范围验证（gt, gte, lt, lte）
+- 枚举验证（oneof）
+- 自定义SKU格式验证
+- 切片元素验证（dive）
+- 批量创建时的部分失败情况
+- 正确的错误响应格式

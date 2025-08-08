@@ -1,25 +1,25 @@
-# Hints for Bank Account with Error Handling
+# 银行账户的提示（含错误处理）
 
-## Hint 1: Struct Design
-Design an `Account` struct with fields for ID, owner name, and balance. Consider what data types are appropriate for each field.
+## 提示 1：结构体设计
+设计一个包含 ID、户主姓名和余额字段的 `Account` 结构体。考虑每个字段应使用何种数据类型。
 
-## Hint 2: Error Types
-Think about what can go wrong in banking operations: insufficient funds, invalid amounts, account not found, etc. Create custom error types for these scenarios.
+## 提示 2：错误类型
+思考银行业务操作中可能出现的问题：资金不足、金额无效、账户不存在等。为这些情况创建自定义错误类型。
 
-## Hint 3: Custom Error Implementation
-Implement the `error` interface by creating a struct with an `Error() string` method. Include relevant context in your error messages.
+## 提示 3：自定义错误实现
+通过创建一个具有 `Error() string` 方法的结构体来实现 `error` 接口。在错误消息中包含相关上下文信息。
 
-## Hint 4: Input Validation
-Always validate inputs before performing operations. Check for negative amounts, nil pointers, and other invalid conditions.
+## 提示 4：输入验证
+在执行操作前始终验证输入。检查负数金额、空指针及其他无效条件。
 
-## Hint 5: Balance Checking
-For withdrawal operations, check if the account has sufficient funds before modifying the balance. Return an appropriate error if not.
+## 提示 5：余额检查
+在执行取款操作时，先检查账户是否有足够的资金，再修改余额。若资金不足，返回适当的错误。
 
-## Hint 6: Thread Safety
-Use `sync.Mutex` to protect account operations from race conditions when multiple goroutines access the same account.
+## 提示 6：线程安全
+使用 `sync.Mutex` 保护账户操作，防止多个 goroutine 同时访问同一账户时出现竞态条件。
 
-## Hint 7: Error Wrapping
-Use `fmt.Errorf` with the `%w` verb to wrap errors and provide additional context while preserving the original error.
+## 提示 7：错误包装
+使用 `fmt.Errorf` 和 `%w` 占位符来包装错误，在保留原始错误的同时提供额外上下文。
 
-## Hint 8: Testing Error Scenarios
-Write tests that verify both successful operations and error conditions. Use type assertions to check for specific error types. 
+## 提示 8：测试错误场景
+编写测试用例，验证成功操作和错误情况。使用类型断言来检查特定的错误类型。

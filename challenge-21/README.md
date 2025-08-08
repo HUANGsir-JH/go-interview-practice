@@ -1,18 +1,18 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 21: Binary Search Implementation
+# 挑战 21：二分查找实现
 
-## Problem Statement
+## 问题描述
 
-Implement the binary search algorithm to efficiently find items in a sorted collection. Binary search is a divide-and-conquer algorithm that repeatedly divides the search space in half, making it much faster than linear search for sorted data.
+实现二分查找算法，以高效地在有序集合中查找元素。二分查找是一种分治算法，通过反复将搜索空间一分为二，使得其在有序数据上的查找速度远快于线性查找。
 
-You'll implement three versions of binary search:
+你需要实现二分查找的三种版本：
 
-1. `BinarySearch` - Standard binary search that returns the index of a target value.
-2. `BinarySearchRecursive` - A recursive implementation of binary search.
-3. `FindInsertPosition` - Find the position where a value should be inserted to maintain sorted order.
+1. `BinarySearch` - 标准二分查找，返回目标值的索引。
+2. `BinarySearchRecursive` - 二分查找的递归实现。
+3. `FindInsertPosition` - 找到插入值的位置以保持有序顺序。
 
-## Function Signatures
+## 函数签名
 
 ```go
 func BinarySearch(arr []int, target int) int
@@ -20,88 +20,88 @@ func BinarySearchRecursive(arr []int, target int, left int, right int) int
 func FindInsertPosition(arr []int, target int) int
 ```
 
-## Input Format
+## 输入格式
 
-- For all functions, a sorted slice of integers `arr` and a target integer value.
-- For the recursive function, additional `left` and `right` parameters indicating the search range.
+- 对所有函数，输入为一个整数切片 `arr`（已排序）和一个目标整数值。
+- 对于递归函数，额外提供 `left` 和 `right` 参数，表示搜索范围。
 
-## Output Format
+## 输出格式
 
-- `BinarySearch` and `BinarySearchRecursive` should return the index of the target if found, or -1 if not found.
-- `FindInsertPosition` should return the index where the target should be inserted to maintain sorted order.
+- `BinarySearch` 和 `BinarySearchRecursive` 应返回目标值的索引（若找到），否则返回 -1。
+- `FindInsertPosition` 应返回目标值应插入的位置，以保持数组有序。
 
-## Requirements
+## 要求
 
-1. All functions must implement the binary search algorithm, which has O(log n) time complexity.
-2. The arrays can be assumed to be sorted in ascending order.
-3. `BinarySearchRecursive` must use recursion to solve the problem.
-4. If multiple occurrences of the target exist, return the index of any occurrence.
+1. 所有函数必须实现二分查找算法，时间复杂度为 O(log n)。
+2. 假设数组按升序排列。
+3. `BinarySearchRecursive` 必须使用递归来解决问题。
+4. 如果目标值存在多个重复项，返回任意一个位置的索引即可。
 
-## Sample Input and Output
+## 示例输入与输出
 
-### Sample Input 1
+### 示例输入 1
 
 ```
 BinarySearch([]int{1, 3, 5, 7, 9}, 5)
 ```
 
-### Sample Output 1
+### 示例输出 1
 
 ```
 2
 ```
 
-### Sample Input 2
+### 示例输入 2
 
 ```
 BinarySearch([]int{1, 3, 5, 7, 9}, 6)
 ```
 
-### Sample Output 2
+### 示例输出 2
 
 ```
 -1
 ```
 
-### Sample Input 3
+### 示例输入 3
 
 ```
 BinarySearchRecursive([]int{1, 3, 5, 7, 9}, 7, 0, 4)
 ```
 
-### Sample Output 3
+### 示例输出 3
 
 ```
 3
 ```
 
-### Sample Input 4
+### 示例输入 4
 
 ```
 FindInsertPosition([]int{1, 3, 5, 7, 9}, 6)
 ```
 
-### Sample Output 4
+### 示例输出 4
 
 ```
 3
 ```
 
-## Instructions
+## 指导说明
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-21/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the required functions.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 该仓库。
+- **Clone** 你的副本到本地机器。
+- 在 `challenge-21/submissions/` 目录下创建一个以你的 GitHub 用户名命名的文件夹。
+- 将 `solution-template.go` 文件复制到你的提交目录中。
+- **实现** 所需的函数。
+- **本地测试** 你的解决方案，运行测试文件。
+- **Commit** 并 **push** 代码到你的副本。
+- **创建** 一个拉取请求以提交你的解决方案。
 
-## Testing Your Solution Locally
+## 本地测试你的解决方案
 
-Run the following command in the `challenge-21/` directory:
+在 `challenge-21/` 目录下运行以下命令：
 
 ```bash
 go test -v
-``` 
+```

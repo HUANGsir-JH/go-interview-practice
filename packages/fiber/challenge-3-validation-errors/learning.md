@@ -1,18 +1,18 @@
-# Learning: Input Validation & Error Handling
+# 学习：输入验证与错误处理
 
-## 🌟 **What is Input Validation?**
+## 🌟 **什么是输入验证？**
 
-Input validation ensures that data received by your API meets specific criteria before processing. It's your first line of defense against bad data, security vulnerabilities, and application crashes.
+输入验证确保API接收到的数据在处理前符合特定标准。它是防范不良数据、安全漏洞和应用崩溃的第一道防线。
 
-### **Why Validate Input?**
-- **Security**: Prevent injection attacks and malicious data
-- **Data Integrity**: Ensure data meets business requirements
-- **User Experience**: Provide clear feedback on invalid input
-- **System Stability**: Prevent crashes from unexpected data
+### **为什么要进行输入验证？**
+- **安全性**：防止注入攻击和恶意数据
+- **数据完整性**：确保数据满足业务需求
+- **用户体验**：对无效输入提供清晰反馈
+- **系统稳定性**：防止因意外数据导致的崩溃
 
-## 🛠️ **Validation in Fiber**
+## 🛠️ **Fiber中的验证**
 
-Fiber doesn't include built-in validation, but integrates well with the `validator` package:
+Fiber不包含内置的验证功能，但可以很好地与`validator`包集成：
 
 ```go
 import "github.com/go-playground/validator/v10"
@@ -24,36 +24,36 @@ type User struct {
 }
 ```
 
-## 📏 **Built-in Validation Tags**
+## 📏 **内置验证标签**
 
-### **Required Fields**
+### **必填字段**
 ```go
 type Product struct {
-    Name string `validate:"required"`        // Must be present
-    SKU  string `validate:"required,min=5"`  // Required and min length
+    Name string `validate:"required"`        // 必须存在
+    SKU  string `validate:"required,min=5"`  // 必填且最小长度
 }
 ```
 
-### **String Validation**
+### **字符串验证**
 ```go
 type User struct {
-    Username string `validate:"min=3,max=20"`           // Length constraints
-    Email    string `validate:"email"`                  // Email format
-    Website  string `validate:"url"`                    // URL format
-    Phone    string `validate:"e164"`                   // Phone number format
+    Username string `validate:"min=3,max=20"`           // 长度限制
+    Email    string `validate:"email"`                  // 邮箱格式
+    Website  string `validate:"url"`                    // URL格式
+    Phone    string `validate:"e164"`                   // 电话号码格式
 }
 ```
 
-### **Numeric Validation**
+### **数值验证**
 ```go
 type Product struct {
-    Price    float64 `validate:"gt=0"`          // Greater than 0
-    Quantity int     `validate:"gte=0,lte=1000"` // Range: 0-1000
-    Rating   float64 `validate:"min=1,max=5"`   // Rating scale
+    Price    float64 `validate:"gt=0"`          // 大于0
+    Quantity int     `validate:"gte=0,lte=1000"` // 范围：0-1000
+    Rating   float64 `validate:"min=1,max=5"`   // 评分范围
 }
 ```
 
-### **Enum Validation**
+### **枚举验证**
 ```go
 type Product struct {
     Category string `validate:"oneof=electronics clothing books home"`
@@ -61,40 +61,40 @@ type Product struct {
 }
 ```
 
-## 🔧 **Custom Validators**
+## 🔧 **自定义验证器**
 
-Create validators for business-specific rules:
+为业务特定规则创建验证器：
 
 ```go
 func validateSKU(fl validator.FieldLevel) bool {
     sku := fl.Field().String()
-    // Custom SKU format: PROD-12345
+    // 自定义SKU格式：PROD-12345
     matched, _ := regexp.MatchString(`^PROD-\d{5}$`, sku)
     return matched
 }
 
-// Register custom validator
+// 注册自定义验证器
 validate := validator.New()
 validate.RegisterValidation("sku", validateSKU)
 ```
 
-### **Complex Custom Validators**
+### **复杂自定义验证器**
 ```go
 func validateBusinessHours(fl validator.FieldLevel) bool {
     hour := fl.Field().Int()
-    // Business hours: 9 AM to 5 PM
+    // 营业时间：上午9点至下午5点
     return hour >= 9 && hour <= 17
 }
 
 func validatePasswordStrength(fl validator.FieldLevel) bool {
     password := fl.Field().String()
     
-    // Check length
+    // 检查长度
     if len(password) < 8 {
         return false
     }
     
-    // Check for uppercase, lowercase, digit, special char
+    // 检查大写字母、小写字母、数字、特殊字符
     hasUpper := regexp.MustCompile(`[A-Z]`).MatchString(password)
     hasLower := regexp.MustCompile(`[a-z]`).MatchString(password)
     hasDigit := regexp.MustCompile(`\d`).MatchString(password)
@@ -104,9 +104,9 @@ func validatePasswordStrength(fl validator.FieldLevel) bool {
 }
 ```
 
-## 🚨 **Error Handling Patterns**
+## 🚨 **错误处理模式**
 
-### **Structured Error Responses**
+### **结构化错误响应**
 ```go
 type ValidationError struct {
     Field   string      `json:"field"`
@@ -122,7 +122,7 @@ type ErrorResponse struct {
 }
 ```
 
-### **Converting Validator Errors**
+### **转换验证错误**
 ```go
 func formatValidationErrors(err error) []ValidationError {
     var errors []ValidationError
@@ -144,22 +144,22 @@ func formatValidationErrors(err error) []ValidationError {
 func getErrorMessage(e validator.FieldError) string {
     switch e.Tag() {
     case "required":
-        return e.Field() + " is required"
+        return e.Field() + " 是必需的"
     case "email":
-        return e.Field() + " must be a valid email"
+        return e.Field() + " 必须是有效的邮箱地址"
     case "min":
-        return fmt.Sprintf("%s must be at least %s characters", e.Field(), e.Param())
+        return fmt.Sprintf("%s 至少需要 %s 个字符", e.Field(), e.Param())
     case "max":
-        return fmt.Sprintf("%s cannot exceed %s characters", e.Field(), e.Param())
+        return fmt.Sprintf("%s 不能超过 %s 个字符", e.Field(), e.Param())
     default:
-        return e.Field() + " is invalid"
+        return e.Field() + " 无效"
     }
 }
 ```
 
-## 🔍 **Advanced Validation Techniques**
+## 🔍 **高级验证技术**
 
-### **Cross-Field Validation**
+### **跨字段验证**
 ```go
 type User struct {
     Password        string `validate:"required,min=8"`
@@ -172,7 +172,7 @@ type DateRange struct {
 }
 ```
 
-### **Conditional Validation**
+### **条件性验证**
 ```go
 type Product struct {
     Type        string  `validate:"required,oneof=physical digital"`
@@ -182,7 +182,7 @@ type Product struct {
 }
 ```
 
-### **Slice Validation**
+### **切片验证**
 ```go
 type Order struct {
     Items []Item `validate:"required,dive,required"`
@@ -196,14 +196,14 @@ type Item struct {
 }
 ```
 
-## 📊 **Filtering and Search Patterns**
+## 📊 **过滤与搜索模式**
 
-### **Query Parameter Filtering**
+### **查询参数过滤**
 ```go
 func applyFilters(products []Product, c *fiber.Ctx) []Product {
     var filtered []Product
     
-    // Get filter parameters
+    // 获取过滤参数
     category := c.Query("category")
     minPrice := c.Query("min_price")
     maxPrice := c.Query("max_price")
@@ -211,7 +211,7 @@ func applyFilters(products []Product, c *fiber.Ctx) []Product {
     search := c.Query("search")
     
     for _, product := range products {
-        // Apply filters
+        // 应用过滤条件
         if category != "" && product.Category != category {
             continue
         }
@@ -240,7 +240,7 @@ func applyFilters(products []Product, c *fiber.Ctx) []Product {
 }
 ```
 
-### **Pagination Support**
+### **分页支持**
 ```go
 func paginateResults(items []Product, c *fiber.Ctx) ([]Product, map[string]interface{}) {
     page, _ := strconv.Atoi(c.Query("page", "1"))
@@ -278,32 +278,32 @@ func paginateResults(items []Product, c *fiber.Ctx) ([]Product, map[string]inter
 }
 ```
 
-## 🔒 **Security Considerations**
+## 🔒 **安全注意事项**
 
-### **Input Sanitization**
+### **输入清理**
 ```go
 import "html"
 
 func sanitizeInput(input string) string {
-    // Remove potentially dangerous characters
+    // 移除潜在危险字符
     input = html.EscapeString(input)
     input = strings.TrimSpace(input)
     return input
 }
 ```
 
-### **Rate Limiting Validation**
+### **请求速率验证**
 ```go
 func validateRequestRate(c *fiber.Ctx) error {
-    // Limit validation requests to prevent abuse
-    // Implementation depends on your rate limiting strategy
+    // 限制验证请求以防止滥用
+    // 实现取决于你的速率限制策略
     return nil
 }
 ```
 
-## 🧪 **Testing Validation**
+## 🧪 **测试验证**
 
-### **Unit Testing Validators**
+### **单元测试验证器**
 ```go
 func TestProductValidation(t *testing.T) {
     validate := validator.New()
@@ -314,10 +314,10 @@ func TestProductValidation(t *testing.T) {
         wantErr bool
     }{
         {
-            name: "valid product",
+            name: "有效产品",
             product: Product{
-                Name:        "Test Product",
-                Description: "A test product description",
+                Name:        "测试产品",
+                Description: "一个测试产品描述",
                 Price:       99.99,
                 Category:    "electronics",
                 SKU:         "PROD-12345",
@@ -325,10 +325,10 @@ func TestProductValidation(t *testing.T) {
             wantErr: false,
         },
         {
-            name: "invalid price",
+            name: "无效价格",
             product: Product{
-                Name:        "Test Product",
-                Description: "A test product description",
+                Name:        "测试产品",
+                Description: "一个测试产品描述",
                 Price:       -10.00,
                 Category:    "electronics",
                 SKU:         "PROD-12345",
@@ -347,20 +347,20 @@ func TestProductValidation(t *testing.T) {
 }
 ```
 
-## 🎯 **Best Practices**
+## 🎯 **最佳实践**
 
-1. **Validate Early**: Check input as soon as it enters your application
-2. **Clear Messages**: Provide specific, actionable error messages
-3. **Consistent Format**: Use standard error response formats
-4. **Security First**: Sanitize input and validate against business rules
-5. **Performance**: Cache validators and avoid expensive operations
-6. **Documentation**: Document validation rules in API documentation
-7. **Testing**: Test both valid and invalid input scenarios
+1. **尽早验证**：在输入进入应用时立即检查
+2. **清晰的消息**：提供具体且可操作的错误信息
+3. **统一格式**：使用标准的错误响应格式
+4. **安全优先**：清理输入并根据业务规则进行验证
+5. **性能优化**：缓存验证器并避免昂贵的操作
+6. **文档化**：在API文档中记录验证规则
+7. **测试覆盖**：测试有效和无效输入场景
 
-## 📚 **Next Steps**
+## 📚 **下一步**
 
-After mastering validation and error handling:
-1. **Authentication & Authorization** - Secure your APIs
-2. **Database Integration** - Persist validated data
-3. **API Documentation** - Document validation rules
-4. **Advanced Patterns** - Async validation, custom middleware
+掌握验证与错误处理后：
+1. **认证与授权** - 保护你的API
+2. **数据库集成** - 持久化已验证的数据
+3. **API文档** - 记录验证规则
+4. **高级模式** - 异步验证、自定义中间件

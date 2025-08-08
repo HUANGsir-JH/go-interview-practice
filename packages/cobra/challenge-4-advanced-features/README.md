@@ -1,80 +1,80 @@
-# Challenge 4: Advanced Features & Middleware
+# 挑战 4：高级功能与中间件
 
-Build a **Configuration Management CLI** using Cobra that demonstrates advanced CLI patterns including middleware, plugins, configuration files, and custom help systems.
+使用 Cobra 构建一个 **配置管理 CLI**，展示高级 CLI 模式，包括中间件、插件、配置文件和自定义帮助系统。
 
-## Challenge Requirements
+## 挑战要求
 
-Create a CLI application called `config-manager` that manages application configurations with:
+创建一个名为 `config-manager` 的 CLI 应用程序，用于管理应用程序配置，具备以下功能：
 
-1. **Configuration Management** - Load/save configs from multiple formats (JSON, YAML, TOML)
-2. **Middleware System** - Pre/post command execution hooks
-3. **Plugin Architecture** - Support for custom command plugins
-4. **Environment Integration** - Environment variable support
-5. **Advanced Help** - Custom help templates and documentation
-6. **Validation Pipeline** - Input validation with custom validators
+1. **配置管理** - 支持从多种格式（JSON、YAML、TOML）加载/保存配置
+2. **中间件系统** - 命令执行前后的钩子函数
+3. **插件架构** - 支持自定义命令插件
+4. **环境集成** - 支持环境变量
+5. **高级帮助** - 自定义帮助模板和文档
+6. **验证流水线** - 支持自定义验证器的输入验证
 
-## Expected CLI Structure
+## 预期 CLI 结构
 
 ```
-config-manager                           # Root command with custom help
-config-manager config get <key>          # Get configuration value
-config-manager config set <key> <value> # Set configuration value  
-config-manager config list               # List all configurations
-config-manager config delete <key>      # Delete configuration
-config-manager config load <file>       # Load config from file
-config-manager config save <file>       # Save config to file
-config-manager config format <format>   # Change config format (json/yaml/toml)
-config-manager plugin install <name>    # Install a plugin
-config-manager plugin list              # List installed plugins
-config-manager validate                 # Validate current configuration
-config-manager env sync                 # Sync with environment variables
-config-manager completion bash          # Generate bash completion
+config-manager                           # 根命令，带有自定义帮助
+config-manager config get <key>          # 获取配置值
+config-manager config set <key> <value> # 设置配置值  
+config-manager config list               # 列出所有配置
+config-manager config delete <key>      # 删除配置
+config-manager config load <file>       # 从文件加载配置
+config-manager config save <file>       # 保存配置到文件
+config-manager config format <format>   # 更改配置格式 (json/yaml/toml)
+config-manager plugin install <name>    # 安装插件
+config-manager plugin list              # 列出已安装插件
+config-manager validate                 # 验证当前配置
+config-manager env sync                 # 与环境变量同步
+config-manager completion bash          # 生成 Bash 补全脚本
 ```
 
-## Sample Output
+## 示例输出
 
-**Set Configuration (`config-manager config set database.host localhost`):**
+**设置配置（`config-manager config set database.host localhost`）：**
 ```
 $ config-manager config set database.host localhost
-🔧 Configuration updated successfully
-Key: database.host
-Value: localhost
-Type: string
-Format: json
+🔧 配置更新成功
+键：database.host
+值：localhost
+类型：字符串
+格式：json
 ```
 
-**Get Configuration (`config-manager config get database.host`):**
+**获取配置（`config-manager config get database.host`）：**
 ```
 $ config-manager config get database.host
-📋 Configuration Value:
-Key: database.host
-Value: localhost
-Type: string
-Source: file
-Last Modified: 2024-01-15 10:30:45
+📋 配置值：
+键：database.host
+值：localhost
+类型：字符串
+来源：文件
+最后修改时间：2024-01-15 10:30:45
 ```
 
-**Load Configuration (`config-manager config load app.yaml`):**
+**加载配置（`config-manager config load app.yaml`）：**
 ```
 $ config-manager config load app.yaml
-📁 Loading configuration from app.yaml...
-✅ Successfully loaded 12 configuration keys
-Format: yaml
-Validation: passed
+📁 正在从 app.yaml 加载配置...
+✅ 成功加载 12 个配置项
+格式：yaml
+验证：通过
 ```
 
-**Plugin System (`config-manager plugin list`):**
+**插件系统（`config-manager plugin list`）：**
 ```
 $ config-manager plugin list
-🔌 Installed Plugins:
-Name        | Version | Status  | Description
-------------|---------|---------|----------------------------------
-validator   | 1.0.0   | active  | Advanced configuration validation
-backup      | 0.2.1   | active  | Automatic configuration backup
-generator   | 1.1.0   | active  | Configuration template generator
+🔌 已安装插件：
+名称        | 版本    | 状态   | 描述
+------------|---------|--------|----------------------------------
+validator   | 1.0.0   | 激活   | 高级配置验证
+backup      | 0.2.1   | 激活   | 自动配置备份
+generator   | 1.1.0   | 激活   | 配置模板生成器
 ```
 
-## Data Models
+## 数据模型
 
 ```go
 type Config struct {
@@ -108,62 +108,62 @@ type ValidationResult struct {
 }
 ```
 
-## Implementation Requirements
+## 实现要求
 
-### Configuration Management
-- Support JSON, YAML, and TOML formats
-- Nested key access (e.g., `database.host`, `server.port`)
-- Type preservation (string, int, bool, float)
-- Atomic updates with rollback capability
+### 配置管理
+- 支持 JSON、YAML 和 TOML 格式
+- 支持嵌套键访问（如 `database.host`、`server.port`）
+- 类型保留（字符串、整数、布尔值、浮点数）
+- 支持原子更新及回滚能力
 
-### Middleware System
-- Pre-command validation middleware
-- Post-command audit logging middleware
-- Configuration backup middleware
-- Performance monitoring middleware
+### 中间件系统
+- 命令执行前的验证中间件
+- 命令执行后的审计日志中间件
+- 配置备份中间件
+- 性能监控中间件
 
-### Plugin Architecture
-- Dynamic plugin loading
-- Plugin command registration
-- Plugin configuration management
-- Plugin lifecycle management (install/uninstall/enable/disable)
+### 插件架构
+- 动态插件加载
+- 插件命令注册
+- 插件配置管理
+- 插件生命周期管理（安装/卸载/启用/禁用）
 
-### Environment Integration
-- Environment variable mapping
-- Variable precedence handling
-- Auto-sync capabilities
-- Environment validation
+### 环境集成
+- 环境变量映射
+- 变量优先级处理
+- 自动同步功能
+- 环境验证
 
-### Advanced Help System
-- Custom help templates
-- Interactive help mode
-- Example generation
-- Command completion with descriptions
+### 高级帮助系统
+- 自定义帮助模板
+- 交互式帮助模式
+- 示例生成
+- 带描述的命令补全
 
-### Validation Pipeline
-- Schema validation
-- Custom validator functions
-- Dependency validation
-- Environment-specific validation
+### 验证流水线
+- 模式验证
+- 自定义验证函数
+- 依赖验证
+- 环境特定验证
 
-## Technical Requirements
+## 技术要求
 
-### Middleware Implementation
+### 中间件实现
 ```go
 type Middleware func(*cobra.Command, []string) error
 
-// PreRun middleware that executes before command
+// 执行于命令前的 PreRun 中间件
 func ValidationMiddleware(cmd *cobra.Command, args []string) error {
-    // Validate configuration before command execution
+    // 在命令执行前验证配置
 }
 
-// PostRun middleware that executes after command
+// 执行于命令后的 PostRun 中间件
 func AuditMiddleware(cmd *cobra.Command, args []string) error {
-    // Log command execution for audit
+    // 为审计记录命令执行情况
 }
 ```
 
-### Plugin Interface
+### 插件接口
 ```go
 type PluginInterface interface {
     Initialize() error
@@ -173,44 +173,44 @@ type PluginInterface interface {
 }
 ```
 
-### Configuration Format Detection
-- Auto-detect format from file extension
-- Content-based format detection
-- Format conversion utilities
-- Migration between formats
+### 配置格式检测
+- 根据文件扩展名自动检测格式
+- 基于内容的格式检测
+- 格式转换工具
+- 不同格式间的迁移支持
 
-## Testing Requirements
+## 测试要求
 
-Your solution must pass tests for:
-- Configuration CRUD operations across all formats
-- Middleware execution order and functionality
-- Plugin loading and command registration
-- Environment variable integration
-- Validation pipeline with custom validators
-- Help system customization
-- Format conversion and migration
-- Error handling and recovery
-- Concurrent access protection
-- Performance benchmarks
+你的解决方案必须通过以下测试：
+- 所有格式下的配置增删改查操作
+- 中间件的执行顺序与功能
+- 插件加载与命令注册
+- 环境变量集成
+- 包含自定义验证器的验证流水线
+- 帮助系统的自定义功能
+- 格式转换与迁移
+- 错误处理与恢复
+- 并发访问保护
+- 性能基准测试
 
-## Advanced Features
+## 高级功能
 
-### Custom Help Templates
-- Rich formatting with colors
-- Interactive examples
-- Context-aware help
-- Multi-language support
+### 自定义帮助模板
+- 支持颜色的丰富格式化
+- 交互式示例
+- 上下文感知的帮助
+- 多语言支持
 
-### Performance Optimization
-- Lazy loading of configurations
-- Caching mechanisms
-- Streaming for large configs
-- Memory-efficient operations
+### 性能优化
+- 配置的延迟加载
+- 缓存机制
+- 大配置的流式处理
+- 内存高效的运算
 
-### Security Features
-- Configuration encryption
-- Access control
-- Audit logging
-- Secure plugin loading
+### 安全特性
+- 配置加密
+- 访问控制
+- 审计日志
+- 安全的插件加载
 
-This challenge tests mastery of advanced Cobra patterns and demonstrates production-ready CLI application architecture. 
+本挑战测试对高级 Cobra 模式的掌握，并展示生产级别的 CLI 应用架构。

@@ -1,64 +1,64 @@
-# Learning Materials for Concurrent Graph BFS Queries
+# 并发图BFS查询学习材料
 
-## Concurrency and Goroutines in Go
+## Go中的并发与goroutine
 
-Go was designed with concurrency as a core feature, making it easy to write programs that efficiently use multiple CPU cores and handle asynchronous tasks. This challenge focuses on implementing concurrent breadth-first search (BFS) in graph traversal.
+Go从设计之初就将并发作为核心特性，使得编写高效利用多CPU核心和处理异步任务的程序变得非常容易。本挑战聚焦于实现图遍历中的并发广度优先搜索（BFS）。
 
 ### Goroutines
 
-Goroutines are lightweight threads managed by the Go runtime. They allow you to run functions concurrently with minimal overhead:
+Goroutines是由Go运行时管理的轻量级线程。它们允许你以极小的开销并行运行函数：
 
 ```go
-// Basic goroutine
-go functionName()  // Runs the function in a separate goroutine
+// 基本的goroutine
+go functionName()  // 在独立的goroutine中运行函数
 
-// Anonymous function as a goroutine
+// 匿名函数作为goroutine
 go func() {
-    // Do work here
-    fmt.Println("Running in a goroutine")
+    // 在此处执行工作
+    fmt.Println("在goroutine中运行")
 }()
 ```
 
-Compared to traditional threads, goroutines:
-- Are much cheaper (a few KB of memory vs MB for threads)
-- Are managed by Go's runtime scheduler instead of the OS
-- Can scale to hundreds of thousands or millions on a single machine
+与传统线程相比，goroutines具有以下优势：
+- 成本低得多（仅需几KB内存，而线程需要MB级别）
+- 由Go的运行时调度器管理，而非操作系统
+- 可在单台机器上扩展至数十万甚至数百万个
 
 ### Channels
 
-Channels are the primary mechanism for communication between goroutines. They provide a way to send and receive values with synchronization built in:
+Channels是goroutine之间通信的主要机制。它们提供了一种带有内置同步的发送和接收值的方式：
 
 ```go
-// Create a channel
-ch := make(chan int)  // Unbuffered channel
-bufferedCh := make(chan string, 10)  // Buffered channel with capacity 10
+// 创建一个channel
+ch := make(chan int)  // 无缓冲channel
+bufferedCh := make(chan string, 10)  // 容量为10的缓冲channel
 
-// Send values (blocks if channel is full)
+// 发送值（如果channel已满则阻塞）
 ch <- 42
 bufferedCh <- "hello"
 
-// Receive values (blocks if channel is empty)
+// 接收值（如果channel为空则阻塞）
 value := <-ch
 message := <-bufferedCh
 
-// Close a channel when done (optional)
+// 完成后关闭channel（可选）
 close(ch)
 
-// Check if channel is closed
-value, ok := <-ch  // ok is false if channel is closed
+// 检查channel是否已关闭
+value, ok := <-ch  // 如果channel已关闭，ok为false
 ```
 
-### Channel Patterns
+### Channel模式
 
-Several common patterns for using channels effectively:
+几种使用channels的有效常见模式：
 
-#### Fan-out / Fan-in
+#### 扇出 / 扇入
 
-Use multiple goroutines to process data in parallel, then combine results:
+使用多个goroutine并行处理数据，然后合并结果：
 
 ```go
 func fanOut(input []int) <-chan int {
-    // Distribute work to multiple goroutines
+    // 将工作分发给多个goroutine
     out := make(chan int)
     
     go func() {
@@ -72,7 +72,7 @@ func fanOut(input []int) <-chan int {
 }
 
 func fanIn(channels ...<-chan int) <-chan int {
-    // Combine results from multiple channels
+    // 合并来自多个channel的结果
     out := make(chan int)
     var wg sync.WaitGroup
     
@@ -95,15 +95,15 @@ func fanIn(channels ...<-chan int) <-chan int {
 }
 ```
 
-#### Worker Pools
+#### 工作池
 
-Create a fixed number of workers that process tasks from a queue:
+创建固定数量的工作线程，从队列中处理任务：
 
 ```go
 func workerPool(numWorkers int, tasks <-chan Task, results chan<- Result) {
     var wg sync.WaitGroup
     
-    // Start workers
+    // 启动工作线程
     for i := 0; i < numWorkers; i++ {
         wg.Add(1)
         go func(id int) {
@@ -119,95 +119,95 @@ func workerPool(numWorkers int, tasks <-chan Task, results chan<- Result) {
 }
 ```
 
-### sync Package
+### sync包
 
-The `sync` package provides synchronization primitives:
+`sync`包提供了同步原语：
 
 ```go
-// WaitGroup: wait for a group of goroutines to finish
+// WaitGroup：等待一组goroutine完成
 var wg sync.WaitGroup
-wg.Add(n)  // Add n goroutines to wait for
-wg.Done()  // Mark one goroutine as complete
-wg.Wait()  // Block until all goroutines are done
+wg.Add(n)  // 添加n个需要等待的goroutine
+wg.Done()  // 标记一个goroutine已完成
+wg.Wait()  // 阻塞直到所有goroutine都完成
 
-// Mutex: protect access to shared data
+// Mutex：保护对共享数据的访问
 var mu sync.Mutex
 mu.Lock()
-// Critical section (only one goroutine at a time)
+// 临界区（同一时间只有一个goroutine可以进入）
 mu.Unlock()
 
-// RWMutex: allows multiple readers or one writer
+// RWMutex：允许多个读取者或一个写入者
 var rwMu sync.RWMutex
-rwMu.RLock() // Read lock (multiple allowed)
-// Read shared data
+rwMu.RLock() // 读锁（允许多个）
+// 读取共享数据
 rwMu.RUnlock()
 
-rwMu.Lock() // Write lock (exclusive)
-// Modify shared data
+rwMu.Lock() // 写锁（独占）
+// 修改共享数据
 rwMu.Unlock()
 ```
 
-### Context Package
+### context包
 
-The `context` package helps manage cancellation and timeouts in concurrent operations:
+`context`包有助于在并发操作中管理取消和超时：
 
 ```go
-// Create a context with cancellation
+// 创建带取消功能的context
 ctx, cancel := context.WithCancel(context.Background())
-defer cancel() // Call cancel when done
+defer cancel() // 完成后调用cancel
 
-// Create a context with timeout
+// 创建带超时的context
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 defer cancel()
 
-// Checking if context is done
+// 检查context是否已结束
 select {
 case <-ctx.Done():
-    // Context was cancelled or timed out
+    // context被取消或超时
     return ctx.Err()
 case result := <-resultChan:
     return result
 }
 ```
 
-### Graph Traversal with BFS
+### 使用BFS进行图遍历
 
-Breadth-First Search visits all vertices at the current depth before moving to the next level. Key concepts:
+广度优先搜索在进入下一层之前会访问当前深度的所有顶点。关键概念包括：
 
-- **Queue-based approach**: Use a queue data structure to track nodes to visit
-- **Visited tracking**: Keep track of visited nodes to avoid cycles
-- **Level-by-level processing**: Process all nodes at current distance before moving to next
+- **基于队列的方法**：使用队列数据结构来跟踪待访问的节点
+- **已访问节点追踪**：记录已访问节点以避免循环
+- **逐层处理**：在进入下一层前处理完当前距离的所有节点
 
-### Concurrent BFS Considerations
+### 并发BFS注意事项
 
-When implementing concurrent BFS, consider:
+在实现并发BFS时，请考虑以下几点：
 
-1. **Goroutine coordination**: Using a goroutine pool for processing nodes at each level
-2. **Communication patterns**: Using channels to communicate between workers
-3. **Synchronization**: Using sync.WaitGroup to wait for each level to complete
-4. **Shared state protection**: Using mutex to protect the visited map if shared across goroutines
-5. **Work distribution**: How to divide the graph traversal work among goroutines
-6. **Result aggregation**: How to collect results from multiple goroutines safely
+1. **goroutine协调**：使用goroutine池来处理每一层的节点
+2. **通信模式**：使用channels在工作线程间通信
+3. **同步机制**：使用sync.WaitGroup等待每层完成
+4. **共享状态保护**：如果多个goroutine共享visited映射，需使用mutex保护
+5. **工作分配**：如何将图遍历工作分配给多个goroutine
+6. **结果聚合**：如何安全地收集多个goroutine的结果
 
-### Important Concurrency Patterns for BFS
+### BFS的重要并发模式
 
-- **Worker pools**: Fixed number of workers processing BFS tasks
-- **Level synchronization**: Ensuring all nodes at one level are processed before moving to next
-- **Shared state management**: Protecting visited nodes map across goroutines
-- **Channel communication**: Using channels for distributing work and collecting results
+- **工作池**：固定数量的工作线程处理BFS任务
+- **层级同步**：确保所有同一层级的节点处理完毕后再进入下一层
+- **共享状态管理**：保护多个goroutine之间的已访问节点映射
+- **channel通信**：使用channel分发工作和收集结果
 
-### Concurrency Gotchas
+### 并发陷阱
 
-Common pitfalls to avoid:
+常见的陷阱需避免：
 
-1. **Race Conditions**: Always protect shared data with mutex or channels
-2. **Deadlocks**: Avoid situations where goroutines wait for each other indefinitely
-3. **Goroutine Leaks**: Ensure goroutines can exit when their work is done
-4. **Channel Misuse**: Be careful about channel closing - only the sender should close
+1. **竞态条件**：始终使用mutex或channel保护共享数据
+2. **死锁**：避免goroutine无限期等待彼此的情况
+3. **goroutine泄漏**：确保当工作完成后goroutine能正常退出
+4. **channel误用**：注意channel关闭问题——只有发送方应关闭channel
 
-## Further Reading
+## 进一步阅读
 
-- [Go Concurrency Patterns](https://blog.golang.org/pipelines)
-- [Effective Go: Concurrency](https://golang.org/doc/effective_go#concurrency)
-- [Visualizing Concurrency in Go](https://divan.dev/posts/go_concurrency_visualize/)
-- [The Context Package](https://blog.golang.org/context) 
+- [Go并发模式](https://blog.golang.org/pipelines)
+- [Effective Go：并发](https://golang.org/doc/effective_go#concurrency)
+- [可视化Go中的并发](https://divan.dev/posts/go_concurrency_visualize/)
+- [Context包](https://blog.golang.org/context)

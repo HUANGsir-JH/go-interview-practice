@@ -1,92 +1,92 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 18: Temperature Converter
+# 挑战 18：温度转换器
 
-## Problem Statement
+## 问题描述
 
-Write a program that converts temperatures between Celsius and Fahrenheit. You'll implement two functions:
-1. `CelsiusToFahrenheit` - converts a temperature from Celsius to Fahrenheit.
-2. `FahrenheitToCelsius` - converts a temperature from Fahrenheit to Celsius.
+编写一个程序，实现摄氏度与华氏度之间的温度转换。你需要实现两个函数：
+1. `CelsiusToFahrenheit` - 将摄氏度转换为华氏度。
+2. `FahrenheitToCelsius` - 将华氏度转换为摄氏度。
 
-## Function Signatures
+## 函数签名
 
 ```go
 func CelsiusToFahrenheit(celsius float64) float64
 func FahrenheitToCelsius(fahrenheit float64) float64
 ```
 
-## Input Format
+## 输入格式
 
-- A float64 temperature value in either Celsius or Fahrenheit.
+- 一个 float64 类型的温度值，单位为摄氏度或华氏度。
 
-## Output Format
+## 输出格式
 
-- A float64 temperature value converted to the other unit.
+- 一个 float64 类型的温度值，已转换为另一种单位。
 
-## Conversion Formulas
+## 转换公式
 
-- **Celsius to Fahrenheit**: F = C × 9/5 + 32
-- **Fahrenheit to Celsius**: C = (F - 32) × 5/9
+- **摄氏度转华氏度**：F = C × 9/5 + 32
+- **华氏度转摄氏度**：C = (F - 32) × 5/9
 
-## Sample Input and Output
+## 示例输入与输出
 
-### Sample Input 1
+### 示例输入 1
 
 ```
 CelsiusToFahrenheit(0)
 ```
 
-### Sample Output 1
+### 示例输出 1
 
 ```
 32.0
 ```
 
-### Sample Input 2
+### 示例输入 2
 
 ```
 FahrenheitToCelsius(32)
 ```
 
-### Sample Output 2
+### 示例输出 2
 
 ```
 0.0
 ```
 
-### Sample Input 3
+### 示例输入 3
 
 ```
 CelsiusToFahrenheit(100)
 ```
 
-### Sample Output 3
+### 示例输出 3
 
 ```
 212.0
 ```
 
-## Requirements
+## 要求
 
-1. Round the result to 2 decimal places
-2. Handle negative temperatures correctly
-3. The functions should work with any valid temperature value
+1. 将结果四舍五入到小数点后两位
+2. 正确处理负温度
+3. 函数应能处理任何有效的温度值
 
-## Instructions
+## 指导步骤
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-18/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the required functions.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 该仓库。
+- **Clone** 你的副本到本地机器。
+- 在 `challenge-18/submissions/` 目录下创建一个以你的 GitHub 用户名命名的文件夹。
+- 将 `solution-template.go` 文件复制到你的提交目录中。
+- **实现**所需的函数。
+- 通过运行测试文件在本地测试你的解决方案。
+- **Commit** 并 **push** 代码到你的副本。
+- **创建**一个拉取请求以提交你的解决方案。
 
-## Testing Your Solution Locally
+## 本地测试你的解决方案
 
-Run the following command in the `challenge-18/` directory:
+在 `challenge-18/` 目录下运行以下命令：
 
 ```bash
 go test -v
-``` 
+```

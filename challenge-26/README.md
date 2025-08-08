@@ -1,61 +1,61 @@
-# Challenge 26: Regular Expression Text Processor
+# 挑战 26：正则表达式文本处理器
 
-## Problem Statement
+## 问题描述
 
-In this challenge, you will implement a text processing utility that uses regular expressions to extract, validate, and transform data from various text formats.
+在此挑战中，你将实现一个使用正则表达式的文本处理工具，用于从各种文本格式中提取、验证和转换数据。
 
-Your task is to create a regular expression processor that can:
+你的任务是创建一个正则表达式处理器，能够：
 
-1. Extract specific data patterns from text (emails, phone numbers, dates, etc.)
-2. Validate if input strings match specific formats
-3. Replace or transform text based on pattern matching
-4. Parse structured text like logs or CSV data
+1. 从文本中提取特定的数据模式（电子邮件、电话号码、日期等）
+2. 验证输入字符串是否符合特定格式
+3. 基于模式匹配替换或转换文本
+4. 解析结构化文本，如日志或 CSV 数据
 
-## Function Signatures
+## 函数签名
 
-You will need to implement the following functions:
+你需要实现以下函数：
 
 ```go
-// ExtractEmails extracts all valid email addresses from a text
+// ExtractEmails 从文本中提取所有有效的电子邮件地址
 func ExtractEmails(text string) []string
 
-// ValidatePhone checks if a string is a valid phone number in format (XXX) XXX-XXXX
+// ValidatePhone 检查字符串是否为有效电话号码格式 (XXX) XXX-XXXX
 func ValidatePhone(phone string) bool
 
-// MaskCreditCard replaces all but the last 4 digits of a credit card number with "X"
-// Example: "1234-5678-9012-3456" -> "XXXX-XXXX-XXXX-3456"
+// MaskCreditCard 将信用卡号除最后 4 位外的所有数字替换为 "X"
+// 示例： "1234-5678-9012-3456" -> "XXXX-XXXX-XXXX-3456"
 func MaskCreditCard(cardNumber string) string
 
-// ParseLogEntry parses a log entry with format:
-// "YYYY-MM-DD HH:MM:SS LEVEL Message"
-// Returns a map with keys: "date", "time", "level", "message"
+// ParseLogEntry 解析格式为：
+// "YYYY-MM-DD HH:MM:SS LEVEL Message" 的日志条目
+// 返回包含键值对的 map： "date", "time", "level", "message"
 func ParseLogEntry(logLine string) map[string]string
 
-// ExtractURLs extracts all valid URLs from a text
+// ExtractURLs 从文本中提取所有有效的 URL
 func ExtractURLs(text string) []string
 ```
 
-## Input/Output Examples
+## 输入/输出示例
 
 ### ExtractEmails
-- Input: `"Contact us at support@example.com or sales@company.co.uk for more info."`
-- Output: `["support@example.com", "sales@company.co.uk"]`
+- 输入： `"Contact us at support@example.com or sales@company.co.uk for more info."`
+- 输出： `["support@example.com", "sales@company.co.uk"]`
 
 ### ValidatePhone
-- Input: `"(555) 123-4567"`
-- Output: `true`
-- Input: `"555-123-4567"`
-- Output: `false`
+- 输入： `"(555) 123-4567"`
+- 输出： `true`
+- 输入： `"555-123-4567"`
+- 输出： `false`
 
 ### MaskCreditCard
-- Input: `"1234-5678-9012-3456"`
-- Output: `"XXXX-XXXX-XXXX-3456"`
-- Input: `"1234567890123456"`
-- Output: `"XXXXXXXXXXXX3456"`
+- 输入： `"1234-5678-9012-3456"`
+- 输出： `"XXXX-XXXX-XXXX-3456"`
+- 输入： `"1234567890123456"`
+- 输出： `"XXXXXXXXXXXX3456"`
 
 ### ParseLogEntry
-- Input: `"2023-11-15 14:23:45 INFO Server started on port 8080"`
-- Output: 
+- 输入： `"2023-11-15 14:23:45 INFO Server started on port 8080"`
+- 输出： 
 ```go
 map[string]string{
     "date":    "2023-11-15",
@@ -66,31 +66,31 @@ map[string]string{
 ```
 
 ### ExtractURLs
-- Input: `"Visit https://golang.org and http://example.com/page?q=123 for more information."`
-- Output: `["https://golang.org", "http://example.com/page?q=123"]`
+- 输入： `"Visit https://golang.org and http://example.com/page?q=123 for more information."`
+- 输出： `["https://golang.org", "http://example.com/page?q=123"]`
 
-## Constraints
+## 约束条件
 
-- Your solution should handle edge cases appropriately
-- Regular expressions should be efficient and avoid excessive backtracking
-- Compile regular expressions once and reuse them for better performance
-- For email validation, use a reasonable regex that covers common email formats
+- 你的解决方案应适当处理边界情况
+- 正则表达式应高效，避免过度回溯
+- 编译正则表达式一次并重复使用以提高性能
+- 对于电子邮件验证，使用合理的正则表达式覆盖常见电子邮件格式
 
-## Evaluation Criteria
+## 评估标准
 
-- Correctness: Does your solution handle all the required cases?
-- Efficiency: Are your regular expressions optimized?
-- Code Quality: Is your code well-structured and documented?
-- Error Handling: Does your code handle invalid inputs gracefully?
+- 正确性：你的解决方案是否处理了所有要求的情况？
+- 效率：你的正则表达式是否经过优化？
+- 代码质量：代码结构是否良好且有文档说明？
+- 错误处理：代码是否能优雅地处理无效输入？
 
-## Learning Resources
+## 学习资源
 
-See the [learning.md](learning.md) document for a comprehensive guide on using regular expressions in Go.
+参见 [learning.md](learning.md) 文档，获取在 Go 中使用正则表达式的全面指南。
 
-## Hints
+## 提示
 
-1. The `regexp` package in Go provides comprehensive regular expression functionality
-2. Use `MustCompile` for patterns you know are valid to simplify error handling
-3. Remember to handle special characters in your patterns
-4. For complex patterns, consider breaking them down into smaller parts
-5. Test your regexes with a variety of inputs, including edge cases 
+1. Go 中的 `regexp` 包提供了完整的正则表达式功能
+2. 对于已知有效的模式，使用 `MustCompile` 可简化错误处理
+3. 记得处理模式中的特殊字符
+4. 对于复杂模式，考虑将其分解为更小的部分
+5. 使用多种输入测试你的正则表达式，包括边界情况

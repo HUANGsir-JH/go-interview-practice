@@ -179,7 +179,7 @@
     <div class="col">
         <div class="challenge-hero-section text-center py-4">
             <div class="challenge-hero-content">
-                <h1 class="display-5 fw-bold mb-3">🏆 Challenge {{.Challenge.ID}} Scoreboard</h1>
+                <h1 class="display-5 fw-bold mb-3">🏆 挑战 {{.Challenge.ID}} 排行榜</h1>
                 <p class="lead mb-3">{{.Challenge.Title}}</p>
                 <div class="d-flex align-items-center justify-content-center mb-3">
                     <span class="badge badge-difficulty badge-{{.Challenge.Difficulty | lower}} me-3 px-3 py-2">
@@ -187,19 +187,19 @@
                     </span>
                     <span class="text-light opacity-75">
                         <i class="bi bi-people-fill me-1"></i>
-                        <span id="participant-count">{{len .Entries}}</span> participants
+                        <span id="participant-count">{{len .Entries}}</span> 参与者
                     </span>
                 </div>
                 
                 <div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
                     <a href="/challenge/{{.Challenge.ID}}" class="btn btn-light px-4">
-                        <i class="bi bi-code-slash me-2"></i>Try Challenge
+                        <i class="bi bi-code-slash me-2"></i>尝试挑战
                     </a>
                     <a href="/scoreboard" class="btn btn-outline-light px-4">
-                        <i class="bi bi-trophy me-2"></i>Main Leaderboard
+                        <i class="bi bi-trophy me-2"></i>主排行榜
                     </a>
                     <button id="refresh-scoreboard" class="btn btn-outline-light px-4">
-                        <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+                        <i class="bi bi-arrow-clockwise me-2"></i>刷新
                     </button>
                 </div>
             </div>
@@ -216,7 +216,7 @@
                     <i class="bi bi-people-fill"></i>
                 </div>
                 <h4 class="mb-0" id="total-participants">{{len .Entries}}</h4>
-                <small class="text-muted">Total Participants</small>
+                <small class="text-muted">总参与者</small>
             </div>
         </div>
     </div>
@@ -227,7 +227,7 @@
                     <i class="bi bi-check-circle-fill"></i>
                 </div>
                 <h4 class="mb-0" id="completed-count">-</h4>
-                <small class="text-muted">Completed</small>
+                <small class="text-muted">已完成</small>
             </div>
         </div>
     </div>
@@ -238,7 +238,7 @@
                     <i class="bi bi-graph-up"></i>
                 </div>
                 <h4 class="mb-0" id="completion-rate">-</h4>
-                <small class="text-muted">Success Rate</small>
+                <small class="text-muted">成功率</small>
             </div>
         </div>
     </div>
@@ -249,7 +249,7 @@
                     <i class="bi bi-speedometer2"></i>
                 </div>
                 <h4 class="mb-0" id="difficulty-level">{{.Challenge.Difficulty}}</h4>
-                <small class="text-muted">Difficulty</small>
+                <small class="text-muted">难度</small>
             </div>
         </div>
     </div>
@@ -258,9 +258,9 @@
 <!-- Loading State -->
 <div id="loading-state" class="text-center py-5" style="display: none;">
     <div class="spinner-border text-primary mb-3" role="status">
-        <span class="visually-hidden">Loading scoreboard...</span>
+        <span class="visually-hidden">正在加载排行榜...</span>
     </div>
-    <p class="text-muted">Refreshing scoreboard data...</p>
+    <p class="text-muted">正在刷新排行榜数据...</p>
 </div>
 
 <!-- Scoreboard Content -->
@@ -269,7 +269,7 @@
         <!-- Top 3 Podium (if we have participants) -->
         <div class="row mb-5" id="podium-section">
             <div class="col">
-                <h3 class="text-center mb-4">🥇 Top Performers</h3>
+                <h3 class="text-center mb-4">🥇 顶尖表现者</h3>
                 <div class="row justify-content-center" id="podium-container">
                     <!-- Top 3 will be populated by JavaScript -->
                 </div>
@@ -282,7 +282,7 @@
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">
-                            <i class="bi bi-list-ol me-2"></i>All Participants
+                            <i class="bi bi-list-ol me-2"></i>所有参与者
                         </h5>
                     </div>
                     <div class="card-body p-0">
@@ -290,11 +290,11 @@
                             <table class="table table-hover mb-0" id="scoreboard-table">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="text-center" style="width: 80px;">Rank</th>
-                                        <th style="width: 250px;">Developer</th>
-                                        <th class="text-center" style="width: 120px;">Status</th>
-                                        <th class="text-center" style="width: 150px;">Submitted</th>
-                                        <th class="text-center" style="width: 120px;">Achievement</th>
+                                        <th class="text-center" style="width: 80px;">排名</th>
+                                        <th style="width: 250px;">开发者</th>
+                                        <th class="text-center" style="width: 120px;">状态</th>
+                                        <th class="text-center" style="width: 150px;">提交时间</th>
+                                        <th class="text-center" style="width: 120px;">成就</th>
                                     </tr>
                                 </thead>
                                 <tbody id="scoreboard-tbody">
@@ -314,20 +314,20 @@
                                                     <div class="fw-bold">{{$entry.Username}}</div>
                                                     <a href="https://github.com/{{$entry.Username}}" target="_blank" 
                                                        class="small text-muted text-decoration-none">
-                                                        <i class="bi bi-github"></i> View Profile
+                                                        <i class="bi bi-github"></i> 查看资料
                                                     </a>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="text-center">
-                                            <span class="badge bg-success">🎉 SOLVED</span>
+                                            <span class="badge bg-success">🎉 已解决</span>
                                         </td>
                                         <td class="text-center">
                                             <div class="small">{{$entry.SubmittedAt.Format "Jan 02, 2006"}}</div>
                                             <div class="small text-muted">{{$entry.SubmittedAt.Format "15:04 MST"}}</div>
                                         </td>
                                         <td class="text-center">
-                                            <span class="badge bg-primary achievement-badge">🔥 Champion</span>
+                                            <span class="badge bg-primary achievement-badge">🔥 冠军</span>
                                         </td>
                                     </tr>
                                     {{end}}
@@ -346,10 +346,10 @@
                     <div class="card-body text-center py-5">
                         <div class="empty-state">
                             <i class="bi bi-trophy" style="font-size: 4rem; color: #6c757d; margin-bottom: 1rem;"></i>
-                            <h4 class="text-muted mb-3">No Submissions Yet</h4>
-                            <p class="text-muted mb-4">Be the first to solve <strong>Challenge {{.Challenge.ID}}</strong> and claim the top spot!</p>
+                            <h4 class="text-muted mb-3">暂无提交</h4>
+                            <p class="text-muted mb-4">成为第一个解决 <strong>挑战 {{.Challenge.ID}}</strong> 的人，夺取榜首！</p>
                             <a href="/challenge/{{.Challenge.ID}}" class="btn btn-primary btn-lg">
-                                <i class="bi bi-code-slash me-2"></i>Start Challenge
+                                <i class="bi bi-code-slash me-2"></i>开始挑战
                             </a>
                         </div>
                     </div>
@@ -412,10 +412,10 @@ document.addEventListener('DOMContentLoaded', function() {
                          class="rounded-circle mx-auto mb-3" 
                          style="width: 80px; height: 80px; border: 3px solid white;">
                     <h5 class="mb-2">${username}</h5>
-                    <p class="mb-2"><strong>Challenge Solved</strong></p>
-                    <p class="mb-0 small">Submitted: ${submittedDate}</p>
+                    <p class="mb-2"><strong>挑战已解决</strong></p>
+                    <p class="mb-0 small">提交时间：${submittedDate}</p>
                     <div class="mt-2">
-                        <span class="badge bg-primary achievement-badge">🔥 Champion</span>
+                        <span class="badge bg-primary achievement-badge">🔥 冠军</span>
                     </div>
                 </div>
             `;
@@ -444,7 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
             scoreboardContent.style.display = 'block';
             
             // Show success message
-            showToast('Scoreboard refreshed successfully!', 'success');
+            showToast('排行榜刷新成功！', 'success');
         }, 1000);
     }
 
@@ -484,4 +484,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-{{end}} 
+{{end}}

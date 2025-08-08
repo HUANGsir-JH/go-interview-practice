@@ -1,19 +1,19 @@
-# Challenge 1: Basic Routing
+# 挑战 1：基础路由
 
-Build a simple **Task Management API** using Fiber with basic HTTP routing and request handling.
+使用 Fiber 构建一个简单的 **任务管理 API**，包含基础的 HTTP 路由和请求处理。
 
-## Challenge Requirements
+## 挑战要求
 
-Implement a REST API for managing tasks with the following endpoints:
+实现一个用于管理任务的 REST API，包含以下端点：
 
-- `GET /ping` - Health check endpoint (returns "pong")
-- `GET /tasks` - Get all tasks  
-- `GET /tasks/:id` - Get task by ID
-- `POST /tasks` - Create new task
-- `PUT /tasks/:id` - Update existing task
-- `DELETE /tasks/:id` - Delete task
+- `GET /ping` - 健康检查端点（返回 "pong"）
+- `GET /tasks` - 获取所有任务
+- `GET /tasks/:id` - 根据 ID 获取任务
+- `POST /tasks` - 创建新任务
+- `PUT /tasks/:id` - 更新现有任务
+- `DELETE /tasks/:id` - 删除任务
 
-## Data Structure
+## 数据结构
 
 ```go
 type Task struct {
@@ -24,59 +24,59 @@ type Task struct {
 }
 ```
 
-## Request/Response Examples
+## 请求/响应示例
 
 **GET /tasks**
 ```json
 [
     {
         "id": 1,
-        "title": "Learn Go",
-        "description": "Complete Go tutorial",
+        "title": "学习 Go",
+        "description": "完成 Go 教程",
         "completed": false
     }
 ]
 ```
 
-**POST /tasks** (Request body)
+**POST /tasks**（请求体）
 ```json
 {
-    "title": "New Task",
-    "description": "Task description",
+    "title": "新任务",
+    "description": "任务描述",
     "completed": false
 }
 ```
 
-## Testing Requirements
+## 测试要求
 
-Your implementation must pass all the provided tests, which verify:
+你的实现必须通过所有提供的测试，这些测试验证：
 
-- ✅ Correct HTTP methods and routes
-- ✅ Proper JSON request/response handling
-- ✅ Path parameter extraction
-- ✅ In-memory data persistence
-- ✅ Error handling for invalid requests
-- ✅ Appropriate HTTP status codes
+- ✅ 正确的 HTTP 方法和路由
+- ✅ 正确的 JSON 请求/响应处理
+- ✅ 路径参数提取
+- ✅ 内存中数据持久化
+- ✅ 无效请求的错误处理
+- ✅ 适当的 HTTP 状态码
 
-## Implementation Notes
+## 实现说明
 
-- Use Fiber's built-in JSON handling with `c.JSON()`
-- Extract path parameters with `c.Params()`
-- Parse JSON request bodies with `c.BodyParser()`
-- Store tasks in memory (slice or map)
-- Return appropriate HTTP status codes
+- 使用 Fiber 内置的 JSON 处理功能，通过 `c.JSON()`
+- 使用 `c.Params()` 提取路径参数
+- 使用 `c.BodyParser()` 解析 JSON 请求体
+- 将任务存储在内存中（切片或映射）
+- 返回适当的 HTTP 状态码
 
-## Getting Started
+## 开始步骤
 
-1. Examine the `solution-template.go` file
-2. Implement the TODO sections
-3. Run tests with `./run_tests.sh`
-4. Iterate until all tests pass
+1. 查看 `solution-template.go` 文件
+2. 实现 TODO 部分
+3. 使用 `./run_tests.sh` 运行测试
+4. 迭代直到所有测试通过
 
-## Success Criteria
+## 成功标准
 
-- All tests pass
-- Clean, readable code
-- Proper error handling
-- RESTful API design
-- Efficient in-memory storage
+- 所有测试通过
+- 代码清晰易读
+- 正确的错误处理
+- 符合 RESTful 设计规范
+- 高效的内存存储

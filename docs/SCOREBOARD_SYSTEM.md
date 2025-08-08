@@ -1,19 +1,19 @@
-# 🏆 Scoreboard System Documentation
+# 🏆 排行榜系统文档
 
-This document explains how the Go Interview Practice scoreboard system works, including both individual challenge scoreboards and the main leaderboard.
+本文档解释了 Go 面试练习排行榜系统的运作方式，包括单个挑战排行榜和主排行榜。
 
-## 📊 Overview
+## 📊 概览
 
-The scoreboard system consists of two levels:
+排行榜系统包含两个层级：
 
-1. **Individual Challenge Scoreboards** - Track submissions for each specific challenge
-2. **Main Leaderboard** - Aggregates data across all challenges to show top performers
+1. **单个挑战排行榜** - 跟踪每个具体挑战的提交情况
+2. **主排行榜** - 汇总所有挑战的数据，展示表现最佳的开发者
 
-## 🔄 How It Works
+## 🔄 运作原理
 
-### Individual Challenge Scoreboards
+### 单个挑战排行榜
 
-Each challenge directory contains a `SCOREBOARD.md` file that tracks successful submissions:
+每个挑战目录中都包含一个 `SCOREBOARD.md` 文件，用于记录成功的提交：
 
 ```
 challenge-1/
@@ -22,140 +22,140 @@ challenge-1/
 └── ...
 ```
 
-**Format:**
+**格式：**
 ```markdown
-# Scoreboard for challenge-1
-| Username   | Passed Tests | Total Tests |
+# challenge-1 排行榜
+| 用户名   | 通过测试数 | 测试总数 |
 |------------|--------------|-------------|
 | RezaSi     | 6            | 6           |
 | AliNazariii| 6            | 6           |
 ```
 
-### Main Leaderboard (README.md)
+### 主排行榜（README.md）
 
-The main leaderboard aggregates completion data from all challenges and displays:
-- Top 10 developers by number of challenges solved
-- Completion rates and achievement badges
-- Overall statistics
+主排行榜汇总所有挑战的完成数据，并显示：
+- 按完成挑战数量排名的前10位开发者
+- 完成率和成就徽章
+- 整体统计数据
 
-## 🤖 Automated Updates
+## 🤖 自动化更新
 
-### GitHub Actions Workflow
+### GitHub Actions 工作流
 
-The system uses two GitHub Actions workflows:
+系统使用两个 GitHub Actions 工作流：
 
-#### 1. Update Challenge Scoreboards (`.github/workflows/update-scoreboards.yml`)
-- **Triggers**: On push to main branch
-- **Process**: 
-  - Runs tests for all submissions in each challenge
-  - Updates individual `SCOREBOARD.md` files
-  - Calls main scoreboard update
-  - Commits and pushes changes
+#### 1. 更新挑战排行榜（`.github/workflows/update-scoreboards.yml`）
+- **触发条件**：推送到 main 分支时
+- **流程**：
+  - 运行每个挑战中所有提交的测试
+  - 更新单个 `SCOREBOARD.md` 文件
+  - 调用主排行榜更新
+  - 提交并推送更改
 
-#### 2. Update Main Scoreboard (`.github/workflows/update-main-scoreboard.yml`)
-- **Triggers**: 
-  - When challenge scoreboards change
-  - Daily at 00:00 UTC (scheduled)
-  - Manual dispatch
-- **Process**:
-  - Aggregates data from all challenge scoreboards
-  - Updates the main leaderboard in README.md
-  - Commits and pushes changes
+#### 2. 更新主排行榜（`.github/workflows/update-main-scoreboard.yml`）
+- **触发条件**：
+  - 当挑战排行榜发生变化时
+  - 每日 UTC 时间 00:00（定时执行）
+  - 手动触发
+- **流程**：
+  - 汇总所有挑战排行榜的数据
+  - 更新 README.md 中的主排行榜
+  - 提交并推送更改
 
-### Automatic Triggering
+### 自动触发机制
 
-The main scoreboard updates automatically when:
-- Any `challenge-*/SCOREBOARD.md` file changes
-- The daily scheduled workflow runs
-- Manual workflow dispatch is triggered
+主排行榜在以下情况下会自动更新：
+- 任何 `challenge-*/SCOREBOARD.md` 文件发生变更
+- 每日定时工作流运行
+- 手动触发工作流
 
-## 📈 Achievement System
+## 📈 成就系统
 
-Developers earn achievement badges based on completion count:
+开发者根据完成挑战的数量获得成就徽章：
 
-| Badge | Name | Requirements |
+| 徽章 | 名称 | 要求 |
 |-------|------|-------------|
-| 🔥 | **Master** | 20+ challenges completed |
-| ⭐ | **Expert** | 15+ challenges completed |
-| 💪 | **Advanced** | 10+ challenges completed |
-| 🚀 | **Intermediate** | 5+ challenges completed |
-| 🌱 | **Beginner** | 1+ challenges completed |
+| 🔥 | **大师** | 完成 20+ 个挑战 |
+| ⭐ | **专家** | 完成 15+ 个挑战 |
+| 💪 | **高级** | 完成 10+ 个挑战 |
+| 🚀 | **中级** | 完成 5+ 个挑战 |
+| 🌱 | **初级** | 完成 1+ 个挑战 |
 
-## 🛠 Manual Operations
+## 🛠 手动操作
 
-### Update Main Scoreboard Manually
+### 手动更新主排行榜
 
-Run the provided script:
+运行提供的脚本：
 ```bash
 ./scripts/update_scoreboard.sh
 ```
 
-This will:
-1. Analyze all challenge scoreboards
-2. Aggregate completion data
-3. Update the main leaderboard in README.md
-4. Display summary statistics
+该脚本将执行：
+1. 分析所有挑战排行榜
+2. 汇总完成数据
+3. 更新 README.md 中的主排行榜
+4. 显示汇总统计信息
 
-### Update Specific Challenge Scoreboard
+### 更新特定挑战排行榜
 
-Navigate to a challenge directory and run tests:
+进入某个挑战目录并运行测试：
 ```bash
 cd challenge-1
 ./run_tests.sh username
 ```
 
-## 📁 File Structure
+## 📁 文件结构
 
 ```
 .
-├── README.md                           # Contains main leaderboard
+├── README.md                           # 包含主排行榜
 ├── scripts/
-│   ├── generate_main_scoreboard.py     # Python script to generate leaderboard
-│   └── update_scoreboard.sh            # Shell script for manual updates
+│   ├── generate_main_scoreboard.py     # 生成排行榜的 Python 脚本
+│   └── update_scoreboard.sh            # 手动更新的 Shell 脚本
 ├── .github/workflows/
-│   ├── update-scoreboards.yml          # Update individual scoreboards
-│   └── update-main-scoreboard.yml      # Update main leaderboard
+│   ├── update-scoreboards.yml          # 更新单个排行榜
+│   └── update-main-scoreboard.yml      # 更新主排行榜
 └── challenge-*/
-    └── SCOREBOARD.md                   # Individual challenge scoreboards
+    └── SCOREBOARD.md                   # 单个挑战排行榜
 ```
 
-## 🔧 Technical Details
+## 🔧 技术细节
 
-### Data Aggregation Logic
+### 数据聚合逻辑
 
-The `generate_main_scoreboard.py` script:
+`generate_main_scoreboard.py` 脚本：
 
-1. **Scans** all `challenge-*/SCOREBOARD.md` files
-2. **Parses** markdown tables to extract usernames
-3. **Counts** unique challenge completions per user
-4. **Sorts** users by completion count (descending) then by username
-5. **Generates** markdown table with rankings and statistics
-6. **Updates** README.md with new leaderboard
+1. **扫描**所有 `challenge-*/SCOREBOARD.md` 文件
+2. **解析** Markdown 表格以提取用户名
+3. **统计**每位用户的唯一挑战完成数量
+4. **排序**用户：按完成数量降序排列，其次按用户名排序
+5. **生成**包含排名和统计数据的 Markdown 表格
+6. **更新** README.md 中的主排行榜
 
-### Error Handling
+### 错误处理
 
-- Handles missing or malformed scoreboard files gracefully
-- Skips invalid usernames (empty, numeric, placeholder values)
-- Provides detailed logging for debugging
-- Fails gracefully without breaking the repository
+- 对缺失或格式错误的排行榜文件进行优雅处理
+- 跳过无效用户名（空值、纯数字、占位符）
+- 提供详细的日志用于调试
+- 出错时优雅失败，不会破坏仓库
 
-## 🎯 Future Enhancements
+## 🎯 未来改进方向
 
-Potential improvements to consider:
+可考虑的潜在优化：
 
-- **Performance Metrics**: Include execution time rankings
-- **Difficulty Weighting**: Weight challenges by difficulty level
-- **Historical Tracking**: Track progress over time
-- **Team Scoreboards**: Support for team-based challenges
-- **Detailed Statistics**: Per-user challenge completion details
+- **性能指标**：增加执行时间排名
+- **难度加权**：按挑战难度级别加权
+- **历史追踪**：跟踪随时间的变化进度
+- **团队排行榜**：支持团队挑战
+- **详细统计**：提供每位用户的挑战完成详情
 
-## 🤝 Contributing
+## 🤝 贡献指南
 
-To modify the scoreboard system:
+若要修改排行榜系统：
 
-1. **Challenge Scoreboards**: Update format in individual `run_tests.sh` scripts
-2. **Main Leaderboard**: Modify `scripts/generate_main_scoreboard.py`
-3. **Workflows**: Update `.github/workflows/` files for automation changes
-4. **Documentation**: Update this file and README.md accordingly
+1. **挑战排行榜**：在各个 `run_tests.sh` 脚本中更新格式
+2. **主排行榜**：修改 `scripts/generate_main_scoreboard.py`
+3. **工作流**：更新 `.github/workflows/` 中的文件以适应自动化变更
+4. **文档**：相应地更新本文件和 README.md
 
-For questions or suggestions about the scoreboard system, please open an issue or contribute improvements! 
+如有关于排行榜系统的疑问或建议，请提交 issue 或贡献改进！

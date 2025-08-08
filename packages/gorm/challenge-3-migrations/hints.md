@@ -1,12 +1,12 @@
-# Hints for GORM Migrations Challenge
+# GORM 迁移挑战提示
 
-## Hint 1: Understanding Migration Versions
+## 提示 1：理解迁移版本
 
-Each migration should have a unique version number that represents the order of application. Use a `MigrationVersion` table to track which migrations have been applied.
+每个迁移都应具有唯一的版本号，以表示应用顺序。使用 `MigrationVersion` 表来跟踪已应用的迁移。
 
-## Hint 2: Database Connection Setup
+## 提示 2：数据库连接设置
 
-Use `gorm.Open()` with SQLite driver. Don't auto-migrate all models here - let migrations handle schema changes:
+使用 `gorm.Open()` 配合 SQLite 驱动程序。此处不要自动迁移所有模型——让迁移处理模式变更：
 
 ```go
 func ConnectDB() (*gorm.DB, error) {
@@ -15,22 +15,22 @@ func ConnectDB() (*gorm.DB, error) {
         return nil, err
     }
     
-    // Create migration tracking table
+    // 创建迁移追踪表
     db.AutoMigrate(&MigrationVersion{})
     return db, nil
 }
 ```
 
-## Hint 3: Running Migrations Safely
+## 提示 3：安全地运行迁移
 
-Check if migration already exists, use transactions, and record the migration version after successful application:
+检查迁移是否已存在，使用事务，并在成功应用后记录迁移版本：
 
 ```go
 func RunMigration(db *gorm.DB, version int) error {
-    // Check if already applied
+    // 检查是否已应用
     var existing MigrationVersion
     if err := db.Where("version = ?", version).First(&existing).Error; err == nil {
-        return nil // Already applied
+        return nil // 已经应用过
     }
     
     tx := db.Begin()
@@ -40,7 +40,7 @@ func RunMigration(db *gorm.DB, version int) error {
         }
     }()
     
-    // Apply migration based on version
+    // 根据版本号应用迁移
     switch version {
     case 1:
         if err := tx.AutoMigrate(&Product{}).Error; err != nil {
@@ -59,7 +59,7 @@ func RunMigration(db *gorm.DB, version int) error {
         }
     }
     
-    // Record migration
+    // 记录迁移
     migration := MigrationVersion{Version: version, AppliedAt: time.Now()}
     if err := tx.Create(&migration).Error; err != nil {
         tx.Rollback()
@@ -70,9 +70,9 @@ func RunMigration(db *gorm.DB, version int) error {
 }
 ```
 
-## Hint 4: Migration Rollback
+## 提示 4：迁移回滚
 
-Apply rollback operations in reverse order and remove the migration record:
+按相反顺序应用回滚操作并删除迁移记录：
 
 ```go
 func RollbackMigration(db *gorm.DB, targetVersion int) error {
@@ -100,9 +100,9 @@ func RollbackMigration(db *gorm.DB, targetVersion int) error {
 }
 ```
 
-## Hint 5: Tracking Migration Version
+## 提示 5：追踪迁移版本
 
-Query the `MigrationVersion` table for the highest version number:
+查询 `MigrationVersion` 表以获取最高版本号：
 
 ```go
 func GetMigrationVersion(db *gorm.DB) (int, error) {
@@ -118,15 +118,15 @@ func GetMigrationVersion(db *gorm.DB) (int, error) {
 }
 ```
 
-## Hint 6: Data Seeding
+## 提示 6：数据填充
 
-Create sample data with proper relationships and use transactions for consistency:
+创建带有正确关系的示例数据，并使用事务确保一致性：
 
 ```go
 func SeedData(db *gorm.DB) error {
     categories := []Category{
-        {Name: "Technology", Description: "Tech products"},
-        {Name: "Sports", Description: "Sports equipment"},
+        {Name: "科技", Description: "科技产品"},
+        {Name: "体育", Description: "体育用品"},
     }
     
     for _, cat := range categories {
@@ -134,8 +134,8 @@ func SeedData(db *gorm.DB) error {
     }
     
     products := []Product{
-        {Name: "Laptop", Price: 999.99, CategoryID: 1, Stock: 10, SKU: "LAP-001"},
-        {Name: "Football", Price: 29.99, CategoryID: 2, Stock: 50, SKU: "SPT-001"},
+        {Name: "笔记本电脑", Price: 999.99, CategoryID: 1, Stock: 10, SKU: "LAP-001"},
+        {Name: "足球", Price: 29.99, CategoryID: 2, Stock: 50, SKU: "SPT-001"},
     }
     
     for _, prod := range products {
@@ -146,30 +146,30 @@ func SeedData(db *gorm.DB) error {
 }
 ```
 
-## Hint 7: Creating Products
+## 提示 7：创建产品
 
-Validate required fields and check if the category exists:
+验证必填字段并检查类别是否存在：
 
 ```go
 func CreateProduct(db *gorm.DB, product *Product) error {
-    // Validate required fields
+    // 验证必填字段
     if product.Name == "" || product.Price <= 0 || product.SKU == "" {
-        return errors.New("missing required fields")
+        return errors.New("缺少必填字段")
     }
     
-    // Check if category exists
+    // 检查类别是否存在
     var category Category
     if err := db.First(&category, product.CategoryID).Error; err != nil {
-        return errors.New("category not found")
+        return errors.New("类别未找到")
     }
     
     return db.Create(product).Error
 }
 ```
 
-## Hint 8: Querying Products by Category
+## 提示 8：按类别查询产品
 
-Use `Where()` to filter and implement pagination:
+使用 `Where()` 进行过滤并实现分页：
 
 ```go
 func GetProductsByCategory(db *gorm.DB, categoryID uint, page, pageSize int) ([]Product, int64, error) {
@@ -186,32 +186,32 @@ func GetProductsByCategory(db *gorm.DB, categoryID uint, page, pageSize int) ([]
 }
 ```
 
-## Migration Implementation Patterns
+## 迁移实现模式
 
-### Version 1: Basic Products
+### 版本 1：基础产品表
 ```go
 func CreateProductsTable(db *gorm.DB) error {
     return db.AutoMigrate(&Product{})
 }
 ```
 
-### Version 2: Add Categories
+### 版本 2：添加类别表
 ```go
 func AddCategoriesTable(db *gorm.DB) error {
-    // Create categories table
+    // 创建类别表
     if err := db.AutoMigrate(&Category{}); err != nil {
         return err
     }
     
-    // Add category_id to products table
+    // 向产品表添加 category_id 字段
     return db.Exec("ALTER TABLE products ADD COLUMN category_id INTEGER").Error
 }
 ```
 
-### Version 3: Add Inventory Fields
+### 版本 3：添加库存字段
 ```go
 func AddInventoryFields(db *gorm.DB) error {
-    // Add new columns to products table
+    // 向产品表添加新列
     return db.Exec(`
         ALTER TABLE products ADD COLUMN stock INTEGER DEFAULT 0;
         ALTER TABLE products ADD COLUMN sku VARCHAR(255) UNIQUE;
@@ -220,9 +220,9 @@ func AddInventoryFields(db *gorm.DB) error {
 }
 ```
 
-## Transaction Patterns
+## 事务模式
 
-### Safe Migration Execution
+### 安全的迁移执行
 ```go
 func RunMigration(db *gorm.DB, version int) error {
     tx := db.Begin()
@@ -232,19 +232,19 @@ func RunMigration(db *gorm.DB, version int) error {
         }
     }()
     
-    // Check if already applied
+    // 检查是否已应用
     var existing MigrationVersion
     if err := tx.Where("version = ?", version).First(&existing).Error; err == nil {
-        return nil // Already applied
+        return nil // 已经应用过
     }
     
-    // Apply migration
+    // 应用迁移
     if err := applyMigration(tx, version); err != nil {
         tx.Rollback()
         return err
     }
     
-    // Record migration
+    // 记录迁移
     migration := MigrationVersion{Version: version, AppliedAt: time.Now()}
     if err := tx.Create(&migration).Error; err != nil {
         tx.Rollback()
@@ -255,18 +255,18 @@ func RunMigration(db *gorm.DB, version int) error {
 }
 ```
 
-## Error Handling
+## 错误处理
 
-1. **Migration already applied** - Check before applying
-2. **Invalid migration version** - Return error for unknown versions
-3. **Database errors** - Handle SQL errors gracefully
-4. **Rollback errors** - Ensure rollback operations are safe
+1. **迁移已应用** - 应用前先检查
+2. **无效的迁移版本** - 对未知版本返回错误
+3. **数据库错误** - 妥善处理 SQL 错误
+4. **回滚错误** - 确保回滚操作是安全的
 
-## Testing Strategies
+## 测试策略
 
-### Test Migration Sequence
+### 测试迁移序列
 ```go
-// Test running migrations in order
+// 测试按顺序运行迁移
 err := RunMigration(db, 1)
 assert.NoError(t, err)
 
@@ -276,37 +276,37 @@ assert.NoError(t, err)
 err = RunMigration(db, 3)
 assert.NoError(t, err)
 
-// Verify final state
+// 验证最终状态
 assert.True(t, db.Migrator().HasTable(&Product{}))
 assert.True(t, db.Migrator().HasTable(&Category{}))
 ```
 
-### Test Rollback
+### 测试回滚
 ```go
-// Run migrations
+// 运行迁移
 RunMigration(db, 1)
 RunMigration(db, 2)
 RunMigration(db, 3)
 
-// Rollback to version 2
+// 回滚到版本 2
 err := RollbackMigration(db, 2)
 assert.NoError(t, err)
 
-// Verify state
+// 验证状态
 version, _ := GetMigrationVersion(db)
 assert.Equal(t, 2, version)
 ```
 
-## Data Seeding Patterns
+## 数据填充模式
 
-### Create Sample Data
+### 创建示例数据
 ```go
 func SeedData(db *gorm.DB) error {
-    // Create categories
+    // 创建类别
     categories := []Category{
-        {Name: "Technology", Description: "Tech products"},
-        {Name: "Sports", Description: "Sports equipment"},
-        {Name: "Food", Description: "Food items"},
+        {Name: "科技", Description: "科技产品"},
+        {Name: "体育", Description: "体育用品"},
+        {Name: "食品", Description: "食品类商品"},
     }
     
     for _, cat := range categories {
@@ -315,11 +315,11 @@ func SeedData(db *gorm.DB) error {
         }
     }
     
-    // Create products
+    // 创建产品
     products := []Product{
-        {Name: "Laptop", Price: 999.99, CategoryID: 1, Stock: 10, SKU: "LAP-001"},
-        {Name: "Football", Price: 29.99, CategoryID: 2, Stock: 50, SKU: "SPT-001"},
-        {Name: "Coffee", Price: 5.99, CategoryID: 3, Stock: 100, SKU: "FOD-001"},
+        {Name: "笔记本电脑", Price: 999.99, CategoryID: 1, Stock: 10, SKU: "LAP-001"},
+        {Name: "足球", Price: 29.99, CategoryID: 2, Stock: 50, SKU: "SPT-001"},
+        {Name: "咖啡", Price: 5.99, CategoryID: 3, Stock: 100, SKU: "FOD-001"},
     }
     
     for _, prod := range products {
@@ -332,65 +332,65 @@ func SeedData(db *gorm.DB) error {
 }
 ```
 
-## Common Mistakes to Avoid
+## 常见错误避免
 
-1. **Not using transactions** - Migrations should be atomic
-2. **Forgetting to track versions** - Always record applied migrations
-3. **Not handling rollbacks** - Every migration should be reversible
-4. **Not testing migrations** - Always test in development first
-5. **Not handling errors** - Check for errors at each step
+1. **未使用事务** - 迁移应为原子操作
+2. **忘记记录版本** - 始终记录已应用的迁移
+3. **未处理回滚** - 每个迁移都应可逆
+4. **未测试迁移** - 始终先在开发环境中测试
+5. **未处理错误** - 在每一步都检查错误
 
-## SQLite Specific Notes
+## SQLite 特定注意事项
 
-- SQLite has limited ALTER TABLE support
-- Use `db.Exec()` for complex schema changes
-- Some operations might require table recreation
-- Be careful with foreign key constraints
+- SQLite 对 `ALTER TABLE` 支持有限
+- 复杂的模式变更使用 `db.Exec()`
+- 某些操作可能需要重建表
+- 注意外键约束
 
-## Debugging Tips
+## 调试技巧
 
-1. **Enable GORM logging**:
+1. **启用 GORM 日志**：
 ```go
 db = db.Debug()
 ```
 
-2. **Check migration state**:
+2. **检查迁移状态**：
 ```go
 var versions []MigrationVersion
 db.Find(&versions)
 for _, v := range versions {
-    fmt.Printf("Migration %d applied at %s\n", v.Version, v.AppliedAt)
+    fmt.Printf("迁移 %d 在 %s 应用\n", v.Version, v.AppliedAt)
 }
 ```
 
-3. **Verify table structure**:
+3. **验证表结构**：
 ```go
-// Check if columns exist
+// 检查列是否存在
 columns, _ := db.Migrator().ColumnTypes(&Product{})
 for _, col := range columns {
-    fmt.Printf("Column: %s, Type: %s\n", col.Name(), col.DatabaseTypeName())
+    fmt.Printf("列: %s, 类型: %s\n", col.Name(), col.DatabaseTypeName())
 }
 ```
 
-## Performance Considerations
+## 性能考虑
 
-1. **Batch operations** - Use transactions for multiple operations
-2. **Index creation** - Add indexes after data migration
-3. **Data validation** - Validate data before migration
+1. **批量操作** - 使用事务处理多个操作
+2. **索引创建** - 在数据迁移后添加索引
+3. **数据验证** - 在迁移前验证数据
 
-## Useful GORM Methods
+## 有用的 GORM 方法
 
-- `db.Begin()` - Start transaction
-- `db.Commit()` - Commit transaction
-- `db.Rollback()` - Rollback transaction
-- `db.Exec()` - Execute raw SQL
-- `db.Migrator()` - Access migration methods
-- `db.AutoMigrate()` - Auto-migrate models
+- `db.Begin()` - 开始事务
+- `db.Commit()` - 提交事务
+- `db.Rollback()` - 回滚事务
+- `db.Exec()` - 执行原生 SQL
+- `db.Migrator()` - 访问迁移方法
+- `db.AutoMigrate()` - 自动迁移模型
 
-## Final Tips
+## 最终建议
 
-1. **Start with simple migrations** - Get basic version tracking working first
-2. **Test each migration** - Verify each step works before moving on
-3. **Keep migrations small** - Each migration should do one thing well
-4. **Document your migrations** - Add comments explaining what each migration does
-5. **Use the learning resources** - Check GORM documentation for migration examples 
+1. **从简单迁移开始** - 先让基本版本追踪正常工作
+2. **测试每个迁移** - 在继续之前验证每一步
+3. **保持迁移简洁** - 每个迁移应只做一件事
+4. **记录你的迁移** - 添加注释说明每个迁移的作用
+5. **使用学习资源** - 查阅 GORM 文档中的迁移示例

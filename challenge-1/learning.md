@@ -1,20 +1,20 @@
-# Learning Materials for Sum of Two Numbers
+# 两数之和学习资料
 
-## Basic Go Syntax and Functions
+## Go 基础语法与函数
 
-In Go, functions are first-class citizens and are defined using the `func` keyword. This challenge focuses on basic function implementation and understanding Go's syntax for arithmetic operations.
+在 Go 中，函数是一等公民，使用 `func` 关键字定义。本挑战聚焦于基础函数实现以及理解 Go 的算术运算符语法。
 
-### Function Declaration
+### 函数声明
 
 ```go
-// Basic function structure
-func FunctionName(parameter1 Type1, parameter2 Type2) ReturnType {
-    // Function body
-    return returnValue
+// 基础函数结构
+func FunctionName(parameter1 Type1, parameter2 Type2) return type {
+    // 函数体
+    return return value
 }
 ```
 
-For example, a function to add two integers would be:
+例如，一个将两个整数相加的函数应为：
 
 ```go
 func Add(a int, b int) int {
@@ -22,7 +22,7 @@ func Add(a int, b int) int {
 }
 ```
 
-You can also specify parameter types once for multiple parameters of the same type:
+你也可以一次性为多个相同类型的参数指定类型：
 
 ```go
 func Add(a, b int) int {
@@ -30,47 +30,47 @@ func Add(a, b int) int {
 }
 ```
 
-### Basic Data Types in Go
+### Go 中的基本数据类型
 
-Go has several basic types including:
+Go 拥有多种基本类型，包括：
 
-- **Numeric types**: 
+- **数值类型**：
   - `int`, `int8`, `int16`, `int32`, `int64`
   - `uint`, `uint8`, `uint16`, `uint32`, `uint64`, `uintptr`
   - `float32`, `float64`
   - `complex64`, `complex128`
-- **String type**: `string`
-- **Boolean type**: `bool`
+- **字符串类型**：`string`
+- **布尔类型**：`bool`
 
-For this challenge, we're working with the `int` type.
+本挑战中我们使用 `int` 类型。
 
-### Arithmetic Operators
+### 算术运算符
 
-Go supports the following arithmetic operators:
+Go 支持以下算术运算符：
 
-- Addition: `+`
-- Subtraction: `-`
-- Multiplication: `*`
-- Division: `/`
-- Modulus: `%` (remainder after division)
+- 加法：`+`
+- 减法：`-`
+- 乘法：`*`
+- 除法：`/`
+- 取模：`%`（除法后的余数）
 
-### Variables in Go
+### Go 中的变量
 
-Go variables are declared using the `var` keyword or the short declaration operator (`:=`):
+Go 变量使用 `var` 关键字或短声明操作符（`:=`）声明：
 
 ```go
-// Using var
+// 使用 var
 var a int = 10
 var b int = 20
 
-// Short declaration (type is inferred)
+// 短声明（类型自动推断）
 a := 10
 b := 20
 ```
 
-### Testing in Go
+### Go 中的测试
 
-Go has a built-in testing framework in the `testing` package. Tests are functions that start with `Test` followed by a name that starts with a capital letter.
+Go 在 `testing` 包中内置了测试框架。测试是函数，以 `Test` 开头，并且名称以大写字母开头。
 
 ```go
 func TestAdd(t *testing.T) {
@@ -81,17 +81,17 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-### Go's Philosophy
+### Go 的设计哲学
 
-Go is designed for simplicity, readability, and efficiency. It encourages:
+Go 的设计原则是简洁、可读性和高效性。它鼓励：
 
-- Clear and concise code
-- Strong typing
-- Efficient compilation and execution
-- Built-in concurrency support (though not needed for this challenge)
+- 清晰简洁的代码
+- 强类型
+- 高效的编译和执行
+- 内置并发支持（尽管本挑战不需要）
 
-## Further Reading
+## 进一步阅读
 
-- [A Tour of Go](https://tour.golang.org/welcome/1) - An interactive introduction to Go
-- [Effective Go](https://golang.org/doc/effective_go) - Tips for writing clear, idiomatic Go code
-- [Go by Example: Functions](https://gobyexample.com/functions) - Practical examples of Go functions 
+- [Go 之旅](https://tour.golang.org/welcome/1) - Go 的交互式入门教程
+- [有效 Go](https://golang.org/doc/effective_go) - 编写清晰、符合习惯的 Go 代码的建议
+- [Go 示例：函数](https://gobyexample.com/functions) - Go 函数的实际示例

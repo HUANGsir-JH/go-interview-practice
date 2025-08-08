@@ -1,23 +1,23 @@
-# Hints for HTTP Authentication Middleware
+# HTTP 认证中间件的提示
 
-## Hint 1: Middleware Function Signature
-HTTP middleware in Go is a function that takes an `http.Handler` and returns an `http.Handler`:
+## 提示 1：中间件函数签名
+Go中的HTTP中间件是一个接受`http.Handler`并返回`http.Handler`的函数：
 ```go
 func authMiddleware(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // middleware logic here
+        // 中间件逻辑在这里
     })
 }
 ```
 
-## Hint 2: Getting Header Values
-Extract the authentication token from the request header:
+## 提示 2：获取头值
+从请求头中提取认证令牌：
 ```go
 token := r.Header.Get("X-Auth-Token")
 ```
 
-## Hint 3: Token Validation
-Check if the token equals the expected secret value. If not, return 401:
+## 提示 3：令牌验证
+检查令牌是否等于预期的secret值。如果不等于，返回401：
 ```go
 if token != "secret" {
     http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -25,22 +25,22 @@ if token != "secret" {
 }
 ```
 
-## Hint 4: Calling Next Handler
-If the token is valid, call the next handler in the chain:
+## 提示 4：调用下一个处理程序
+如果令牌有效，调用链中的下一个处理程序：
 ```go
 next.ServeHTTP(w, r)
 ```
 
-## Hint 5: Setting Up Routes
-Create a router with the required endpoints:
+## 提示 5：设置路由
+创建包含所需端点的路由器：
 ```go
 mux := http.NewServeMux()
 mux.HandleFunc("/hello", helloHandler)
 mux.HandleFunc("/secure", secureHandler)
 ```
 
-## Hint 6: Applying Middleware
-Wrap your router with the authentication middleware:
+## 提示 6：应用中间件
+用认证中间件包装你的路由器：
 ```go
 server := &http.Server{
     Addr:    ":8080",
@@ -48,8 +48,8 @@ server := &http.Server{
 }
 ```
 
-## Hint 7: Handler Functions
-Create simple handler functions:
+## 提示 7：处理程序函数
+创建简单的处理程序函数：
 ```go
 func helloHandler(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte("Hello!"))
@@ -60,5 +60,5 @@ func secureHandler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-## Hint 8: Missing Header Handling
-If the header is missing (empty string), treat it as invalid and return 401. The `Header.Get()` method returns an empty string if the header doesn't exist. 
+## 提示 8：缺失头处理
+如果头缺失（空字符串），将其视为无效并返回401。`Header.Get()`方法在头不存在时返回空字符串。

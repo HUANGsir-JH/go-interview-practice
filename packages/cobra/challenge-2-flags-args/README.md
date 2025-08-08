@@ -1,32 +1,32 @@
-# Challenge 2: Flags and Arguments
+# 挑战 2：标志和参数
 
-Build a **File Manager CLI** that demonstrates advanced flag and argument handling with Cobra.
+构建一个 **文件管理器命令行工具**，展示使用 Cobra 进行高级标志和参数处理。
 
-## Challenge Requirements
+## 挑战要求
 
-Create a CLI application that supports:
+创建一个支持以下功能的命令行应用程序：
 
-1. **Global Flags** - Available to all commands
-2. **Command-specific Flags** - Available only to specific commands  
-3. **Required and Optional Flags** - Different validation levels
-4. **Arguments** - Positional parameters
-5. **Flag Types** - String, int, bool flags
+1. **全局标志** - 对所有命令可用  
+2. **命令特定标志** - 仅对特定命令可用  
+3. **必需和可选标志** - 不同级别的验证  
+4. **参数** - 位置参数  
+5. **标志类型** - 字符串、整数、布尔标志
 
-## Expected CLI Structure
+## 预期的 CLI 结构
 
 ```
-filecli --verbose list                    # Global flag
-filecli list --format json               # Command flag
-filecli copy file1.txt file2.txt         # Arguments
-filecli delete --force myfile.txt        # Required flag + argument
-filecli create --name "test" --size 100  # Multiple flags
+filecli --verbose list                    # 全局标志
+filecli list --format json               # 命令标志
+filecli copy file1.txt file2.txt         # 参数
+filecli delete --force myfile.txt        # 必需标志 + 参数
+filecli create --name "test" --size 100  # 多个标志
 ```
 
-## Testing Requirements
+## 测试要求
 
-Your solution must pass tests for:
-- Global and command-specific flags
-- Required flag validation
-- Argument handling and validation
-- Flag type conversion (string, int, bool)
-- Help text generation for flags 
+你的解决方案必须通过以下测试：
+- 全局标志和命令特定标志
+- 必需标志验证
+- 参数处理和验证
+- 标志类型转换（字符串、整数、布尔）
+- 标志的帮助文本生成

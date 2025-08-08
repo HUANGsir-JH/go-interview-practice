@@ -1,13 +1,13 @@
-# Learning GORM Advanced Queries
+# 学习 GORM 高级查询
 
-## Overview
+## 概述
 
-Advanced queries in GORM allow you to perform complex database operations, aggregations, and analytics. This challenge focuses on mastering advanced querying techniques to build efficient and powerful data retrieval systems.
+GORM 中的高级查询允许您执行复杂的数据库操作、聚合和分析。本挑战聚焦于掌握高级查询技术，以构建高效且强大的数据检索系统。
 
-## Query Building
+## 查询构建
 
-### 1. Chain Methods
-GORM allows you to chain query methods for complex queries:
+### 1. 方法链式调用
+GORM 允许您链式调用查询方法以实现复杂查询：
 
 ```go
 var users []User
@@ -18,8 +18,8 @@ db.Where("age > ?", 18).
    Find(&users)
 ```
 
-### 2. Preloading with Conditions
-Preload related data with specific conditions:
+### 2. 带条件的预加载
+使用特定条件预加载相关数据：
 
 ```go
 var users []User
@@ -28,21 +28,21 @@ db.Preload("Posts", "is_published = ?", true).
    Find(&users)
 ```
 
-## Aggregations
+## 聚合
 
-### 1. Count
-Count records with conditions:
+### 1. 计数
+按条件统计记录数量：
 
 ```go
 var count int64
 db.Model(&User{}).Where("country = ?", "USA").Count(&count)
 
-// Count with distinct
+// 去重计数
 db.Model(&User{}).Distinct("country").Count(&count)
 ```
 
-### 2. Sum, Average, Min, Max
-Perform mathematical aggregations:
+### 2. 求和、平均值、最小值、最大值
+执行数学聚合操作：
 
 ```go
 var total float64
@@ -55,8 +55,8 @@ var maxPrice float64
 db.Model(&Product{}).Select("MAX(price)").Scan(&maxPrice)
 ```
 
-### 3. Group By
-Group results by specific fields:
+### 3. 分组
+按特定字段分组结果：
 
 ```go
 type CountryStats struct {
@@ -72,13 +72,13 @@ db.Model(&User{}).
    Scan(&stats)
 ```
 
-## Complex Queries
+## 复杂查询
 
-### 1. Subqueries
-Use subqueries for complex filtering:
+### 1. 子查询
+使用子查询进行复杂过滤：
 
 ```go
-// Find users who have more than 5 posts
+// 查找拥有超过 5 篇文章的用户
 var users []User
 db.Where("id IN (?)", 
     db.Model(&Post{}).
@@ -88,8 +88,8 @@ db.Where("id IN (?)",
    Find(&users)
 ```
 
-### 2. Joins
-Perform complex joins:
+### 2. 连接查询
+执行复杂的连接操作：
 
 ```go
 var results []struct {
@@ -106,8 +106,8 @@ db.Table("users").
    Scan(&results)
 ```
 
-### 3. Raw SQL
-Use raw SQL for complex queries:
+### 3. 原生 SQL
+使用原生 SQL 实现复杂查询：
 
 ```go
 var users []User
@@ -122,20 +122,20 @@ db.Raw(`
 `, "USA", 5).Scan(&users)
 ```
 
-## Pagination
+## 分页
 
-### 1. Offset and Limit
-Implement pagination:
+### 1. 偏移与限制
+实现分页功能：
 
 ```go
 func GetPaginatedPosts(db *gorm.DB, page, pageSize int) ([]Post, int64, error) {
     var posts []Post
     var total int64
     
-    // Get total count
+    // 获取总数
     db.Model(&Post{}).Count(&total)
     
-    // Get paginated results
+    // 获取分页结果
     offset := (page - 1) * pageSize
     err := db.Offset(offset).Limit(pageSize).Find(&posts).Error
     
@@ -143,8 +143,8 @@ func GetPaginatedPosts(db *gorm.DB, page, pageSize int) ([]Post, int64, error) {
 }
 ```
 
-### 2. Cursor-Based Pagination
-For better performance with large datasets:
+### 2. 游标分页
+对于大数据集有更好的性能表现：
 
 ```go
 func GetPostsByCursor(db *gorm.DB, cursor uint, limit int) ([]Post, error) {
@@ -157,10 +157,10 @@ func GetPostsByCursor(db *gorm.DB, cursor uint, limit int) ([]Post, error) {
 }
 ```
 
-## Full-Text Search
+## 全文搜索
 
-### 1. LIKE Queries
-Simple text search:
+### 1. LIKE 查询
+简单的文本搜索：
 
 ```go
 var posts []Post
@@ -168,29 +168,29 @@ db.Where("title LIKE ? OR content LIKE ?",
     "%"+query+"%", "%"+query+"%").Find(&posts)
 ```
 
-### 2. Full-Text Search (MySQL)
-For more advanced search capabilities:
+### 2. 全文搜索（MySQL）
+实现更高级的搜索功能：
 
 ```go
 var posts []Post
 db.Where("MATCH(title, content) AGAINST(? IN BOOLEAN MODE)", query).Find(&posts)
 ```
 
-## Query Optimization
+## 查询优化
 
-### 1. Select Specific Fields
-Only select needed fields:
+### 1. 选择特定字段
+仅选择需要的字段：
 
 ```go
 var users []User
 db.Select("id, username, email").Find(&users)
 ```
 
-### 2. Use Indexes
-Ensure proper indexing for frequently queried fields:
+### 2. 使用索引
+确保对频繁查询的字段建立适当的索引：
 
 ```go
-// Add indexes to your models
+// 在模型中添加索引
 type User struct {
     ID       uint   `gorm:"primaryKey"`
     Username string `gorm:"uniqueIndex"`
@@ -199,15 +199,15 @@ type User struct {
 }
 ```
 
-### 3. Avoid N+1 Queries
-Use preloading to avoid multiple queries:
+### 3. 避免 N+1 查询
+使用预加载避免多次查询：
 
 ```go
-// Good: Single query with preloading
+// 正确：单次查询并预加载
 var users []User
 db.Preload("Posts").Find(&users)
 
-// Bad: N+1 queries
+// 错误：N+1 查询
 var users []User
 db.Find(&users)
 for _, user := range users {
@@ -215,10 +215,10 @@ for _, user := range users {
 }
 ```
 
-## Analytics Queries
+## 分析查询
 
-### 1. Time-Based Analytics
-Analyze data over time periods:
+### 1. 时间维度分析
+按时间段分析数据：
 
 ```go
 type DailyStats struct {
@@ -235,25 +235,25 @@ db.Model(&Post{}).
    Scan(&stats)
 ```
 
-### 2. User Engagement Metrics
-Calculate user engagement:
+### 2. 用户参与度指标
+计算用户参与度：
 
 ```go
 func GetUserEngagement(db *gorm.DB, userID uint) map[string]interface{} {
     var stats map[string]interface{}
     
-    // Get post count
+    // 获取文章数量
     var postCount int64
     db.Model(&Post{}).Where("user_id = ?", userID).Count(&postCount)
     
-    // Get total likes received
+    // 获取收到的总点赞数
     var likesReceived int64
     db.Model(&Like{}).
        Joins("JOIN posts ON likes.post_id = posts.id").
        Where("posts.user_id = ?", userID).
        Count(&likesReceived)
     
-    // Get average views per post
+    // 获取每篇文章的平均浏览量
     var avgViews float64
     db.Model(&Post{}).
        Select("AVG(view_count)").
@@ -270,10 +270,10 @@ func GetUserEngagement(db *gorm.DB, userID uint) map[string]interface{} {
 }
 ```
 
-## Advanced Patterns
+## 高级模式
 
-### 1. Query Scopes
-Create reusable query conditions:
+### 1. 查询作用域
+创建可复用的查询条件：
 
 ```go
 func (db *gorm.DB) ActiveUsers() *gorm.DB {
@@ -284,7 +284,7 @@ func (db *gorm.DB) PublishedPosts() *gorm.DB {
     return db.Where("is_published = ?", true)
 }
 
-// Usage
+// 使用示例
 var users []User
 db.ActiveUsers().Find(&users)
 
@@ -292,19 +292,19 @@ var posts []Post
 db.PublishedPosts().Preload("User").Find(&posts)
 ```
 
-### 2. Query Hooks
-Add custom logic to queries:
+### 2. 查询钩子
+为查询添加自定义逻辑：
 
 ```go
 func (u *User) AfterFind(tx *gorm.DB) error {
-    // Calculate additional fields after query
+    // 查询后计算额外字段
     u.FullName = u.FirstName + " " + u.LastName
     return nil
 }
 ```
 
-### 3. Custom Scanners
-Handle complex query results:
+### 3. 自定义扫描器
+处理复杂的查询结果：
 
 ```go
 type UserStats struct {
@@ -315,15 +315,15 @@ type UserStats struct {
 }
 
 func (us *UserStats) Scan(value interface{}) error {
-    // Custom scanning logic
+    // 自定义扫描逻辑
     return nil
 }
 ```
 
-## Performance Tips
+## 性能提示
 
-### 1. Use Indexes
-Create indexes for frequently queried fields:
+### 1. 使用索引
+为频繁查询的字段创建索引：
 
 ```sql
 CREATE INDEX idx_users_country ON users(country);
@@ -331,63 +331,63 @@ CREATE INDEX idx_posts_created_at ON posts(created_at);
 CREATE INDEX idx_likes_post_id ON likes(post_id);
 ```
 
-### 2. Limit Result Sets
-Always limit large result sets:
+### 2. 限制结果集
+始终限制大型结果集：
 
 ```go
-db.Limit(100).Find(&users) // Limit to 100 results
+db.Limit(100).Find(&users) // 限制返回 100 条结果
 ```
 
-### 3. Use Count Efficiently
-Use count efficiently for pagination:
+### 3. 高效使用计数
+在分页时高效使用计数：
 
 ```go
-// Good: Use count for total
+// 正确：使用计数获取总数
 var total int64
 db.Model(&User{}).Count(&total)
 
-// Bad: Load all records to count
+// 错误：加载所有记录后再计数
 var users []User
 db.Find(&users)
 total := len(users)
 ```
 
-### 4. Cache Results
-Cache frequently accessed data:
+### 4. 缓存结果
+缓存频繁访问的数据：
 
 ```go
 func GetCachedUserStats(userID uint) map[string]interface{} {
     cacheKey := fmt.Sprintf("user_stats_%d", userID)
     
-    // Check cache first
+    // 先检查缓存
     if cached, found := cache.Get(cacheKey); found {
         return cached.(map[string]interface{})
     }
     
-    // Calculate stats
+    // 计算统计数据
     stats := calculateUserStats(userID)
     
-    // Cache for 5 minutes
+    // 缓存 5 分钟
     cache.Set(cacheKey, stats, 5*time.Minute)
     
     return stats
 }
 ```
 
-## Resources
+## 资源
 
-- [GORM Advanced Queries](https://gorm.io/docs/advanced_query.html)
-- [GORM Raw SQL](https://gorm.io/docs/raw_sql.html)
-- [GORM Scopes](https://gorm.io/docs/scopes.html)
-- [GORM Hooks](https://gorm.io/docs/hooks.html)
-- [SQL Performance Tuning](https://use-the-index-luke.com/)
+- [GORM 高级查询](https://gorm.io/docs/advanced_query.html)
+- [GORM 原生 SQL](https://gorm.io/docs/raw_sql.html)
+- [GORM 作用域](https://gorm.io/docs/scopes.html)
+- [GORM 钩子](https://gorm.io/docs/hooks.html)
+- [SQL 性能调优](https://use-the-index-luke.com/)
 
-## Practice Exercises
+## 练习题
 
-1. Build a social media analytics dashboard
-2. Implement a search engine with filters
-3. Create a recommendation system
-4. Build a reporting system with aggregations
-5. Implement real-time analytics queries
+1. 构建一个社交媒体分析仪表盘  
+2. 实现带筛选功能的搜索引擎  
+3. 创建一个推荐系统  
+4. 构建一个包含聚合功能的报表系统  
+5. 实现实时分析查询  
 
-These exercises will help you master advanced querying techniques and build efficient data retrieval systems. 
+这些练习将帮助您掌握高级查询技术，并构建高效的查询系统。

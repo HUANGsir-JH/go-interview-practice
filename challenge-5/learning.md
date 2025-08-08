@@ -1,12 +1,12 @@
-# Learning Materials for HTTP Authentication Middleware
+# HTTP 认证中间件学习资料
 
-## HTTP Servers and Middleware in Go
+## Go 中的 HTTP 服务器与中间件
 
-Go provides excellent support for building HTTP servers through its standard library. This challenge focuses on implementing an HTTP middleware for authentication.
+Go 通过其标准库提供了构建 HTTP 服务器的优秀支持。本挑战聚焦于实现用于认证的 HTTP 中间件。
 
-### HTTP Basics in Go
+### Go 中的 HTTP 基础知识
 
-Go's `net/http` package provides everything needed to build HTTP servers:
+Go 的 `net/http` 包提供了构建 HTTP 服务器所需的一切功能：
 
 ```go
 package main
@@ -17,7 +17,7 @@ import (
 )
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Hello, World!")
+    fmt.Fprintf(w, "你好，世界！")
 }
 
 func main() {
@@ -26,35 +26,35 @@ func main() {
 }
 ```
 
-### Understanding Middleware
+### 理解中间件
 
-Middleware functions sit between the client request and your application logic. They can:
+中间件函数位于客户端请求和应用程序逻辑之间。它们可以：
 
-1. Process incoming requests
-2. Modify request objects
-3. Terminate requests early
-4. Modify response objects
-5. Chain multiple middlewares together
+1. 处理传入的请求
+2. 修改请求对象
+3. 提前终止请求
+4. 修改响应对象
+5. 将多个中间件串联在一起
 
 ```go
-// Basic middleware structure
+// 基础中间件结构
 func middleware(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // Logic before the handler
-        fmt.Println("Before handler")
+        // 处理器之前的操作
+        fmt.Println("处理器之前")
         
-        // Call the next handler
+        // 调用下一个处理器
         next.ServeHTTP(w, r)
         
-        // Logic after the handler
-        fmt.Println("After handler")
+        // 处理器之后的操作
+        fmt.Println("处理器之后")
     })
 }
 ```
 
-### The http.Handler Interface
+### http.Handler 接口
 
-At the core of Go's HTTP server is the `http.Handler` interface:
+Go HTTP 服务器的核心是 `http.Handler` 接口：
 
 ```go
 type Handler interface {
@@ -62,7 +62,7 @@ type Handler interface {
 }
 ```
 
-And `http.HandlerFunc` adapts regular functions to this interface:
+而 `http.HandlerFunc` 将普通函数适配到此接口：
 
 ```go
 type HandlerFunc func(ResponseWriter, *Request)
@@ -72,17 +72,17 @@ func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) {
 }
 ```
 
-### Chaining Middleware
+### 中间件链式调用
 
-Middleware can be chained together to form a pipeline:
+中间件可以串联起来形成一个处理管道：
 
 ```go
 func main() {
-    // Create a new mux (router)
+    // 创建新的 mux（路由器）
     mux := http.NewServeMux()
     mux.HandleFunc("/api", apiHandler)
     
-    // Wrap mux with middleware chain
+    // 使用中间件链包装 mux
     handler := loggingMiddleware(
         authenticationMiddleware(
             rateLimitMiddleware(mux),
@@ -93,107 +93,107 @@ func main() {
 }
 ```
 
-### Authentication Middleware Patterns
+### 认证中间件模式
 
-#### Basic Authentication
+#### 基本认证
 
 ```go
 func basicAuthMiddleware(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // Get credentials from request header
+        // 从请求头获取凭证
         username, password, ok := r.BasicAuth()
         
-        // Check credentials
+        // 检查凭证
         if !ok || !checkCredentials(username, password) {
             w.Header().Set("WWW-Authenticate", `Basic realm="Restricted"`)
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
+            http.Error(w, "未授权", http.StatusUnauthorized)
             return
         }
         
-        // Set authenticated user in context
+        // 将已认证用户存入上下文
         ctx := context.WithValue(r.Context(), userContextKey, username)
         next.ServeHTTP(w, r.WithContext(ctx))
     })
 }
 ```
 
-#### Token Authentication
+#### Token 认证
 
 ```go
 func tokenAuthMiddleware(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // Get token from header
+        // 从头信息中获取 token
         authHeader := r.Header.Get("Authorization")
         if authHeader == "" {
-            http.Error(w, "Authorization header required", http.StatusUnauthorized)
+            http.Error(w, "需要授权头", http.StatusUnauthorized)
             return
         }
         
-        // Check format (Bearer token)
+        // 检查格式（Bearer token）
         parts := strings.SplitN(authHeader, " ", 2)
         if len(parts) != 2 || parts[0] != "Bearer" {
-            http.Error(w, "Invalid authorization format", http.StatusUnauthorized)
+            http.Error(w, "无效的授权格式", http.StatusUnauthorized)
             return
         }
         
         token := parts[1]
         
-        // Validate token (depends on your token system)
+        // 验证 token（取决于你的 token 系统）
         user, err := validateToken(token)
         if err != nil {
-            http.Error(w, "Invalid token", http.StatusUnauthorized)
+            http.Error(w, "无效的 token", http.StatusUnauthorized)
             return
         }
         
-        // Set user in context
+        // 将用户存入上下文
         ctx := context.WithValue(r.Context(), userContextKey, user)
         next.ServeHTTP(w, r.WithContext(ctx))
     })
 }
 ```
 
-### Context in HTTP Requests
+### HTTP 请求中的 Context
 
-Go's `context` package allows passing request-scoped values between middleware and handlers:
+Go 的 `context` 包允许在中间件和处理器之间传递请求范围的值：
 
 ```go
-// Define a context key type to avoid collisions
+// 定义上下文键类型以避免冲突
 type contextKey string
 
-// Define specific keys
+// 定义特定键
 const userContextKey contextKey = "user"
 
-// Store a value in context
+// 在上下文中存储值
 func middleware(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // Create a new context with the value
+        // 创建带值的新上下文
         ctx := context.WithValue(r.Context(), userContextKey, "john")
         
-        // Call the next handler with updated context
+        // 使用更新后的上下文调用下一个处理器
         next.ServeHTTP(w, r.WithContext(ctx))
     })
 }
 
-// Retrieve a value from context
+// 从上下文中检索值
 func handler(w http.ResponseWriter, r *http.Request) {
     user, ok := r.Context().Value(userContextKey).(string)
     if !ok {
-        // Handle missing value
+        // 处理缺失值的情况
         return
     }
-    fmt.Fprintf(w, "Hello, %s", user)
+    fmt.Fprintf(w, "你好，%s", user)
 }
 ```
 
-### JWT Authentication
+### JWT 认证
 
-JSON Web Tokens (JWT) are a common method for authentication in web applications:
+JSON Web Tokens (JWT) 是 Web 应用程序中常见的认证方法：
 
 ```go
-// Using a popular Go JWT library (github.com/golang-jwt/jwt)
+// 使用流行的 Go JWT 库 (github.com/golang-jwt/jwt)
 import "github.com/golang-jwt/jwt/v4"
 
-// Create a JWT token
+// 创建 JWT token
 func createToken(username string, secret []byte) (string, error) {
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
         "username": username,
@@ -203,12 +203,12 @@ func createToken(username string, secret []byte) (string, error) {
     return token.SignedString(secret)
 }
 
-// Verify a JWT token
+// 验证 JWT token
 func verifyToken(tokenString string, secret []byte) (jwt.MapClaims, error) {
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-        // Validate the signing method
+        // 验证签名方法
         if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-            return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+            return nil, fmt.Errorf("不支持的签名方法: %v", token.Header["alg"])
         }
         return secret, nil
     })
@@ -221,37 +221,37 @@ func verifyToken(tokenString string, secret []byte) (jwt.MapClaims, error) {
         return claims, nil
     }
     
-    return nil, fmt.Errorf("invalid token")
+    return nil, fmt.Errorf("无效的 token")
 }
 
-// JWT middleware
+// JWT 中间件
 func jwtMiddleware(secret []byte) func(http.Handler) http.Handler {
     return func(next http.Handler) http.Handler {
         return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-            // Get token from header
+            // 从头信息中获取 token
             authHeader := r.Header.Get("Authorization")
             if authHeader == "" {
-                http.Error(w, "Authorization header required", http.StatusUnauthorized)
+                http.Error(w, "需要授权头", http.StatusUnauthorized)
                 return
             }
             
-            // Extract token
+            // 提取 token
             parts := strings.SplitN(authHeader, " ", 2)
             if len(parts) != 2 || parts[0] != "Bearer" {
-                http.Error(w, "Invalid authorization format", http.StatusUnauthorized)
+                http.Error(w, "无效的授权格式", http.StatusUnauthorized)
                 return
             }
             
             tokenString := parts[1]
             
-            // Verify token
+            // 验证 token
             claims, err := verifyToken(tokenString, secret)
             if err != nil {
-                http.Error(w, "Invalid token: "+err.Error(), http.StatusUnauthorized)
+                http.Error(w, "无效的 token: "+err.Error(), http.StatusUnauthorized)
                 return
             }
             
-            // Set user in context
+            // 将用户存入上下文
             username := claims["username"].(string)
             ctx := context.WithValue(r.Context(), userContextKey, username)
             next.ServeHTTP(w, r.WithContext(ctx))
@@ -260,55 +260,55 @@ func jwtMiddleware(secret []byte) func(http.Handler) http.Handler {
 }
 ```
 
-### Testing Middleware
+### 测试中间件
 
-Testing middleware and HTTP handlers in Go is straightforward using the `httptest` package:
+使用 `httptest` 包测试中间件和 HTTP 处理器在 Go 中非常简单：
 
 ```go
 func TestAuthMiddleware(t *testing.T) {
-    // Create a test handler
+    // 创建测试处理器
     testHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         user := r.Context().Value(userContextKey).(string)
-        fmt.Fprintf(w, "User: %s", user)
+        fmt.Fprintf(w, "用户: %s", user)
     })
     
-    // Wrap with middleware
+    // 使用中间件包装
     handler := authMiddleware(testHandler)
     
-    // Create a test request
+    // 创建测试请求
     req := httptest.NewRequest("GET", "/", nil)
     req.Header.Set("Authorization", "Bearer valid-token")
     
-    // Create a recorder to capture the response
+    // 创建记录器以捕获响应
     rr := httptest.NewRecorder()
     
-    // Serve the request
+    // 处理请求
     handler.ServeHTTP(rr, req)
     
-    // Check the status code
+    // 检查状态码
     if status := rr.Code; status != http.StatusOK {
-        t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+        t.Errorf("处理器返回了错误的状态码: 实际 %v 期望 %v", status, http.StatusOK)
     }
     
-    // Check the response body
-    expected := "User: john"
+    // 检查响应体
+    expected := "用户: john"
     if rr.Body.String() != expected {
-        t.Errorf("handler returned unexpected body: got %v want %v", rr.Body.String(), expected)
+        t.Errorf("处理器返回了意外的响应体: 实际 %v 期望 %v", rr.Body.String(), expected)
     }
 }
 ```
 
-## Best Practices for HTTP Middleware
+## HTTP 中间件的最佳实践
 
-1. **Use context for request-scoped values**: Store authentication data, request IDs, etc.
-2. **Keep middleware focused**: Each middleware should have a single responsibility
-3. **Graceful error handling**: Return appropriate HTTP status codes and error messages
-4. **Don't forget security headers**: Set headers like `X-XSS-Protection`, `Content-Security-Policy`, etc.
-5. **Log requests and errors**: Include a logging middleware for debugging
+1. **使用 context 存储请求范围的值**：存储认证数据、请求 ID 等。
+2. **保持中间件职责单一**：每个中间件应只负责一项任务。
+3. **优雅地处理错误**：返回适当的 HTTP 状态码和错误信息。
+4. **不要忘记安全头**：设置如 `X-XSS-Protection`、`Content-Security-Policy` 等头。
+5. **记录请求和错误**：包含日志中间件以便调试。
 
-## Further Reading
+## 进一步阅读
 
-- [Go Web Examples: Middleware](https://gowebexamples.com/middleware/)
-- [Go Web Examples: JSON Web Tokens](https://gowebexamples.com/jwt/)
-- [Context Package Documentation](https://pkg.go.dev/context)
-- [Effective Go: Web Servers](https://golang.org/doc/effective_go#web_server) 
+- [Go Web 示例：中间件](https://gowebexamples.com/middleware/)
+- [Go Web 示例：JSON Web Tokens](https://gowebexamples.com/jwt/)
+- [Context 包文档](https://pkg.go.dev/context)
+- [Effective Go：Web 服务器](https://golang.org/doc/effective_go#web_server)

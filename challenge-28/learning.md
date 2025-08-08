@@ -1,42 +1,42 @@
-# Learning Materials for Cache Implementation
+# 缓存实现学习资料
 
-## Introduction to Caching
+## 缓存简介
 
-Caching is a fundamental technique in computer science used to store frequently accessed data in a fast-access location. A good cache implementation can dramatically improve application performance by reducing the time needed to access data from slower storage systems.
+缓存是计算机科学中一种基础技术，用于将频繁访问的数据存储在快速访问的位置。良好的缓存实现可以通过减少从较慢存储系统访问数据所需的时间，显著提升应用程序性能。
 
-### Why Caching Matters
+### 为什么缓存很重要
 
-1. **Performance**: Reduces latency by storing frequently accessed data closer to the application
-2. **Resource Efficiency**: Reduces load on backend systems like databases
-3. **Scalability**: Helps applications handle more requests with the same resources
-4. **Cost Reduction**: Minimizes expensive operations like database queries or API calls
+1. **性能**：通过将频繁访问的数据存储在靠近应用程序的位置来降低延迟
+2. **资源效率**：减轻数据库等后端系统的负载
+3. **可扩展性**：帮助应用程序在相同资源下处理更多请求
+4. **成本降低**：最小化昂贵操作，如数据库查询或API调用
 
-### Cache Fundamentals
+### 缓存基础
 
-A cache is essentially a key-value store with limited capacity. When the cache reaches its capacity, it must decide which items to remove to make space for new ones. This decision is made by an **eviction policy**.
+缓存本质上是一个容量有限的键值存储。当缓存达到其容量时，必须决定哪些项目需要移除以腾出空间给新项目。这一决策由**淘汰策略**做出。
 
-## Cache Eviction Policies
+## 缓存淘汰策略
 
-### 1. LRU (Least Recently Used)
+### 1. LRU（最近最少使用）
 
-LRU evicts the item that was accessed (read or written) least recently.
+LRU 淘汰最近访问（读取或写入）次数最少的项目。
 
-**Algorithm**: 
-- Maintain a doubly-linked list of cache entries ordered by access time
-- Use a hash map for O(1) key lookups
-- On access: move item to front of list
-- On eviction: remove item from back of list
+**算法**：
+- 维护一个按访问时间排序的双向链表
+- 使用哈希表实现 O(1) 的键查找
+- 访问时：将项目移动到链表前端
+- 淘汰时：从链表尾部移除项目
 
-**Time Complexity**: O(1) for all operations
-**Space Complexity**: O(n) where n is cache capacity
+**时间复杂度**：所有操作均为 O(1)
+**空间复杂度**：O(n)，其中 n 为缓存容量
 
 ```go
-// LRU Cache Implementation Concept
+// LRU 缓存实现概念
 type LRUCache struct {
     capacity int
     cache    map[string]*Node
-    head     *Node  // Most recently used
-    tail     *Node  // Least recently used
+    head     *Node  // 最近使用的
+    tail     *Node  // 最久未使用的
 }
 
 type Node struct {
@@ -47,41 +47,41 @@ type Node struct {
 }
 ```
 
-**Use Cases**:
-- Operating system page replacement
-- CPU cache management
-- Web browser cache
-- Database buffer pools
+**适用场景**：
+- 操作系统页面替换
+- CPU 缓存管理
+- 网络浏览器缓存
+- 数据库缓冲池
 
-**Advantages**:
-- Good temporal locality performance
-- Intuitive eviction strategy
-- Works well for most general-purpose scenarios
+**优点**：
+- 对时间局部性表现良好
+- 淘汰策略直观
+- 适用于大多数通用场景
 
-**Disadvantages**:
-- Doesn't consider access frequency
-- Can be affected by sequential scans that destroy cache locality
+**缺点**：
+- 不考虑访问频率
+- 可能受顺序扫描影响而破坏缓存局部性
 
-### 2. LFU (Least Frequently Used)
+### 2. LFU（最不经常使用）
 
-LFU evicts the item that has been accessed the fewest times.
+LFU 淘汰被访问次数最少的项目。
 
-**Algorithm**:
-- Maintain a frequency counter for each item
-- Use a min-heap or frequency buckets for efficient eviction
-- On access: increment frequency counter
-- On eviction: remove item with lowest frequency
+**算法**：
+- 为每个项目维护一个频率计数器
+- 使用最小堆或频率桶实现高效的淘汰
+- 访问时：增加频率计数器
+- 淘汰时：移除频率最低的项目
 
-**Time Complexity**: O(1) for get/put with proper implementation
-**Space Complexity**: O(n)
+**时间复杂度**：正确实现下 get/put 为 O(1)
+**空间复杂度**：O(n)
 
 ```go
-// LFU Cache Implementation Concept
+// LFU 缓存实现概念
 type LFUCache struct {
     capacity   int
     minFreq    int
     cache      map[string]*Node
-    freqGroups map[int]*FreqGroup  // frequency -> list of nodes
+    freqGroups map[int]*FreqGroup  // 频率 -> 节点列表
 }
 
 type FreqGroup struct {
@@ -91,63 +91,63 @@ type FreqGroup struct {
 }
 ```
 
-**Use Cases**:
-- Long-running applications with stable access patterns
-- Scientific computing with repeated data access
-- CDN systems
+**适用场景**：
+- 具有稳定访问模式的长期运行应用
+- 科学计算中重复访问数据
+- CDN 系统
 
-**Advantages**:
-- Excellent for workloads with clear hot data
-- Adapts well to changing access patterns over time
-- Good for scenarios where some data is accessed much more frequently
+**优点**：
+- 适用于具有明显热点数据的工作负载
+- 能很好地适应随时间变化的访问模式
+- 在某些数据访问频率远高于其他数据的场景中表现优异
 
-**Disadvantages**:
-- More complex implementation
-- New items are immediately evicted if cache is full
-- Frequency counts can become stale over time
+**缺点**：
+- 实现更复杂
+- 新项目在缓存满时可能立即被淘汰
+- 频率计数可能随时间变得过时
 
-### 3. FIFO (First In, First Out)
+### 3. FIFO（先进先出）
 
-FIFO evicts the oldest item in the cache, regardless of access patterns.
+FIFO 淘汰缓存中最旧的项目，与访问模式无关。
 
-**Algorithm**:
-- Maintain insertion order using a queue or linked list
-- On insertion: add to front
-- On eviction: remove from back
+**算法**：
+- 使用队列或链表维护插入顺序
+- 插入时：添加到前端
+- 淘汰时：从后端移除
 
-**Time Complexity**: O(1) for all operations
-**Space Complexity**: O(n)
+**时间复杂度**：所有操作均为 O(1)
+**空间复杂度**：O(n)
 
 ```go
-// FIFO Cache Implementation Concept
+// FIFO 缓存实现概念
 type FIFOCache struct {
     capacity int
     cache    map[string]*Node
-    head     *Node  // Newest item
-    tail     *Node  // Oldest item
+    head     *Node  // 最新的项目
+    tail     *Node  // 最旧的项目
 }
 ```
 
-**Use Cases**:
-- Simple caching scenarios
-- When access patterns are unknown
-- Embedded systems with memory constraints
+**适用场景**：
+- 简单的缓存场景
+- 当访问模式未知时
+- 内存受限的嵌入式系统
 
-**Advantages**:
-- Simple to implement and understand
-- Predictable behavior
-- No access pattern tracking needed
+**优点**：
+- 实现和理解简单
+- 行为可预测
+- 无需跟踪访问模式
 
-**Disadvantages**:
-- Ignores access patterns completely
-- May evict frequently used items
-- Generally poor cache hit rates
+**缺点**：
+- 完全忽略访问模式
+- 可能淘汰频繁使用的项目
+- 通常缓存命中率较低
 
-## Advanced Cache Concepts
+## 高级缓存概念
 
-### Thread Safety
+### 线程安全
 
-Real-world caches must handle concurrent access:
+真实世界的缓存必须处理并发访问：
 
 ```go
 type ThreadSafeCache struct {
@@ -168,14 +168,14 @@ func (c *ThreadSafeCache) Put(key string, value interface{}) {
 }
 ```
 
-### Cache Metrics
+### 缓存指标
 
-Important metrics to track:
+需要跟踪的重要指标：
 
-1. **Hit Rate**: Percentage of requests served from cache
-2. **Miss Rate**: Percentage of requests not in cache
-3. **Eviction Count**: Number of items evicted
-4. **Average Response Time**: Performance measurement
+1. **命中率**：从缓存中服务的请求数百分比
+2. **未命中率**：不在缓存中的请求数百分比
+3. **淘汰数量**：被淘汰项目的数量
+4. **平均响应时间**：性能测量
 
 ```go
 type CacheMetrics struct {
@@ -193,9 +193,9 @@ func (m *CacheMetrics) HitRate() float64 {
 }
 ```
 
-### TTL (Time To Live)
+### TTL（生存时间）
 
-Items can automatically expire after a certain time:
+项目可以在一定时间后自动过期：
 
 ```go
 type CacheEntry struct {
@@ -212,29 +212,29 @@ func (e *CacheEntry) IsExpired() bool {
 }
 ```
 
-## Implementation Strategies
+## 实现策略
 
-### Memory Management
+### 内存管理
 
 ```go
-// Proper cleanup to prevent memory leaks
+// 正确清理以防止内存泄漏
 func (c *Cache) evict(node *Node) {
-    // Remove from hash map
+    // 从哈希表中删除
     delete(c.cache, node.key)
     
-    // Remove from linked list
+    // 从链表中删除
     c.removeFromList(node)
     
-    // Clear references to help GC
+    // 清除引用以帮助垃圾回收
     node.prev = nil
     node.next = nil
     node.value = nil
 }
 ```
 
-### Interface Design
+### 接口设计
 
-Design for flexibility and testability:
+设计灵活且易于测试：
 
 ```go
 type Cache interface {
@@ -254,12 +254,12 @@ type EvictionPolicy interface {
 }
 ```
 
-## Performance Optimization
+## 性能优化
 
-### Memory Layout
+### 内存布局
 
 ```go
-// Use struct of arrays for better cache locality
+// 使用数组结构以提高缓存局部性
 type OptimizedLRU struct {
     keys     []string
     values   []interface{}
@@ -273,10 +273,10 @@ type OptimizedLRU struct {
 }
 ```
 
-### Avoiding Allocations
+### 避免分配
 
 ```go
-// Pre-allocate node pool to reduce GC pressure
+// 预分配节点池以减少垃圾回收压力
 type NodePool struct {
     nodes []Node
     free  []int
@@ -292,28 +292,28 @@ func (p *NodePool) Get() *Node {
 }
 ```
 
-## Testing Strategies
+## 测试策略
 
-### Unit Tests
+### 单元测试
 
 ```go
 func TestCacheEviction(t *testing.T) {
     cache := NewLRUCache(2)
     
-    // Fill cache
+    // 填充缓存
     cache.Put("a", 1)
     cache.Put("b", 2)
     
-    // Trigger eviction
+    // 触发淘汰
     cache.Put("c", 3)
     
-    // Verify oldest item was evicted
+    // 验证最旧的项目已被淘汰
     _, found := cache.Get("a")
     assert.False(t, found)
 }
 ```
 
-### Concurrency Tests
+### 并发测试
 
 ```go
 func TestConcurrentAccess(t *testing.T) {
@@ -335,13 +335,13 @@ func TestConcurrentAccess(t *testing.T) {
 }
 ```
 
-### Benchmark Tests
+### 基准测试
 
 ```go
 func BenchmarkCacheGet(b *testing.B) {
     cache := NewLRUCache(1000)
     
-    // Populate cache
+    // 填充缓存
     for i := 0; i < 1000; i++ {
         cache.Put(fmt.Sprintf("key-%d", i), i)
     }
@@ -353,9 +353,9 @@ func BenchmarkCacheGet(b *testing.B) {
 }
 ```
 
-## Real-World Considerations
+## 实际应用考虑
 
-### Cache Stampede Prevention
+### 缓存雪崩预防
 
 ```go
 type SafeCache struct {
@@ -368,7 +368,7 @@ func (c *SafeCache) GetOrCompute(key string, compute func() interface{}) interfa
         return value
     }
     
-    // Prevent cache stampede
+    // 防止缓存雪崩
     value, _, _ := c.groups.Do(key, func() (interface{}, error) {
         if value, found := c.cache.Get(key); found {
             return value, nil
@@ -383,7 +383,7 @@ func (c *SafeCache) GetOrCompute(key string, compute func() interface{}) interfa
 }
 ```
 
-### Distributed Caching
+### 分布式缓存
 
 ```go
 type DistributedCache interface {
@@ -394,7 +394,7 @@ type DistributedCache interface {
 }
 ```
 
-### Memory Pressure Handling
+### 内存压力处理
 
 ```go
 func (c *Cache) handleMemoryPressure() {
@@ -402,7 +402,7 @@ func (c *Cache) handleMemoryPressure() {
     runtime.ReadMemStats(&m)
     
     if m.Alloc > c.maxMemory {
-        // Aggressively evict items
+        // 积极淘汰项目
         evictCount := c.size / 4
         for i := 0; i < evictCount; i++ {
             c.evictLRU()
@@ -411,18 +411,18 @@ func (c *Cache) handleMemoryPressure() {
 }
 ```
 
-## Comparison of Cache Policies
+## 缓存策略对比
 
-| Policy | Get Time | Put Time | Space | Best Use Case |
+| 策略 | 获取时间 | 插入时间 | 空间 | 最佳应用场景 |
 |--------|----------|----------|--------|---------------|
-| LRU    | O(1)     | O(1)     | O(n)   | General purpose, temporal locality |
-| LFU    | O(1)     | O(1)     | O(n)   | Stable access patterns, hot data |
-| FIFO   | O(1)     | O(1)     | O(n)   | Simple scenarios, unknown patterns |
+| LRU    | O(1)     | O(1)     | O(n)   | 通用场景，时间局部性 |
+| LFU    | O(1)     | O(1)     | O(n)   | 稳定访问模式，热点数据 |
+| FIFO   | O(1)     | O(1)     | O(n)   | 简单场景，未知模式 |
 
-## Further Reading
+## 进一步阅读
 
-1. [Cache Replacement Policies](https://en.wikipedia.org/wiki/Cache_replacement_policies)
-2. [The LFU-DA Cache Algorithm](https://www.usenix.org/legacy/publications/library/proceedings/usits97/full_papers/arlitt/arlitt.pdf)
-3. [Caching at Scale with Redis](https://redis.io/topics/lru-cache)
-4. [Linux Kernel Page Cache](https://www.kernel.org/doc/gorman/html/understand/understand013.html)
-5. [Caffeine: A High Performance Java Caching Library](https://github.com/ben-manes/caffeine) 
+1. [缓存替换策略](https://zh.wikipedia.org/wiki/缓存替换策略)
+2. [LFU-DA 缓存算法](https://www.usenix.org/legacy/publications/library/proceedings/usits97/full_papers/arlitt/arlitt.pdf)
+3. [使用 Redis 扩展缓存](https://redis.io/topics/lru-cache)
+4. [Linux 内核页缓存](https://www.kernel.org/doc/gorman/html/understand/understand013.html)
+5. [Caffeine：高性能 Java 缓存库](https://github.com/ben-manes/caffeine)

@@ -1,17 +1,17 @@
-# Hints for Challenge 28: Cache Implementation with Multiple Eviction Policies
+# 挑战28提示：支持多种淘汰策略的缓存实现
 
-## Hint 1: LRU Cache Design Pattern
-LRU (Least Recently Used) requires O(1) access and O(1) eviction:
+## 提示1：LRU缓存设计模式
+LRU（最近最少使用）要求访问和淘汰操作均为O(1)：
 
-**Data Structure Choice:**
-- **Hash Map**: O(1) access to cache nodes by key
-- **Doubly Linked List**: O(1) insertion/deletion at any position
-- **Dummy Head/Tail**: Simplifies edge cases in linked list operations
+**数据结构选择：**
+- **哈希表**：通过键实现O(1)的缓存节点访问
+- **双向链表**：在任意位置实现O(1)的插入/删除
+- **虚拟头尾节点**：简化链表操作中的边界情况
 
-**Key Components:**
-- Node structure with `prev`/`next` pointers
-- Map for quick lookups: `map[string]*Node`
-- Dummy nodes to avoid null checks
+**核心组件：**
+- 包含`prev`/`next`指针的节点结构
+- 用于快速查找的映射：`map[string]*Node`
+- 虚拟节点避免空指针检查
 
 ```go
 type LRUNode struct {
@@ -19,28 +19,28 @@ type LRUNode struct {
     prev, next *LRUNode
 }
 
-// Always insert after head, remove before tail
-head.next = cache.tail  // Initialize empty list
+// 始终在头节点后插入，从尾节点前移除
+head.next = cache.tail  // 初始化空列表
 tail.prev = cache.head
 ```
 
-## Hint 2: LRU Operations Logic
-Understanding the core LRU operations:
+## 提示2：LRU操作逻辑
+理解核心LRU操作：
 
-**Get Operation:**
-- If key exists: move node to head (mark as recently used), return value
-- If key doesn't exist: return cache miss
+**Get操作：**
+- 若键存在：将节点移至头部（标记为最近使用），返回值
+- 若键不存在：返回缓存未命中
 
-**Put Operation:**
-- If key exists: update value, move to head
-- If key doesn't exist: create new node, add to head
-- If at capacity: remove tail node first (LRU), then add new
+**Put操作：**
+- 若键存在：更新值，并移至头部
+- 若键不存在：创建新节点，插入头部
+- 若已达容量：先移除尾部节点（最久未使用），再添加新节点
 
-**Essential Helper Methods:**
+**关键辅助方法：**
 ```go
 func moveToHead(node) {
-    removeNode(node)  // Unlink from current position
-    addToHead(node)   // Insert after dummy head
+    removeNode(node)  // 从当前位置解绑
+    addToHead(node)   // 插入到虚拟头节点之后
 }
 
 func addToHead(node) {
@@ -51,24 +51,24 @@ func addToHead(node) {
 }
 
 func removeTail() {
-    lru := tail.prev  // Get LRU node
-    removeNode(lru)   // Unlink it
+    lru := tail.prev  // 获取最久未使用的节点
+    removeNode(lru)   // 解绑该节点
     return lru
 }
 ```
 
-## Hint 3: LFU Cache Design
-LFU (Least Frequently Used) requires tracking access frequency:
+## 提示3：LFU缓存设计
+LFU（最不经常使用）需要跟踪访问频率：
 
-**Key Concept:** Group nodes by frequency in separate doubly-linked lists
-- `freqMap[1]` → list of nodes accessed 1 time
-- `freqMap[2]` → list of nodes accessed 2 times  
-- Track `minFreq` to know which frequency list to evict from
+**核心概念：** 将节点按频率分组存储于独立的双向链表中
+- `freqMap[1]` → 访问次数为1的节点列表
+- `freqMap[2]` → 访问次数为2的节点列表  
+- 维护`minFreq`以确定应从哪个频率列表中淘汰
 
-**Data Structure:**
-- Nodes have `freq` field to track access count
-- `freqMap` maps frequency → dummy head of node list
-- When frequency increases, move node to new frequency list
+**数据结构：**
+- 节点包含`freq`字段记录访问次数
+- `freqMap`将频率映射到节点列表的虚拟头节点
+- 频率增加时，将节点移动到新的频率列表
 
 ```go
 type LFUNode struct {
@@ -77,7 +77,7 @@ type LFUNode struct {
     prev, next *LFUNode
 }
 
-// Move node from freq N to freq N+1
+// 将节点从频率N移动到频率N+1
 func updateFreq(node) {
     removeFromFreqList(node, oldFreq)
     node.freq++
@@ -86,8 +86,8 @@ func updateFreq(node) {
 ```
 ```
 
-## Hint 4: LFU Cache - Get and Put Implementation
-Handle frequency updates and eviction:
+## 提示4：LFU缓存 - Get与Put实现
+处理频率更新与淘汰：
 ```go
 func (c *LFUCache) Get(key string) (interface{}, bool) {
     if node, exists := c.cache[key]; exists {
@@ -107,7 +107,7 @@ func (c *LFUCache) updateFreq(node *LFUNode) {
     node.freq = newFreq
     c.addToFreqList(node, newFreq)
     
-    // Update minFreq if necessary
+    // 必要时更新 minFreq
     if oldFreq == c.minFreq && c.isFreqListEmpty(oldFreq) {
         c.minFreq++
     }
@@ -149,8 +149,8 @@ func (c *LFUCache) evict() {
 }
 ```
 
-## Hint 5: FIFO Cache - Simple Queue Structure
-Implement FIFO using a slice as a queue:
+## 提示5：FIFO缓存 - 简单队列结构
+使用切片实现FIFO队列：
 ```go
 type FIFOCache struct {
     capacity int
@@ -184,7 +184,7 @@ func (c *FIFOCache) Put(key string, value interface{}) {
     }
     
     if len(c.cache) >= c.capacity {
-        // Remove oldest (first in)
+        // 移除最早进入的（队首）
         oldest := c.order[0]
         delete(c.cache, oldest)
         c.order = c.order[1:]
@@ -198,7 +198,7 @@ func (c *FIFOCache) Delete(key string) bool {
     if _, exists := c.cache[key]; exists {
         delete(c.cache, key)
         
-        // Remove from order slice
+        // 从顺序切片中移除
         for i, k := range c.order {
             if k == key {
                 c.order = append(c.order[:i], c.order[i+1:]...)
@@ -211,8 +211,8 @@ func (c *FIFOCache) Delete(key string) bool {
 }
 ```
 
-## Hint 6: Thread-Safe Wrapper
-Add thread safety with read-write mutex:
+## 提示6：线程安全包装器
+使用读写互斥锁实现线程安全：
 ```go
 import "sync"
 
@@ -270,8 +270,8 @@ func (c *ThreadSafeCache) HitRate() float64 {
 }
 ```
 
-## Hint 7: Cache Factory Pattern
-Implement factory pattern for cache creation:
+## 提示7：缓存工厂模式
+实现工厂模式用于缓存创建：
 ```go
 type CachePolicy int
 
@@ -299,7 +299,7 @@ func NewThreadSafeCacheWithPolicy(policy CachePolicy, capacity int) Cache {
     return NewThreadSafeCache(baseCache)
 }
 
-// Utility function for testing
+// 测试用工具函数
 func BenchmarkCache(cache Cache, operations int) {
     start := time.Now()
     
@@ -314,15 +314,15 @@ func BenchmarkCache(cache Cache, operations int) {
     }
     
     duration := time.Since(start)
-    fmt.Printf("Completed %d operations in %v\n", operations, duration)
-    fmt.Printf("Hit rate: %.2f%%\n", cache.HitRate()*100)
+    fmt.Printf("完成 %d 次操作耗时 %v\n", operations, duration)
+    fmt.Printf("命中率: %.2f%%\n", cache.HitRate()*100)
 }
 ```
 
-## Key Cache Implementation Concepts:
-- **O(1) Operations**: Use hash maps for constant-time access
-- **Doubly Linked List**: Efficient insertion/deletion for LRU
-- **Frequency Buckets**: Group nodes by frequency for LFU
-- **Thread Safety**: Use RWMutex for concurrent access
-- **Memory Management**: Proper cleanup to prevent leaks
-- **Factory Pattern**: Flexible cache creation and configuration 
+## 缓存实现核心概念：
+- **O(1)操作**：使用哈希表实现常数时间访问
+- **双向链表**：高效支持LRU的插入与删除
+- **频率桶**：按频率分组节点以支持LFU
+- **线程安全**：使用RWMutex处理并发访问
+- **内存管理**：正确清理防止内存泄漏
+- **工厂模式**：灵活的缓存创建与配置

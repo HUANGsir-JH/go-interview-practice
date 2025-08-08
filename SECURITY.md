@@ -1,141 +1,141 @@
-# Security Policy
+# 安全政策
 
-## Supported Versions
+## 支持的版本
 
-We actively maintain and provide security updates for the following versions:
+我们积极维护并为以下版本提供安全更新：
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.x.x   | :white_check_mark: |
-| < 1.0   | :x:                |
+| 版本 | 支持状态          |
+| ---- | ------------------ |
+| 1.x.x   | ✅ |
+| < 1.0   | ❌                |
 
-## Reporting a Vulnerability
+## 报告漏洞
 
-We take security vulnerabilities seriously. If you discover a security vulnerability in this project, please follow these steps:
+我们非常重视安全漏洞。如果您在本项目中发现安全漏洞，请按照以下步骤操作：
 
-### 1. **DO NOT** create a public GitHub issue
-Security vulnerabilities should be reported privately to prevent potential exploitation.
+### 1. **不要**创建公开的 GitHub 问题
+安全漏洞应私下报告，以防止潜在的利用。
 
-### 2. **Email us directly**
-Send a detailed report to: **rezashiri88@gmail.com**
+### 2.**直接发送邮件**
+将详细报告发送至：**rezashiri88@gmail.com**
 
-### 3. **Include the following information**
-Your security report should contain:
+### 3.**包含以下信息**
+您的安全报告应包含：
 
-- **Description**: A clear description of the vulnerability
-- **Steps to reproduce**: Detailed steps to reproduce the issue
-- **Impact**: Potential impact of the vulnerability
-- **Suggested fix**: If you have a solution in mind
-- **Affected versions**: Which versions are affected
-- **Proof of concept**: If applicable, include a minimal PoC
+- **描述**：漏洞的清晰描述
+- **复现步骤**：复现问题的详细步骤
+- **影响**：漏洞的潜在影响
+- **建议修复**：如果您有解决方案
+- **受影响版本**：哪些版本受到影响
+- **概念验证**：如适用，请包含最小的概念验证
 
-### 4. **Response timeline**
-- **Initial response**: Within 48 hours
-- **Status update**: Within 1 week
-- **Resolution**: As quickly as possible, typically within 30 days
+### 4.**响应时间**
+- **初始响应**：48小时内
+- **状态更新**：1周内
+- **解决**：尽快，通常在30天内
 
-## Security Measures
+## 安全措施
 
-### Code Execution Safety
-- All user-submitted code runs in isolated environments
-- Execution timeouts prevent resource exhaustion
-- Memory limits prevent excessive resource usage
-- File system access is restricted to challenge directories only
+### 代码执行安全
+- 所有用户提交的代码都在隔离环境中运行
+- 执行超时防止资源耗尽
+- 内存限制防止过度资源使用
+- 文件系统访问仅限于挑战目录
 
-### Input Validation
-- All user inputs are validated and sanitized
-- SQL injection protection through parameterized queries
-- XSS protection through proper output encoding
-- File upload restrictions and validation
+### 输入验证
+- 所有用户输入都经过验证和清理
+- 通过参数化查询防止SQL注入
+- 通过适当的输出编码防止XSS攻击
+- 文件上传限制和验证
 
-### Authentication & Authorization
-- GitHub OAuth integration for secure authentication
-- User submissions are restricted to their own directories
-- Pull request validation ensures users can only modify their own code
-- Admin-only access to sensitive operations
+### 身份验证和授权
+- GitHub OAuth集成以实现安全身份验证
+- 用户提交仅限于自己的目录
+- 拉取请求验证确保用户只能修改自己的代码
+- 管理员才能访问敏感操作
 
-### Infrastructure Security
-- HTTPS enforcement for all web traffic
-- Regular dependency updates to patch known vulnerabilities
-- Automated security scanning in CI/CD pipeline
-- Environment variables for sensitive configuration
+### 基础设施安全
+- 对所有网络流量强制使用HTTPS
+- 定期更新依赖项以修补已知漏洞
+- CI/CD管道中的自动安全扫描
+- 敏感配置的环境变量
 
-## Responsible Disclosure
+## 负责任的披露
 
-We follow responsible disclosure practices:
+我们遵循负责任的披露实践：
 
-1. **Private reporting**: Vulnerabilities are reported privately first
-2. **Timely response**: We respond quickly to security reports
-3. **Coordinated disclosure**: We work with reporters to coordinate public disclosure
-4. **Credit acknowledgment**: Security researchers are credited in our security advisories
+1. **私下报告**：漏洞首先私下报告
+2. **及时响应**：我们快速响应安全报告
+3. **协调披露**：我们与报告者协调公开披露
+4. **致谢**：安全研究人员在我们的安全公告中获得致谢
 
-## Security Updates
+## 安全更新
 
-### Automatic Updates
-- Dependencies are automatically updated via Dependabot
-- Security patches are applied as soon as they're available
-- Automated vulnerability scanning in our CI/CD pipeline
+### 自动更新
+- 依赖项通过Dependabot自动更新
+- 安全补丁在可用时立即应用
+- CI/CD管道中的自动漏洞扫描
 
-### Manual Updates
-- Critical security issues are addressed immediately
-- Non-critical issues are scheduled for the next release
-- Security advisories are published for significant vulnerabilities
+### 手动更新
+- 关键安全问题立即得到解决
+- 非关键问题安排在下个版本中
+- 为重大漏洞发布安全公告
 
-## Security Best Practices for Contributors
+## 贡献者的安全最佳实践
 
-### Code Review
-- All code changes require security review
-- Automated security scanning in pull requests
-- Manual review for security-sensitive changes
+### 代码审查
+- 所有代码更改都需要安全审查
+- 拉取请求中的自动安全扫描
+- 对安全敏感更改的手动审查
 
-### Dependency Management
-- Regular updates of all dependencies
-- Monitoring for known vulnerabilities
-- Immediate updates for security patches
+### 依赖管理
+- 定期更新所有依赖项
+- 监控已知漏洞
+- 立即更新安全补丁
 
-### Testing
-- Security-focused testing in CI/CD
-- Penetration testing for major releases
-- Regular security audits
+### 测试
+- CI/CD中的安全重点测试
+- 主要版本的渗透测试
+- 定期安全审计
 
-## Contact Information
+## 联系信息
 
-### Security Team
-- **Email**: rezashiri88@gmail.com
-- **Response Time**: Within 72 hours
-- **PGP Key**: Available upon request
+### 安全团队
+- **邮箱**：rezashiri88@gmail.com
+- **响应时间**：72小时内
+- **PGP密钥**：可根据要求提供
 
-### Project Maintainer
-- **GitHub**: [@RezaSi](https://github.com/RezaSi)
-- **Email**: rezashiri88@gmail.com
+### 项目维护者
+- **GitHub**：[@RezaSi](https://github.com/RezaSi)
+- **邮箱**：rezashiri88@gmail.com
 
-## Security Hall of Fame
+## 安全名人堂
 
-We acknowledge security researchers who help improve our security:
+我们感谢帮助改进安全性的安全研究人员：
 
-| Researcher | Vulnerability | Date |
-|------------|---------------|------|
-| *Your name could be here* | *Report a vulnerability* | *Help us improve* |
+| 研究人员 | 漏洞 | 日期 |
+|---------|------|------|
+| *您的名字可以在这里* | *报告漏洞* | *帮助我们改进* |
 
-## Bug Bounty
+## 漏洞奖励
 
-While we don't currently offer a formal bug bounty program, we do:
+虽然我们目前不提供正式的漏洞奖励计划，但我们确实：
 
-- Acknowledge security researchers in our documentation
-- Provide early access to security patches
-- Consider special recognition for significant findings
+- 在我们的文档中致谢安全研究人员
+- 提供安全补丁的早期访问
+- 考虑对重大发现给予特别认可
 
-## Legal
+## 法律
 
-By reporting a security vulnerability, you agree to:
+通过报告安全漏洞，您同意：
 
-- Keep the vulnerability confidential until we've had time to address it
-- Not exploit the vulnerability for malicious purposes
-- Work with us to coordinate disclosure
-- Follow responsible disclosure practices
+- 在我们有时间解决之前对漏洞保密
+- 不出于恶意目的利用漏洞
+- 与我们合作协调披露
+- 遵循负责任的披露实践
 
 ---
 
-**Thank you for helping keep our community secure!** 🛡️
+**感谢您帮助保持我们社区的安全！** 🛡️
 
-*Last updated: July 2025* 
+*最后更新：2025年7月* 

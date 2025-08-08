@@ -1,91 +1,91 @@
-# Learning: Advanced Gin Middleware Patterns
+# 学习：Gin 中间件高级模式
 
-## 🌟 **What is Middleware?**
+## 🌟 **什么是中间件？**
 
-Middleware in Gin is code that runs **before** and **after** your route handlers. Think of it as a chain of functions that can:
-- **Intercept** requests before they reach your handlers
-- **Modify** requests and responses
-- **Add** functionality like logging, authentication, CORS
-- **Handle** errors and panics globally
+Gin 中的中间件是在路由处理器**之前和之后**运行的代码。可以将其视为一系列函数链，能够：
+- **拦截**请求在到达处理器之前
+- **修改**请求和响应
+- **添加**日志记录、认证、CORS 等功能
+- **全局处理**错误和恐慌
 
-### **The Middleware Chain**
+### **中间件链**
 ```
-Request → Middleware1 → Middleware2 → Handler → Middleware2 → Middleware1 → Response
+请求 → 中间件1 → 中间件2 → 处理器 → 中间件2 → 中间件1 → 响应
 ```
 
-## 🔗 **Middleware Execution Flow**
+## 🔗 **中间件执行流程**
 
-### **Basic Middleware Structure**
+### **基本中间件结构**
 ```go
 func MyMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
-        // BEFORE: Code here runs before the request is processed
-        fmt.Println("Before request")
+        // 之前：此处代码在请求处理前运行
+        fmt.Println("请求前")
         
-        c.Next() // Call the next middleware/handler
+        c.Next() // 调用下一个中间件/处理器
         
-        // AFTER: Code here runs after the request is processed  
-        fmt.Println("After request")
+        // 之后：此处代码在请求处理后运行  
+        fmt.Println("请求后")
     }
 }
 ```
 
-### **Middleware Registration**
+### **中间件注册**
 ```go
 router := gin.Default()
 
-// Global middleware (applies to all routes)
+// 全局中间件（对所有路由生效）
 router.Use(MyMiddleware())
 
-// Group middleware (applies to specific route groups)
+// 组中间件（对特定路由组生效）
 api := router.Group("/api")
 api.Use(AuthMiddleware())
 {
     api.GET("/users", getUsers)
 }
 
-// Route-specific middleware
+// 路由特有中间件
 router.GET("/admin", AdminMiddleware(), adminHandler)
 ```
 
-## 🔐 **Authentication Middleware**
+## 🔐 **认证中间件**
 
-### **API Key Authentication**
+### **API 密钥认证**
 ```go
 func APIKeyAuth() gin.HandlerFunc {
     return func(c *gin.Context) {
         apiKey := c.GetHeader("X-API-Key")
         
         if apiKey == "" {
-            c.JSON(401, gin.H{"error": "API key required"})
-            c.Abort() // Stop middleware chain
+            c.JSON(401, gin.H{"error": "需要 API 密钥"})
+            c.Abort() // 停止中间件链
             return
         }
         
-        // Validate API key
+        // 验证 API 密钥
         if !isValidAPIKey(apiKey) {
-            c.JSON(401, gin.H{"error": "Invalid API key"})
+            c.JSON(401, gin.H{"error": "无效的 API 密钥"})
             c.Abort()
             return
         }
         
-        // Store user info in context
+        // 将用户信息存入上下文
         c.Set("user_id", getUserIDFromAPIKey(apiKey))
         c.Set("user_role", getUserRole(apiKey))
         
-        c.Next() // Continue to next middleware/handler
+        c.Next() // 继续下一个中间件/处理器
     }
 }
 ```
 
-### **Role-Based Access Control**
+### **基于角色的访问控制**
 ```go
 func RequireRole(requiredRole string) gin.HandlerFunc {
     return func(c *gin.Context) {
         userRole := c.GetString("user_role")
         
         if userRole != requiredRole {
-            c.JSON(403, gin.H{"error": "Insufficient permissions"})
+            c.JSON(403, gin.H{"error": "权限不足"})
             c.Abort()
             return
         }
@@ -94,13 +94,13 @@ func RequireRole(requiredRole string) gin.HandlerFunc {
     }
 }
 
-// Usage: Require admin role
+// 使用示例：要求管理员角色
 router.DELETE("/users/:id", RequireRole("admin"), deleteUser)
 ```
 
-## 📝 **Logging Middleware**
+## 📝 **日志中间件**
 
-### **Custom Request Logger**
+### **自定义请求日志**
 ```go
 func CustomLogger() gin.HandlerFunc {
     return func(c *gin.Context) {
@@ -109,10 +109,10 @@ func CustomLogger() gin.HandlerFunc {
         
         c.Next()
         
-        // Calculate request duration
+        // 计算请求耗时
         duration := time.Since(start)
         
-        // Log request details
+        // 记录请求详情
         log.Printf("[%s] %s %s %d %v %s",
             c.GetString("request_id"),
             c.Request.Method,
@@ -125,7 +125,7 @@ func CustomLogger() gin.HandlerFunc {
 }
 ```
 
-### **Structured Logging with Context**
+### **带上下文的结构化日志**
 ```go
 func StructuredLogger() gin.HandlerFunc {
     return func(c *gin.Context) {
@@ -154,18 +154,18 @@ func StructuredLogger() gin.HandlerFunc {
 }
 ```
 
-## 🌐 **CORS Middleware**
+## 🌐 **CORS 中间件**
 
-### **Understanding CORS**
-Cross-Origin Resource Sharing (CORS) allows web pages from one domain to access resources from another domain.
+### **理解 CORS**
+跨域资源共享（CORS）允许一个域名的网页访问另一个域名的资源。
 
-### **Custom CORS Implementation**
+### **自定义 CORS 实现**
 ```go
 func CORSMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
         origin := c.Request.Header.Get("Origin")
         
-        // Define allowed origins
+        // 定义允许的来源
         allowedOrigins := map[string]bool{
             "http://localhost:3000":  true,
             "https://myapp.com":      true,
@@ -179,7 +179,7 @@ func CORSMiddleware() gin.HandlerFunc {
         c.Header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, X-Request-ID")
         c.Header("Access-Control-Allow-Credentials", "true")
         
-        // Handle preflight requests
+        // 处理预检请求
         if c.Request.Method == "OPTIONS" {
             c.Status(204)
             c.Abort()
@@ -191,9 +191,9 @@ func CORSMiddleware() gin.HandlerFunc {
 }
 ```
 
-## ⏱️ **Rate Limiting Middleware**
+## ⏱️ **限流中间件**
 
-### **Simple In-Memory Rate Limiter**
+### **简单的内存限流器**
 ```go
 type RateLimiter struct {
     visitors map[string]*visitor
@@ -210,7 +210,7 @@ func NewRateLimiter(requests int, duration time.Duration) *RateLimiter {
         visitors: make(map[string]*visitor),
     }
     
-    // Clean up old visitors every minute
+    // 每分钟清理旧访客
     go rl.cleanupVisitors()
     
     return rl
@@ -222,7 +222,7 @@ func (rl *RateLimiter) getVisitor(ip string) *rate.Limiter {
     
     v, exists := rl.visitors[ip]
     if !exists {
-        limiter := rate.NewLimiter(rate.Every(time.Minute), 100) // 100 requests per minute
+        limiter := rate.NewLimiter(rate.Every(time.Minute), 100) // 每分钟 100 次请求
         rl.visitors[ip] = &visitor{limiter, time.Now()}
         return limiter
     }
@@ -238,7 +238,7 @@ func (rl *RateLimiter) Middleware() gin.HandlerFunc {
         if !limiter.Allow() {
             c.Header("X-RateLimit-Limit", "100")
             c.Header("X-RateLimit-Remaining", "0")
-            c.JSON(429, gin.H{"error": "Rate limit exceeded"})
+            c.JSON(429, gin.H{"error": "超出速率限制"})
             c.Abort()
             return
         }
@@ -248,26 +248,26 @@ func (rl *RateLimiter) Middleware() gin.HandlerFunc {
 }
 ```
 
-## 🆔 **Request ID Middleware**
+## 🆔 **请求 ID 中间件**
 
-### **UUID Generation**
+### **UUID 生成**
 ```go
 import "github.com/google/uuid"
 
 func RequestIDMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
-        // Check if request ID already exists in header
+        // 检查请求 ID 是否已在头部存在
         requestID := c.GetHeader("X-Request-ID")
         
         if requestID == "" {
-            // Generate new UUID
+            // 生成新的 UUID
             requestID = uuid.New().String()
         }
         
-        // Store in context for other middleware/handlers
+        // 将其存入上下文供其他中间件/处理器使用
         c.Set("request_id", requestID)
         
-        // Add to response headers
+        // 添加到响应头
         c.Header("X-Request-ID", requestID)
         
         c.Next()
@@ -275,9 +275,9 @@ func RequestIDMiddleware() gin.HandlerFunc {
 }
 ```
 
-## ❌ **Error Handling Middleware**
+## ❌ **错误处理中间件**
 
-### **Centralized Error Handler**
+### **集中式错误处理器**
 ```go
 type APIError struct {
     StatusCode int    `json:"-"`
@@ -301,14 +301,14 @@ func ErrorHandler() gin.HandlerFunc {
             apiErr = APIError{
                 StatusCode: 500,
                 Code:       "INTERNAL_ERROR",
-                Message:    "Internal server error",
+                Message:    "内部服务器错误",
                 Details:    err.Error(),
             }
         default:
             apiErr = APIError{
                 StatusCode: 500,
                 Code:       "PANIC",
-                Message:    "Internal server error",
+                Message:    "内部服务器错误",
                 Details:    fmt.Sprintf("%v", recovered),
             }
         }
@@ -323,9 +323,9 @@ func ErrorHandler() gin.HandlerFunc {
 }
 ```
 
-## 🔍 **Content Type Validation**
+## 🔍 **内容类型验证**
 
-### **JSON Content Type Middleware**
+### **JSON 内容类型中间件**
 ```go
 func RequireJSON() gin.HandlerFunc {
     return func(c *gin.Context) {
@@ -334,7 +334,7 @@ func RequireJSON() gin.HandlerFunc {
             
             if !strings.HasPrefix(contentType, "application/json") {
                 c.JSON(415, gin.H{
-                    "error":   "Content-Type must be application/json",
+                    "error":   "Content-Type 必须为 application/json",
                     "code":    "INVALID_CONTENT_TYPE",
                 })
                 c.Abort()
@@ -347,14 +347,14 @@ func RequireJSON() gin.HandlerFunc {
 }
 ```
 
-## 🔄 **Context Data Sharing**
+## 🔄 **上下文数据共享**
 
-### **Passing Data Between Middleware**
+### **在中间件之间传递数据**
 ```go
-// Setting data in middleware
+// 在中间件中设置数据
 func SetUserMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
-        // Authenticate user...
+        // 认证用户...
         user := User{ID: 123, Name: "John Doe"}
         
         c.Set("current_user", user)
@@ -364,11 +364,11 @@ func SetUserMiddleware() gin.HandlerFunc {
     }
 }
 
-// Getting data in handlers
+// 在处理器中获取数据
 func getUserHandler(c *gin.Context) {
     user, exists := c.Get("current_user")
     if !exists {
-        c.JSON(401, gin.H{"error": "User not found"})
+        c.JSON(401, gin.H{"error": "未找到用户"})
         return
     }
     
@@ -377,28 +377,28 @@ func getUserHandler(c *gin.Context) {
 }
 ```
 
-## 🏗️ **Middleware Best Practices**
+## 🏗️ **中间件最佳实践**
 
-### **1. Order Matters**
+### **1. 执行顺序很重要**
 ```go
 router.Use(
-    ErrorHandler(),      // First: Catch panics
-    RequestIDMiddleware(), // Early: Generate request ID
-    CORSMiddleware(),     // Early: Handle CORS
-    CustomLogger(),       // Log requests
-    RateLimiter(),        // Rate limit
-    AuthMiddleware(),     // Authenticate (if needed)
+    ErrorHandler(),      // 首先：捕获恐慌
+    RequestIDMiddleware(), // 早期：生成请求 ID
+    CORSMiddleware(),     // 早期：处理 CORS
+    CustomLogger(),       // 记录请求
+    RateLimiter(),        // 限流
+    AuthMiddleware(),     // 认证（如需）
 )
 ```
 
-### **2. Graceful Error Handling**
+### **2. 优雅的错误处理**
 ```go
 func SafeMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
         defer func() {
             if r := recover(); r != nil {
-                log.Printf("Middleware panic: %v", r)
-                c.JSON(500, gin.H{"error": "Internal server error"})
+                log.Printf("中间件恐慌: %v", r)
+                c.JSON(500, gin.H{"error": "内部服务器错误"})
                 c.Abort()
             }
         }()
@@ -408,9 +408,9 @@ func SafeMiddleware() gin.HandlerFunc {
 }
 ```
 
-### **3. Performance Considerations**
+### **3. 性能考虑**
 ```go
-// Cache expensive operations
+// 缓存昂贵操作
 var onceCache sync.Once
 var expensiveData string
 
@@ -420,16 +420,16 @@ func OptimizedMiddleware() gin.HandlerFunc {
     })
     
     return func(c *gin.Context) {
-        // Use cached data
+        // 使用缓存数据
         c.Set("data", expensiveData)
         c.Next()
     }
 }
 ```
 
-## 🔗 **Third-Party Middleware**
+## 🔗 **第三方中间件**
 
-### **Popular Gin Middleware**
+### **流行的 Gin 中间件**
 ```go
 import (
     "github.com/gin-contrib/cors"
@@ -440,17 +440,17 @@ import (
 // CORS
 router.Use(cors.Default())
 
-// Sessions
+// 会话
 store := sessions.NewCookieStore([]byte("secret"))
 router.Use(sessions.Sessions("mysession", store))
 
-// Gzip compression
+// Gzip 压缩
 router.Use(gzip.Gzip(gzip.DefaultCompression))
 ```
 
-## 🧪 **Testing Middleware**
+## 🧪 **测试中间件**
 
-### **Unit Testing Middleware**
+### **单元测试中间件**
 ```go
 func TestAuthMiddleware(t *testing.T) {
     gin.SetMode(gin.TestMode)
@@ -461,14 +461,14 @@ func TestAuthMiddleware(t *testing.T) {
         c.JSON(200, gin.H{"message": "success"})
     })
     
-    // Test without API key
+    // 测试无 API 密钥的情况
     w := httptest.NewRecorder()
     req, _ := http.NewRequest("GET", "/test", nil)
     router.ServeHTTP(w, req)
     
     assert.Equal(t, 401, w.Code)
     
-    // Test with valid API key
+    // 测试有效 API 密钥
     w = httptest.NewRecorder()
     req, _ = http.NewRequest("GET", "/test", nil)
     req.Header.Set("X-API-Key", "valid-key")
@@ -478,38 +478,38 @@ func TestAuthMiddleware(t *testing.T) {
 }
 ```
 
-## 🌍 **Real-World Applications**
+## 🌍 **实际应用场景**
 
-### **Production Middleware Stack**
+### **生产环境中间件栈**
 ```go
 func SetupMiddleware(router *gin.Engine) {
-    // Security
+    // 安全
     router.Use(SecurityHeaders())
     router.Use(RateLimiter(100, time.Minute))
     
-    // Observability
+    // 可观测性
     router.Use(RequestID())
     router.Use(StructuredLogger())
     router.Use(Metrics())
     
-    // CORS & Content
+    // CORS 与内容
     router.Use(CORS())
     router.Use(gzip.Gzip(gzip.DefaultCompression))
     
-    // Error handling
+    // 错误处理
     router.Use(ErrorHandler())
     
-    // Authentication (for protected routes)
+    // 认证（用于受保护的路由）
     api := router.Group("/api/v1")
     api.Use(JWTAuth())
 }
 ```
 
-## 📚 **Next Steps**
+## 📚 **下一步**
 
-After mastering middleware, explore:
-1. **Custom Validators**: JSON schema validation middleware
-2. **Caching**: Response caching middleware
-3. **Circuit Breakers**: Fault tolerance patterns
-4. **Distributed Tracing**: OpenTelemetry integration
-5. **Health Checks**: Endpoint monitoring middleware 
+掌握中间件后，可进一步探索：
+1. **自定义校验器**：JSON Schema 校验中间件
+2. **缓存**：响应缓存中间件
+3. **熔断器**：容错模式
+4. **分布式追踪**：OpenTelemetry 集成
+5. **健康检查**：端点监控中间件

@@ -1,8 +1,8 @@
-# Hints for Challenge 4: Authentication & Session Management
+# 挑战4：认证与会话管理提示
 
-## Hint 1: Password Validation
+## 提示1：密码验证
 
-Implement strong password validation:
+实现强密码验证：
 
 ```go
 import "regexp"
@@ -12,22 +12,22 @@ func validatePassword(password string) bool {
         return false
     }
     
-    // Check for at least one uppercase letter
+    // 检查至少包含一个大写字母
     hasUpper, _ := regexp.MatchString(`[A-Z]`, password)
-    // Check for at least one lowercase letter
+    // 检查至少包含一个小写字母
     hasLower, _ := regexp.MatchString(`[a-z]`, password)
-    // Check for at least one digit
+    // 检查至少包含一个数字
     hasDigit, _ := regexp.MatchString(`\d`, password)
-    // Check for at least one special character
+    // 检查至少包含一个特殊字符
     hasSpecial, _ := regexp.MatchString(`[!@#$%^&*(),.?":{}|<>]`, password)
     
     return hasUpper && hasLower && hasDigit && hasSpecial
 }
 ```
 
-## Hint 2: Password Hashing with bcrypt
+## 提示2：使用bcrypt进行密码哈希
 
-Use bcrypt for secure password hashing:
+使用bcrypt进行安全的密码哈希：
 
 ```go
 import "golang.org/x/crypto/bcrypt"
@@ -46,9 +46,9 @@ func verifyPassword(password, hash string) bool {
 }
 ```
 
-## Hint 3: JWT Token Generation
+## 提示3：JWT令牌生成
 
-Create JWT tokens with custom claims:
+使用自定义声明创建JWT令牌：
 
 ```go
 import "github.com/golang-jwt/jwt/v5"
@@ -67,15 +67,15 @@ func generateJWT(user User) (string, error) {
 }
 ```
 
-## Hint 4: JWT Token Validation
+## 提示4：JWT令牌验证
 
-Parse and validate JWT tokens:
+解析并验证JWT令牌：
 
 ```go
 func validateJWT(tokenString string) (*JWTClaims, error) {
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
         if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-            return nil, fmt.Errorf("unexpected signing method")
+            return nil, fmt.Errorf("不支持的签名方法")
         }
         return jwtSecret, nil
     })
@@ -93,13 +93,13 @@ func validateJWT(tokenString string) (*JWTClaims, error) {
         }, nil
     }
     
-    return nil, fmt.Errorf("invalid token")
+    return nil, fmt.Errorf("无效的令牌")
 }
 ```
 
-## Hint 5: JWT Middleware
+## 提示5：JWT中间件
 
-Extract and validate tokens from requests:
+从请求中提取并验证令牌：
 
 ```go
 func jwtMiddleware() fiber.Handler {
@@ -108,16 +108,16 @@ func jwtMiddleware() fiber.Handler {
         if authHeader == "" {
             return c.Status(401).JSON(fiber.Map{
                 "success": false,
-                "message": "Authorization header required",
+                "message": "需要授权头",
             })
         }
         
-        // Expected format: "Bearer <token>"
+        // 预期格式："Bearer <token>"
         parts := strings.Split(authHeader, " ")
         if len(parts) != 2 || parts[0] != "Bearer" {
             return c.Status(401).JSON(fiber.Map{
                 "success": false,
-                "message": "Invalid authorization header format",
+                "message": "无效的授权头格式",
             })
         }
         
@@ -125,20 +125,20 @@ func jwtMiddleware() fiber.Handler {
         if err != nil {
             return c.Status(401).JSON(fiber.Map{
                 "success": false,
-                "message": "Invalid or expired token",
+                "message": "令牌无效或已过期",
             })
         }
         
-        // Store claims in context for use in handlers
+        // 将声明存储在上下文中供处理器使用
         c.Locals("user_claims", claims)
         return c.Next()
     }
 }
 ```
 
-## Hint 6: Role-Based Access Control
+## 提示6：基于角色的访问控制
 
-Check user roles for admin endpoints:
+检查用户角色以保护管理员端点：
 
 ```go
 func adminMiddleware() fiber.Handler {
@@ -148,7 +148,7 @@ func adminMiddleware() fiber.Handler {
         if claims.Role != "admin" {
             return c.Status(403).JSON(fiber.Map{
                 "success": false,
-                "message": "Admin access required",
+                "message": "需要管理员权限",
             })
         }
         
@@ -157,9 +157,9 @@ func adminMiddleware() fiber.Handler {
 }
 ```
 
-## Hint 7: Registration Handler
+## 提示7：注册处理器
 
-Handle user registration with validation:
+处理用户注册并进行验证：
 
 ```go
 func registerHandler(c *fiber.Ctx) error {
@@ -167,52 +167,52 @@ func registerHandler(c *fiber.Ctx) error {
     if err := c.BodyParser(&req); err != nil {
         return c.Status(400).JSON(AuthResponse{
             Success: false,
-            Message: "Invalid request format",
+            Message: "请求格式无效",
         })
     }
     
-    // Validate input
+    // 验证输入
     if err := validate.Struct(req); err != nil {
         return c.Status(400).JSON(AuthResponse{
             Success: false,
-            Message: "Validation failed",
+            Message: "验证失败",
         })
     }
     
-    // Check if username exists
+    // 检查用户名是否已存在
     if _, exists := findUserByUsername(req.Username); exists {
         return c.Status(409).JSON(AuthResponse{
             Success: false,
-            Message: "Username already exists",
+            Message: "用户名已存在",
         })
     }
     
-    // Check if email exists
+    // 检查邮箱是否已注册
     if _, exists := findUserByEmail(req.Email); exists {
         return c.Status(409).JSON(AuthResponse{
             Success: false,
-            Message: "Email already registered",
+            Message: "邮箱已被注册",
         })
     }
     
-    // Validate password strength
+    // 验证密码强度
     if !validatePassword(req.Password) {
         return c.Status(400).JSON(AuthResponse{
             Success: false,
-            Message: "Password must contain uppercase, lowercase, digit, and special character",
+            Message: "密码必须包含大写字母、小写字母、数字和特殊字符",
         })
     }
     
-    // Hash password
+    // 哈希密码
     hashedPassword, err := hashPassword(req.Password)
     if err != nil {
         return c.Status(500).JSON(AuthResponse{
             Success: false,
-            Message: "Failed to process password",
+            Message: "密码处理失败",
         })
     }
     
-    // Create user
+    // 创建用户
     user := User{
         ID:       nextUserID,
         Username: req.Username,
@@ -228,14 +228,14 @@ func registerHandler(c *fiber.Ctx) error {
     return c.Status(201).JSON(AuthResponse{
         Success: true,
         User:    user,
-        Message: "User registered successfully",
+        Message: "用户注册成功",
     })
 }
 ```
 
-## Hint 8: Login Handler
+## 提示8：登录处理器
 
-Authenticate users and return JWT tokens:
+认证用户并返回JWT令牌：
 
 ```go
 func loginHandler(c *fiber.Ctx) error {
@@ -243,41 +243,41 @@ func loginHandler(c *fiber.Ctx) error {
     if err := c.BodyParser(&req); err != nil {
         return c.Status(400).JSON(AuthResponse{
             Success: false,
-            Message: "Invalid request format",
+            Message: "请求格式无效",
         })
     }
     
-    // Find user
+    // 查找用户
     user, _ := findUserByUsername(req.Username)
     if user == nil {
         return c.Status(401).JSON(AuthResponse{
             Success: false,
-            Message: "Invalid credentials",
+            Message: "凭证无效",
         })
     }
     
-    // Verify password
+    // 验证密码
     if !verifyPassword(req.Password, user.Password) {
         return c.Status(401).JSON(AuthResponse{
             Success: false,
-            Message: "Invalid credentials",
+            Message: "凭证无效",
         })
     }
     
-    // Check if user is active
+    // 检查用户是否激活
     if !user.Active {
         return c.Status(401).JSON(AuthResponse{
             Success: false,
-            Message: "Account is disabled",
+            Message: "账户已被禁用",
         })
     }
     
-    // Generate JWT token
+    // 生成JWT令牌
     token, err := generateJWT(*user)
     if err != nil {
         return c.Status(500).JSON(AuthResponse{
             Success: false,
-            Message: "Failed to generate token",
+            Message: "无法生成令牌",
         })
     }
     
@@ -285,31 +285,31 @@ func loginHandler(c *fiber.Ctx) error {
         Success: true,
         Token:   token,
         User:    *user,
-        Message: "Login successful",
+        Message: "登录成功",
     })
 }
 ```
 
-## Hint 9: Protected Route Pattern
+## 提示9：受保护路由模式
 
-Use middleware to protect routes:
+使用中间件保护路由：
 
 ```go
-// Setup route groups
+// 设置路由组
 app := fiber.New()
 
-// Public routes
+// 公共路由
 app.Post("/auth/register", registerHandler)
 app.Post("/auth/login", loginHandler)
 app.Get("/health", healthHandler)
 
-// Protected routes (require valid JWT)
+// 受保护路由（需要有效的JWT）
 protected := app.Group("/", jwtMiddleware())
 protected.Get("/profile", getProfileHandler)
 protected.Put("/profile", updateProfileHandler)
 protected.Post("/auth/refresh", refreshTokenHandler)
 
-// Admin routes (require admin role)
+// 管理员路由（需要管理员角色）
 admin := app.Group("/admin", jwtMiddleware(), adminMiddleware())
 admin.Get("/users", listUsersHandler)
 admin.Put("/users/:id/role", updateUserRoleHandler)

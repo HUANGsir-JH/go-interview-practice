@@ -1,28 +1,28 @@
-# Hints for Word Frequency Counter
+# 词频统计器提示
 
-## Hint 1: Data Structure Choice
-Think about what data structure would be best for counting occurrences. You need something that can map words to their counts.
+## 提示 1：数据结构选择
+思考哪种数据结构最适合统计出现次数。你需要一种能够将单词映射到其计数的数据结构。
 
-## Hint 2: Go Maps
-Use a Go map with string keys (words) and integer values (counts). You can declare it as `make(map[string]int)`.
+## 提示 2：Go 语言的 map
+使用 Go 的 map，键为字符串（单词），值为整数（计数）。你可以声明为 `make(map[string]int)`。
 
-## Hint 3: Text Preprocessing
-Before counting, you'll likely need to:
-- Convert the text to lowercase for consistent counting
-- Remove or replace punctuation
-- Split the text into individual words
+## 提示 3：文本预处理
+在统计之前，你可能需要：
+- 将文本转换为小写以保证统计的一致性
+- 移除或替换标点符号
+- 将文本拆分为单独的单词
 
-## Hint 4: String Package Functions
-The `strings` package has useful functions like:
-- `strings.ToLower()` for case conversion
-- `strings.Fields()` for splitting by whitespace
-- `strings.ReplaceAll()` for removing punctuation
+## 提示 4：字符串包函数
+`strings` 包提供了有用的函数，例如：
+- `strings.ToLower()` 用于大小写转换
+- `strings.Fields()` 用于按空白字符分割
+- `strings.ReplaceAll()` 用于移除标点符号
 
-## Hint 5: Regular Expressions
-For more advanced text cleaning, consider using the `regexp` package to remove non-alphabetic characters.
+## 提示 5：正则表达式
+对于更高级的文本清理，可以考虑使用 `regexp` 包来移除非字母字符。
 
-## Hint 6: Counting Logic
-For each word, check if it exists in the map. If it does, increment its count. If not, set its count to 1. You can use the comma ok idiom or simply increment (Go initializes missing map values to zero).
+## 提示 6：计数逻辑
+对于每个单词，检查它是否存在于 map 中。如果存在，则将其计数加 1；如果不存在，则将其计数设为 1。你可以使用逗号 ok 惯用法，或者直接进行递增（Go 会将未定义的 map 值初始化为零）。
 
-## Hint 7: Iteration Pattern
-Use a `for range` loop to iterate through the words and update the frequency map. 
+## 提示 7：迭代模式
+使用 `for range` 循环遍历单词并更新频率 map。

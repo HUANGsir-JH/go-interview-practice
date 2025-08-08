@@ -1,76 +1,76 @@
-# **Contributing to Go Interview Practice**
+# **为Go面试实战做贡献**
 
-Thank you for your interest in contributing to the **Go Interview Practice** repository! We welcome contributions from the community to help improve this project. Whether you want to submit solutions, add new challenges, or improve documentation, your efforts are appreciated.
+感谢您对为 **Go面试实战** 仓库做贡献的兴趣！我们欢迎社区的贡献来帮助改进这个项目。无论您是想提交解决方案、添加新挑战还是改进文档，我们都非常感谢您的努力。
 
-## **Table of Contents**
+## **目录**
 
-- [Code of Conduct](#code-of-conduct)
-- [How to Contribute](#how-to-contribute)
-  - [Submitting a Solution](#submitting-a-solution)
-  - [Adding a New Challenge](#adding-a-new-challenge)
-    - [Classic vs Package Challenges](#classic-vs-package-challenges)
-    - [Classic Challenges](#classic-challenges-algorithmdata-structure-focused)
-    - [Package Challenges](#package-challenges-frameworklibrary-focused)
-- [Style Guidelines](#style-guidelines)
-- [Pull Request Process](#pull-request-process)
-- [Reporting Issues](#reporting-issues)
-- [Contact](#contact)
-
----
-
-## **Code of Conduct**
-
-Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project, you agree to abide by its terms.
+- [行为准则](#行为准则)
+- [如何贡献](#如何贡献)
+  - [提交解决方案](#提交解决方案)
+  - [添加新挑战](#添加新挑战)
+    - [经典挑战 vs 包挑战](#经典挑战-vs-包挑战)
+    - [经典挑战](#经典挑战算法数据结构重点)
+    - [包挑战](#包挑战框架库重点)
+- [风格指南](#风格指南)
+- [拉取请求流程](#拉取请求流程)
+- [报告问题](#报告问题)
+- [联系方式](#联系方式)
 
 ---
 
-## **How to Contribute**
+## **行为准则**
 
-### **Submitting a Solution**
+请注意，本项目附有[贡献者行为准则](CODE_OF_CONDUCT.md)。通过参与本项目，您同意遵守其条款。
 
-You can submit solutions to both Classic and Package challenges:
+---
 
-#### **For Classic Challenges**
+## **如何贡献**
 
-1. **Fork the Repository:**
+### **提交解决方案**
 
-   - Click the "Fork" button on the repository page.
+您可以向经典挑战和包挑战提交解决方案：
 
-2. **Clone Your Fork:**
+#### **对于经典挑战**
+
+1. **Fork 仓库：**
+
+   - 点击仓库页面上的"Fork"按钮。
+
+2. **Clone 您的 Fork：**
 
    ```bash
    git clone https://github.com/yourusername/go-interview-practice.git
    ```
 
-3. **Create a New Branch:**
+3. **创建新分支：**
 
    ```bash
    git checkout -b challenge-[number]-solution
    ```
 
-4. **Set Up Your Submission:**
+4. **设置您的提交：**
 
-   - Use the provided script to set up your submission:
+   - 使用提供的脚本设置您的提交：
 
      ```bash
      ./create_submission.sh [challenge-number]
      ```
 
-5. **Implement Your Solution:**
+5. **实现您的解决方案：**
 
-   - Edit the `solution-template.go` file in your submission directory.
-   - Ensure your code passes all the tests.
+   - 编辑您提交目录中的 `solution-template.go` 文件。
+   - 确保您的代码通过所有测试。
 
-6. **Run Tests Locally:**
+6. **本地运行测试：**
 
-   - Navigate to the challenge directory and use `run_tests.sh`:
+   - 导航到挑战目录并使用 `run_tests.sh`：
 
      ```bash
      cd challenge-[number]
      ./run_tests.sh
      ```
 
-7. **Commit and Push:**
+7. **提交和推送：**
 
    ```bash
    git add challenge-[number]/submissions/yourusername/
@@ -78,49 +78,49 @@ You can submit solutions to both Classic and Package challenges:
    git push origin challenge-[number]-solution
    ```
 
-#### **For Package Challenges**
+#### **对于包挑战**
 
-1. **Fork and Clone** (same as above)
+1. **Fork 和 Clone**（同上）
 
-2. **Create a New Branch:**
+2. **创建新分支：**
 
    ```bash
    git checkout -b package-[package-name]-challenge-[number]-solution
    ```
 
-3. **Navigate to the Package Challenge:**
+3. **导航到包挑战：**
 
    ```bash
    cd packages/[package-name]/challenge-[number]-[topic]
    ```
 
-4. **Create Your Submission Directory:**
+4. **创建您的提交目录：**
 
    ```bash
    mkdir -p submissions/yourusername
    ```
 
-5. **Implement Your Solution:**
+5. **实现您的解决方案：**
 
-   - Copy the `solution-template.go` to your submission directory:
+   - 将 `solution-template.go` 复制到您的提交目录：
 
      ```bash
      cp solution-template.go submissions/yourusername/solution.go
      ```
 
-   - Edit `submissions/yourusername/solution.go` and complete all TODOs.
-   - Ensure your solution follows the package requirements and passes all tests.
+   - 编辑 `submissions/yourusername/solution.go` 并完成所有 TODO。
+   - 确保您的解决方案遵循包要求并通过所有测试。
 
-6. **Run Tests Locally:**
+6. **本地运行测试：**
 
-   - Use the package challenge test script:
+   - 使用包挑战测试脚本：
 
      ```bash
      ./run_tests.sh
-     # When prompted, enter your GitHub username
+     # 提示时，输入您的 GitHub 用户名
      ```
 
-7. **Commit and Push:**
+7. **提交和推送：**
 
    ```bash
    git add packages/[package-name]/challenge-[number]-[topic]/submissions/yourusername/
@@ -128,77 +128,77 @@ You can submit solutions to both Classic and Package challenges:
    git push origin package-[package-name]-challenge-[number]-solution
    ```
 
-#### **General Submission Guidelines**
+#### **通用提交指南**
 
-8. **Create a Pull Request:**
+8. **创建拉取请求：**
 
-   - Go to your fork on GitHub and open a pull request to the `main` branch.
-   - Use a descriptive title and mention which challenge you solved.
+   - 转到您在 GitHub 上的 fork 并向 `main` 分支打开拉取请求。
+   - 使用描述性标题并提及您解决了哪个挑战。
 
-9. **Receive Feedback:**
+9. **接收反馈：**
 
-   - The automated tests will run on your pull request.
-   - Address any comments or requested changes.
-   - Package challenge solutions will be automatically added to the scoreboard upon merge.
+   - 自动化测试将在您的拉取请求上运行。
+   - 处理任何评论或请求的更改。
+   - 包挑战解决方案将在合并时自动添加到排行榜。
 
-### **Adding a New Challenge**
+### **添加新挑战**
 
-There are two types of challenges you can contribute:
+您可以贡献两种类型的挑战：
 
-#### **Classic vs Package Challenges**
+#### **经典挑战 vs 包挑战**
 
-Before contributing a new challenge, it's important to understand the difference between the two types:
+在贡献新挑战之前，了解两种类型之间的区别很重要：
 
-**Classic Challenges:**
-- **Focus:** Algorithm and data structure problems
-- **Purpose:** Fundamental programming concepts and problem-solving skills
-- **Structure:** Single challenge directory with standalone problems
-- **Examples:** Binary search, linked list manipulation, dynamic programming
-- **Target Audience:** All developers regardless of framework experience
-- **Location:** `challenge-[number]/` directories in the root
+**经典挑战：**
+- **重点：** 算法和数据结构问题
+- **目的：** 基础编程概念和问题解决技能
+- **结构：** 单个挑战目录，包含独立问题
+- **示例：** 二分查找、链表操作、动态规划
+- **目标受众：** 所有开发人员，无论框架经验如何
+- **位置：** 根目录中的 `challenge-[number]/` 目录
 
-**Package Challenges:**
-- **Focus:** Real-world application development with specific Go packages/frameworks
-- **Purpose:** Practical skills for building production applications
-- **Structure:** Package-based directory with progressive challenge series
-- **Examples:** REST APIs with Gin, CLI tools with Cobra, database operations with GORM
-- **Target Audience:** Developers learning specific frameworks or building portfolio projects
-- **Location:** `packages/[package-name]/challenge-[number]-[topic]/` directories
+**包挑战：**
+- **重点：** 使用特定Go包/框架的真实应用程序开发
+- **目的：** 构建生产应用程序的实用技能
+- **结构：** 基于包的目录，包含渐进式挑战系列
+- **示例：** 使用Gin的REST API、使用Cobra的CLI工具、使用GORM的数据库操作
+- **目标受众：** 学习特定框架或构建作品集项目的开发人员
+- **位置：** `packages/[package-name]/challenge-[number]-[topic]/` 目录
 
-**When to Choose Each Type:**
+**何时选择每种类型：**
 
-- Choose **Classic Challenges** for:
-  - Algorithm problems from coding interviews
-  - Data structure implementations
-  - Mathematical or logical puzzles
-  - Language-agnostic programming concepts
+- 选择**经典挑战**用于：
+  - 编程面试中的算法问题
+  - 数据结构实现
+  - 数学或逻辑谜题
+  - 与语言无关的编程概念
 
-- Choose **Package Challenges** for:
-  - Framework-specific tutorials
-  - Building complete applications
-  - Learning industry-standard libraries
-  - Demonstrating real-world development patterns
+- 选择**包挑战**用于：
+  - 框架特定的教程
+  - 构建完整的应用程序
+  - 学习行业标准库
+  - 展示真实世界的开发模式
 
-#### **Classic Challenges (Algorithm/Data Structure Focused)**
+#### **经典挑战（算法/数据结构重点）**
 
-For traditional algorithm and data structure challenges:
+对于传统的算法和数据结构挑战：
 
-1. **Create a New Issue:**
+1. **创建新问题：**
 
-   - Open an issue to discuss the new challenge idea.
-   - Provide details such as the problem statement and its relevance.
+   - 打开一个问题来讨论新挑战的想法。
+   - 提供问题陈述及其相关性等详细信息。
 
-2. **Wait for Approval:**
+2. **等待批准：**
 
-   - Wait for maintainers or community members to provide feedback.
+   - 等待维护者或社区成员提供反馈。
 
-3. **Create a New Branch:**
+3. **创建新分支：**
 
    ```bash
    git checkout -b add-challenge-[number]
    ```
 
-4. **Set Up the Challenge Directory:**
+4. **设置挑战目录：**
 
    ```
    challenge-[number]/
@@ -211,243 +211,243 @@ For traditional algorithm and data structure challenges:
    └── submissions/
    ```
 
-5. **Write the Challenge Description:**
+5. **编写挑战描述：**
 
-   - Include problem statement, function signature, input/output format, constraints, and sample inputs/outputs in `README.md`.
+   - 在 `README.md` 中包含问题陈述、函数签名、输入/输出格式、约束和示例输入/输出。
 
-6. **Create Learning Materials:**
+6. **创建学习材料：**
 
-   - In `challenge-[number]/learning.md`, provide:
-     - Explanations of relevant Go concepts needed for the challenge
-     - Code examples demonstrating these concepts
-     - Best practices and efficiency considerations
-     - Links to further reading resources
+   - 在 `challenge-[number]/learning.md` 中提供：
+     - 挑战所需的相关Go概念的解释
+     - 演示这些概念的代码示例
+     - 最佳实践和效率考虑
+     - 进一步阅读资源的链接
 
-7. **Create the Solution Template:**
+7. **创建解决方案模板：**
 
-   - Provide a skeleton code in `solution-template.go` with appropriate comments.
+   - 在 `solution-template.go` 中提供带有适当注释的骨架代码。
 
-8. **Write Comprehensive Tests:**
+8. **编写全面测试：**
 
-   - Create `solution-template_test.go` with detailed test cases covering various scenarios, including edge cases.
+   - 创建 `solution-template_test.go`，包含涵盖各种场景（包括边缘情况）的详细测试用例。
 
-9. **Create Hints:**
+9. **创建提示：**
 
-   - Provide step-by-step guidance in `hints.md` without giving away the complete solution.
+   - 在 `hints.md` 中提供逐步指导，但不给出完整解决方案。
 
-10. **Create Test Script:**
+10. **创建测试脚本：**
 
-    - Create an executable `run_tests.sh` script for testing submissions.
+    - 创建可执行的 `run_tests.sh` 脚本来测试提交。
 
-11. **Update Documentation:**
+11. **更新文档：**
 
-    - Add the new challenge to the main `README.md`.
+    - 将新挑战添加到主 `README.md`。
 
-#### **Package Challenges (Framework/Library Focused)**
+#### **包挑战（框架/库重点）**
 
-For challenges that focus on specific Go packages/frameworks:
+对于专注于特定Go包/框架的挑战：
 
-1. **Create a New Issue:**
+1. **创建新问题：**
 
-   - Open an issue to discuss the new package challenge idea.
-   - Specify the package/framework (e.g., Gin, Cobra, GORM) and challenge focus.
+   - 打开一个问题来讨论新的包挑战想法。
+   - 指定包/框架（例如，Gin、Cobra、GORM）和挑战重点。
 
-2. **Wait for Approval:**
+2. **等待批准：**
 
-   - Wait for maintainers or community members to provide feedback.
+   - 等待维护者或社区成员提供反馈。
 
-3. **Create a New Branch:**
+3. **创建新分支：**
 
    ```bash
    git checkout -b add-package-[package-name]-challenge-[number]
    ```
 
-4. **Set Up the Package Challenge Directory:**
+4. **设置包挑战目录：**
 
    ```
    packages/[package-name]/
-   ├── package.json                    # Package metadata and learning path
+   ├── package.json                    # 包元数据和学习路径
    └── challenge-[number]-[topic]/
-       ├── metadata.json               # Challenge-specific metadata
-       ├── README.md                   # Challenge description
-       ├── solution-template.go        # Template with TODOs
-       ├── solution-template_test.go   # Comprehensive tests
-       ├── go.mod                      # Module with dependencies
-       ├── go.sum                      # Dependency checksums
-       ├── learning.md                 # In-depth educational content
-       ├── hints.md                    # Step-by-step guidance
-       ├── run_tests.sh               # Testing script
-       ├── SCOREBOARD.md              # Auto-generated scoreboard
-       └── submissions/               # User solutions
+       ├── metadata.json               # 挑战特定的元数据
+       ├── README.md                   # 挑战描述
+       ├── solution-template.go        # 带有TODO的模板
+       ├── solution-template_test.go   # 全面测试
+       ├── go.mod                      # 带有依赖项的模块
+       ├── go.sum                      # 依赖项校验和
+       ├── learning.md                 # 深入教育内容
+       ├── hints.md                    # 逐步指导
+       ├── run_tests.sh               # 测试脚本
+       ├── SCOREBOARD.md              # 自动生成的排行榜
+       └── submissions/               # 用户解决方案
            └── [username]/
-               └── solution.go        # Complete working solution
+               └── solution.go        # 完整的工作解决方案
    ```
 
-5. **Create Package Metadata (if new package):**
+5. **创建包元数据（如果是新包）：**
 
-   - Create `packages/[package-name]/package.json` with:
-     - Package information (name, description, GitHub repo)
-     - Learning path defining challenge progression
-     - Categories and difficulty levels
+   - 创建 `packages/[package-name]/package.json`，包含：
+     - 包信息（名称、描述、GitHub仓库）
+     - 定义挑战进度的学习路径
+     - 类别和难度级别
 
-6. **Create Challenge Metadata:**
+6. **创建挑战元数据：**
 
-   - Create `metadata.json` with:
-     - Title, description, difficulty, estimated time
-     - Learning objectives and prerequisites
-     - Requirements and bonus points
-     - Tags and real-world connections
+   - 创建 `metadata.json`，包含：
+     - 标题、描述、难度、估计时间
+     - 学习目标和先决条件
+     - 要求和奖励积分
+     - 标签和真实世界连接
 
-7. **Write the Challenge Description:**
+7. **编写挑战描述：**
 
-   - Include practical problem statement, CLI/API requirements, and testing instructions in `README.md`.
+   - 在 `README.md` 中包含实际问题陈述、CLI/API要求和测试说明。
 
-8. **Create Learning Materials:**
+8. **创建学习材料：**
 
-   - In `learning.md`, provide comprehensive educational content (400+ lines):
-     - Framework fundamentals and core concepts
-     - Code examples and patterns
-     - Best practices and real-world usage
-     - Advanced features and testing strategies
+   - 在 `learning.md` 中提供全面的教育内容（400+行）：
+     - 框架基础和核心概念
+     - 代码示例和模式
+     - 最佳实践和真实世界用法
+     - 高级功能和测试策略
 
-9. **Create the Solution Template:**
+9. **创建解决方案模板：**
 
-   - Provide a structured template in `solution-template.go` with:
-     - Proper imports and dependencies
-     - Type definitions and structures
-     - Function signatures with TODO comments
-     - Helper functions and validation logic
+   - 在 `solution-template.go` 中提供结构化模板，包含：
+     - 适当的导入和依赖项
+     - 类型定义和结构
+     - 带有TODO注释的函数签名
+     - 辅助函数和验证逻辑
 
-10. **Write Comprehensive Tests:**
+10. **编写全面测试：**
 
-    - Create `solution-template_test.go` with:
-      - Unit tests for all functions and features
-      - Integration tests for complete workflows
-      - Edge cases and error scenarios
-      - Performance and behavior validation
+    - 创建 `solution-template_test.go`，包含：
+      - 所有功能和特性的单元测试
+      - 完整工作流程的集成测试
+      - 边缘情况和错误场景
+      - 性能和行为验证
 
-11. **Create Dependencies:**
+11. **创建依赖项：**
 
-    - Set up `go.mod` with proper module name and Go version
-    - Include all necessary dependencies for the package
-    - Run `go mod tidy` to generate `go.sum`
+    - 使用适当的模块名称和Go版本设置 `go.mod`
+    - 包含包所需的所有依赖项
+    - 运行 `go mod tidy` 生成 `go.sum`
 
-12. **Create Hints:**
+12. **创建提示：**
 
-    - Provide detailed guidance in `hints.md` with:
-      - Step-by-step implementation guidance
-      - Code examples and patterns
-      - Common pitfalls to avoid
-      - Testing and debugging tips
+    - 在 `hints.md` 中提供详细指导，包含：
+      - 逐步实现指导
+      - 代码示例和模式
+      - 要避免的常见陷阱
+      - 测试和调试技巧
 
-13. **Create Test Script:**
+13. **创建测试脚本：**
 
-    - Create an executable `run_tests.sh` script that:
-      - Tests compilation and functionality
-      - Runs unit tests and functional tests
-      - Validates flag handling and argument processing
-      - Provides detailed feedback and next steps
+    - 创建可执行的 `run_tests.sh` 脚本，它：
+      - 测试编译和功能
+      - 运行单元测试和功能测试
+      - 验证标志处理和参数处理
+      - 提供详细反馈和后续步骤
 
-14. **Create Working Solution:**
+14. **创建工作解决方案：**
 
-    - Implement a complete working solution in `submissions/RezaSi/solution.go`
-    - Ensure it passes all tests and demonstrates best practices
+    - 在 `submissions/RezaSi/solution.go` 中实现完整的工作解决方案
+    - 确保它通过所有测试并展示最佳实践
 
-15. **Update Documentation:**
+15. **更新文档：**
 
-    - Update package scoreboard using the package scoreboard scripts
-    - Ensure the web UI can discover and display the new challenge
+    - 使用包排行榜脚本更新包排行榜
+    - 确保Web UI可以发现并显示新挑战
 
-### **General Guidelines for Both Challenge Types**
+### **两种挑战类型的通用指南**
 
-12. **Commit and Push:**
+12. **提交和推送：**
 
     ```bash
-    # For classic challenges
+    # 对于经典挑战
     git add challenge-[number]/
     git commit -m "Add Challenge [number]: [Challenge Title]"
     
-    # For package challenges
+    # 对于包挑战
     git add packages/[package-name]/
     git commit -m "Add [Package] Challenge [number]: [Challenge Title]"
     
     git push origin [branch-name]
     ```
 
-13. **Create a Pull Request:**
+13. **创建拉取请求：**
 
-    - Submit the pull request for review.
-    - Ensure all tests pass in the CI workflow.
-    - Include a detailed description of the challenge and its educational value.
-
----
-
-## **Style Guidelines**
-
-- **Code Formatting:**
-
-  - Use `gofmt` to format your Go code.
-  - Maintain consistent indentation and spacing.
-
-- **Naming Conventions:**
-
-  - Use descriptive variable and function names.
-  - Follow Go naming conventions (e.g., `camelCase` for variables and functions).
-
-- **Comments:**
-
-  - Include comments to explain complex logic.
-  - Use doc comments (`//`) for exported functions and types.
-
-- **Test Writing:**
-
-  - Write thorough tests covering various input cases.
-  - Use subtests (`t.Run()`) to organize test cases.
+    - 提交拉取请求以供审查。
+    - 确保所有测试在CI工作流程中通过。
+    - 包含挑战及其教育价值的详细描述。
 
 ---
 
-## **Pull Request Process**
+## **风格指南**
 
-1. **Ensure All Tests Pass:**
+- **代码格式化：**
 
-   - Run tests locally before submitting your pull request.
-   - Check that your code does not break existing functionality.
+  - 使用 `gofmt` 格式化您的Go代码。
+  - 保持一致的缩进和间距。
 
-2. **Provide a Clear Description:**
+- **命名约定：**
 
-   - Explain what changes you have made and why.
-   - Reference any related issues.
+  - 使用描述性的变量和函数名称。
+  - 遵循Go命名约定（例如，变量和函数使用 `camelCase`）。
 
-3. **One Pull Request per Feature:**
+- **注释：**
 
-   - Keep your pull requests focused on a single feature or fix.
+  - 包含注释以解释复杂逻辑。
+  - 为导出的函数和类型使用文档注释（`//`）。
 
-4. **Wait for Review:**
+- **测试编写：**
 
-   - A maintainer will review your pull request.
-   - Be responsive to feedback and make necessary changes.
-
----
-
-## **Reporting Issues**
-
-If you encounter any problems or have suggestions:
-
-- **Open an Issue:**
-
-  - Go to the [Issues](https://github.com/RezaSi/go-interview-practice/issues) tab.
-  - Provide a detailed description of the issue or suggestion.
-  - Include steps to reproduce the issue if applicable.
+  - 编写彻底的测试，涵盖各种输入情况。
+  - 使用子测试（`t.Run()`）来组织测试用例。
 
 ---
 
-## **Contact**
+## **拉取请求流程**
 
-For any questions or additional support:
+1. **确保所有测试通过：**
 
-- **Email:** [rezashiri88@gmail.com](mailto:rezashiri88@gmail.com)
-- **GitHub:** [RezaSi](https://github.com/RezaSi)
+   - 在提交拉取请求之前在本地运行测试。
+   - 检查您的代码不会破坏现有功能。
+
+2. **提供清晰的描述：**
+
+   - 解释您做了什么更改以及为什么。
+   - 引用任何相关问题。
+
+3. **每个功能一个拉取请求：**
+
+   - 保持您的拉取请求专注于单个功能或修复。
+
+4. **等待审查：**
+
+   - 维护者将审查您的拉取请求。
+   - 对反馈做出响应并进行必要的更改。
 
 ---
 
-Thank you for contributing to the Go Interview Practice repository!
+## **报告问题**
+
+如果您遇到任何问题或有建议：
+
+- **打开问题：**
+
+  - 转到[问题](https://github.com/RezaSi/go-interview-practice/issues)标签。
+  - 提供问题或建议的详细描述。
+  - 如适用，请包含重现问题的步骤。
+
+---
+
+## **联系方式**
+
+如有任何问题或需要额外支持：
+
+- **邮箱：** [rezashiri88@gmail.com](mailto:rezashiri88@gmail.com)
+- **GitHub：** [RezaSi](https://github.com/RezaSi)
+
+---
+
+感谢您为Go面试实战仓库做出贡献！

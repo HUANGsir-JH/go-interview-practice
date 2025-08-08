@@ -1,192 +1,192 @@
-# Go Interview Practice Web UI
+# Go面试实战Web UI
 
-This is a web-based user interface for the Go Interview Practice project, providing an interactive environment for solving Go programming challenges.
+这是Go面试实战项目的基于Web的用户界面，为解决Go编程挑战提供了一个交互式环境。
 
-## Features
+## 功能特点
 
-- **Challenge Browser**: View all available coding challenges with difficulty indicators.
-- **In-browser Code Editor**: Edit and run Go code directly in your browser with syntax highlighting.
-- **Test Runner**: Run tests against your solution and see results in real-time.
-- **Learning Materials**: Access Go learning materials specific to each challenge to improve your understanding.
-- **Scoreboard**: Track your progress and see how you compare to others.
-- **Markdown Support**: Challenge descriptions and learning materials rendered with full Markdown support.
+- **挑战浏览器**：查看所有可用的编程挑战，带有难度指示器。
+- **浏览器内代码编辑器**：直接在浏览器中编辑和运行Go代码，具有语法高亮功能。
+- **测试运行器**：针对您的解决方案运行测试，并实时查看结果。
+- **学习材料**：访问每个挑战特定的Go学习材料，以提高您的理解。
+- **排行榜**：跟踪您的进度，看看您与其他人的比较情况。
+- **Markdown支持**：挑战描述和学习材料具有完整的Markdown支持。
 
-## Getting Started
+## 开始使用
 
-### Prerequisites
+### 前置要求
 
-- Go 1.16 or later
-- Web browser (Chrome, Firefox, Safari, Edge)
+- Go 1.16 或更高版本
+- Web浏览器（Chrome、Firefox、Safari、Edge）
 
-### Running the Web UI
+### 运行Web UI
 
-1. Navigate to the web-ui directory:
+1. 导航到web-ui目录：
    ```
    cd web-ui
    ```
 
-2. Run the web server:
+2. 运行Web服务器：
    ```
    go run main.go
    ```
 
-3. Open your browser and visit:
+3. 打开浏览器并访问：
    ```
    http://localhost:8080
    ```
 
-## Project Structure
+## 项目结构
 
 ```
 web-ui/
-├── main.go                  # Main server entry point
-├── static/                  # Static assets
-│   ├── css/                 # CSS stylesheets
-│   │   └── style.css        # Custom CSS for the UI
-│   └── js/                  # JavaScript files
-│       └── main.js          # Common JavaScript utilities
-├── templates/               # HTML templates
-│   ├── base.html            # Base template with common layout
-│   ├── challenge.html       # Challenge page with code editor
-│   ├── home.html            # Home page with challenge list
-│   └── scoreboard.html      # Scoreboard page for results
-└── README.md                # This file
+├── main.go                  # 主服务器入口点
+├── static/                  # 静态资源
+│   ├── css/                 # CSS样式表
+│   │   └── style.css        # UI的自定义CSS
+│   └── js/                  # JavaScript文件
+│       └── main.js          # 通用JavaScript工具
+├── templates/               # HTML模板
+│   ├── base.html            # 具有通用布局的基础模板
+│   ├── challenge.html       # 带有代码编辑器的挑战页面
+│   ├── home.html            # 带有挑战列表的主页
+│   └── scoreboard.html      # 结果的排行榜页面
+└── README.md                # 本文件
 ```
 
-## Technical Details
+## 技术细节
 
-### Templates and HTML Rendering
+### 模板和HTML渲染
 
-The web UI uses Go's `html/template` package for server-side rendering, with a base template that defines the common layout and individual content templates for each page type.
+Web UI使用Go的`html/template`包进行服务器端渲染，具有定义通用布局的基础模板和每种页面类型的单独内容模板。
 
-### JavaScript Libraries
+### JavaScript库
 
-- **Bootstrap**: For responsive UI components
-- **Ace Editor**: For the in-browser code editor
-- **Marked**: For Markdown parsing
-- **Highlight.js**: For syntax highlighting
+- **Bootstrap**：用于响应式UI组件
+- **Ace Editor**：用于浏览器内代码编辑器
+- **Marked**：用于Markdown解析
+- **Highlight.js**：用于语法高亮
 
-### API Endpoints
+### API端点
 
-The web UI exposes the following API endpoints:
+Web UI暴露以下API端点：
 
-- `GET /api/challenges`: Get all challenges
-- `GET /api/challenges/{id}`: Get a specific challenge
-- `POST /api/run`: Run code for a specific challenge
-- `POST /api/submissions`: Submit a solution
-- `GET /api/scoreboard/{id}`: Get scoreboard for a challenge
+- `GET /api/challenges`：获取所有挑战
+- `GET /api/challenges/{id}`：获取特定挑战
+- `POST /api/run`：运行特定挑战的代码
+- `POST /api/submissions`：提交解决方案
+- `GET /api/scoreboard/{id}`：获取挑战的排行榜
 
-## Development
+## 开发
 
-### Adding New Features
+### 添加新功能
 
-1. If adding new pages, create a new template in the `templates` directory.
-2. Add any new API handlers in `main.go`.
-3. Add CSS styles to `static/css/style.css`.
-4. Add JavaScript utilities to `static/js/main.js`.
+1. 如果添加新页面，请在`templates`目录中创建新模板。
+2. 在`main.go`中添加任何新的API处理程序。
+3. 将CSS样式添加到`static/css/style.css`。
+4. 将JavaScript工具添加到`static/js/main.js`。
 
-### Running in Development Mode
+### 开发模式运行
 
-To enable hot-reloading during development, you can use tools like [Air](https://github.com/cosmtrek/air):
+要在开发期间启用热重载，您可以使用[Air](https://github.com/cosmtrek/air)等工具：
 
 ```bash
-# Install Air
+# 安装Air
 go install github.com/cosmtrek/air@latest
 
-# Run with hot reloading
+# 使用热重载运行
 air
 ```
 
-## Contributing
+## 贡献
 
-Contributions to improve the web UI are welcome! Please feel free to submit pull requests or open issues for new features or bug fixes.
+欢迎改进Web UI的贡献！请随时提交拉取请求或为新功能或错误修复打开问题。
 
-## License
+## 许可证
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+本项目根据MIT许可证许可 - 详见LICENSE文件。
 
-## Complete Workflow: From Fork to Pull Request
+## 完整工作流程：从Fork到Pull Request
 
-### Prerequisites
-1. **Fork the repository** on GitHub (click the "Fork" button)
-2. **Clone your fork** locally: `git clone https://github.com/yourusername/go-interview-practice.git`
-3. **Start the web UI** as described above
+### 前置要求
+1. **在GitHub上Fork仓库**（点击"Fork"按钮）
+2. **在本地Clone您的fork**：`git clone https://github.com/yourusername/go-interview-practice.git`
+3. **如上所述启动Web UI**
 
-### Solving and Submitting Challenges
+### 解决和提交挑战
 
-1. **Choose a challenge** from the homepage
-2. **Write your solution** in the code editor
-3. **Test your code** using the "Run Tests" button
-4. **Submit your solution** when tests pass
+1. **从主页选择一个挑战**
+2. **在代码编辑器中编写您的解决方案**
+3. **使用"运行测试"按钮测试您的代码**
+4. **测试通过时提交您的解决方案**
 
-### After Successful Submission
+### 成功提交后
 
-The web UI will guide you through these steps:
+Web UI将指导您完成以下步骤：
 
-1. **Save to Filesystem**: Click the button to save your solution locally
-2. **Commit and Push**: 
+1. **保存到文件系统**：点击按钮在本地保存您的解决方案
+2. **提交和推送**：
    ```bash
    git add challenge-X/submissions/yourusername/
    git commit -m "Add solution for Challenge X by yourusername"
    git push origin main
    ```
-3. **Create Pull Request**:
-   - Go to your fork on GitHub
-   - Click "Contribute" → "Open pull request"
-   - Add a descriptive title
-   - Submit the PR
+3. **创建拉取请求**：
+   - 转到您在GitHub上的fork
+   - 点击"Contribute" → "Open pull request"
+   - 添加描述性标题
+   - 提交PR
 
-### What Happens Next
+### 接下来会发生什么
 
-- Your pull request will be reviewed
-- Once merged, your solution appears on the public scoreboard
-- You get credit for solving the challenge
-- Other developers can learn from your approach
+- 您的拉取请求将被审核
+- 一旦合并，您的解决方案将出现在公共排行榜上
+- 您因解决挑战而获得学分
+- 其他开发人员可以从您的方法中学习
 
-This workflow ensures:
-- ✅ Your solutions are properly tracked
-- ✅ You contribute to the community
-- ✅ Your GitHub profile shows your contributions
-- ✅ You appear on the public leaderboards
+这个工作流程确保：
+- ✅ 您的解决方案得到正确跟踪
+- ✅ 您为社区做出贡献
+- ✅ 您的GitHub个人资料显示您的贡献
+- ✅ 您出现在公共排行榜上
 
-## Submission Process
+## 提交过程
 
-The web UI provides two ways to submit your solution:
+Web UI提供两种提交解决方案的方式：
 
-### 1. In-Browser Submission (For Scoreboard Only)
+### 1. 浏览器内提交（仅用于排行榜）
 
-When you click the "Submit Solution" button, your solution will be:
-- Tested against the challenge test cases
-- Added to the in-memory scoreboard if all tests pass
-- Displayed in the challenge scoreboard
+当您点击"提交解决方案"按钮时，您的解决方案将：
+- 针对挑战测试用例进行测试
+- 如果所有测试通过，则添加到内存排行榜中
+- 显示在挑战排行榜中
 
-This submission is temporary and only exists in the current server session. It doesn't save your solution to the filesystem.
+此提交是临时的，仅存在于当前服务器会话中。它不会将您的解决方案保存到文件系统中。
 
-### 2. Filesystem Submission (For Pull Requests)
+### 2. 文件系统提交（用于拉取请求）
 
-After successfully submitting a solution that passes all tests, you'll see two options:
+成功提交通过所有测试的解决方案后，您将看到两个选项：
 
-#### Option 1: One-Click Filesystem Save
+#### 选项1：一键文件系统保存
 
-Click the "Save to Filesystem" button to:
-- Automatically create a submission directory in your local repository
-- Save your solution to `challenge-X/submissions/yourusername/solution-template.go`
-- Get a list of Git commands to commit and push your changes
+点击"保存到文件系统"按钮以：
+- 在本地存储库中自动创建提交目录
+- 将您的解决方案保存到`challenge-X/submissions/yourusername/solution-template.go`
+- 获取提交和推送更改的Git命令列表
 
-This option creates the actual file structure needed for a GitHub pull request.
+此选项创建GitHub拉取请求所需的实际文件结构。
 
-#### Option 2: Copy Manual Commands
+#### 选项2：复制手动命令
 
-If you prefer to manage the file creation yourself, you can:
-- Click "Copy Commands" to copy shell commands to your clipboard
-- Run these commands in your terminal to create the submission files
-- Commit and push the changes using the provided Git commands
+如果您更喜欢自己管理文件创建，您可以：
+- 点击"复制命令"将shell命令复制到剪贴板
+- 在终端中运行这些命令以创建提交文件
+- 使用提供的Git命令提交和推送更改
 
-### Completing Your Submission
+### 完成您的提交
 
-After saving your solution to the filesystem (via either method), complete the submission by:
-1. Committing your changes
-2. Pushing to your fork
-3. Creating a pull request to the original repository
+将解决方案保存到文件系统后（通过任一方法），通过以下方式完成提交：
+1. 提交您的更改
+2. 推送到您的fork
+3. 创建到原始存储库的拉取请求
 
-This workflow ensures your submission is properly integrated into the project's review system. 
+这个工作流程确保您的提交正确集成到项目的审核系统中。

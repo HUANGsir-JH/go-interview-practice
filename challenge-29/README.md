@@ -1,42 +1,42 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 29: Rate Limiter Implementation
+# 挑战 29：速率限制器实现
 
-## Problem Statement
+## 问题描述
 
-Implement a comprehensive rate limiter system that can control the rate of requests or operations. This challenge focuses on understanding rate limiting algorithms, concurrency control, and implementing robust systems that can handle high-throughput scenarios.
+实现一个全面的速率限制系统，用于控制请求或操作的速率。本挑战聚焦于理解速率限制算法、并发控制，并实现能够处理高吞吐场景的健壮系统。
 
-## Requirements
+## 要求
 
-1. Implement a `RateLimiter` interface with the following methods:
-   - `Allow() bool`: Returns true if the request is allowed, false if rate limited
-   - `AllowN(n int) bool`: Returns true if n requests are allowed, false if rate limited
-   - `Wait(ctx context.Context) error`: Blocks until the request can be processed (or context expires)
-   - `WaitN(ctx context.Context, n int) error`: Blocks until n requests can be processed
-   - `Limit() int`: Returns the current rate limit (requests per second)
-   - `Burst() int`: Returns the current burst capacity
-   - `Reset()`: Resets the rate limiter state
+1. 实现 `RateLimiter` 接口，包含以下方法：
+   - `Allow() bool`：如果请求被允许则返回 true，否则返回 false（已限流）
+   - `AllowN(n int) bool`：如果允许 n 个请求则返回 true，否则返回 false（已限流）
+   - `Wait(ctx context.Context) error`：阻塞直到请求可被处理（或上下文超时）
+   - `WaitN(ctx context.Context, n int) error`：阻塞直到 n 个请求可被处理
+   - `Limit() int`：返回当前速率限制（每秒请求数）
+   - `Burst() int`：返回当前突发容量
+   - `Reset()`：重置速率限制器状态
 
-2. Implement the following rate limiting algorithms:
-   - **Token Bucket**: Classic algorithm with configurable rate and burst capacity
-   - **Sliding Window**: More accurate rate limiting with configurable window size
-   - **Fixed Window**: Simple counter-based rate limiting with fixed time windows
+2. 实现以下速率限制算法：
+   - **令牌桶**：具有可配置速率和突发容量的经典算法
+   - **滑动窗口**：具有可配置窗口大小的更精确的速率限制
+   - **固定窗口**：基于计数器的简单速率限制，使用固定时间窗口
 
-3. Implement a `RateLimiterFactory` that can create different types of rate limiters:
-   - Support for different algorithms (token bucket, sliding window, fixed window)
-   - Configurable parameters (rate, burst, window size)
-   - Thread-safe implementation for concurrent usage
+3. 实现一个 `RateLimiterFactory`，用于创建不同类型的速率限制器：
+   - 支持不同算法（令牌桶、滑动窗口、固定窗口）
+   - 可配置参数（速率、突发容量、窗口大小）
+   - 线程安全实现以支持并发使用
 
-4. Implement advanced features:
-   - **Distributed Rate Limiting**: Support for rate limiting across multiple instances
-   - **Adaptive Rate Limiting**: Ability to adjust rate limits based on system load
-   - **Rate Limiter Middleware**: HTTP middleware for web applications
-   - **Metrics Collection**: Track rate limiter statistics and performance
+4. 实现高级功能：
+   - **分布式速率限制**：支持跨多个实例的速率限制
+   - **自适应速率限制**：根据系统负载动态调整速率限制
+   - **速率限制中间件**：适用于 Web 应用程序的 HTTP 中间件
+   - **指标收集**：跟踪速率限制器的统计信息和性能
 
-## Function Signatures
+## 函数签名
 
 ```go
-// Core Rate Limiter Interface
+// 核心速率限制器接口
 type RateLimiter interface {
     Allow() bool
     AllowN(n int) bool
@@ -47,49 +47,49 @@ type RateLimiter interface {
     Reset()
 }
 
-// Rate Limiter Types
+// 速率限制器类型
 type TokenBucketLimiter struct {
-    // Implementation fields
+    // 实现字段
 }
 
 type SlidingWindowLimiter struct {
-    // Implementation fields
+    // 实现字段
 }
 
 type FixedWindowLimiter struct {
-    // Implementation fields
+    // 实现字段
 }
 
-// Factory for creating rate limiters
+// 用于创建速率限制器的工厂
 type RateLimiterFactory struct{}
 
 type RateLimiterConfig struct {
     Algorithm    string // "token_bucket", "sliding_window", "fixed_window"
-    Rate         int    // requests per second
-    Burst        int    // maximum burst capacity
-    WindowSize   time.Duration // for sliding window
+    Rate         int    // 每秒请求数
+    Burst        int    // 最大突发容量
+    WindowSize   time.Duration // 滑动窗口大小
 }
 
-// Constructor functions
+// 构造函数
 func NewTokenBucketLimiter(rate int, burst int) RateLimiter
 func NewSlidingWindowLimiter(rate int, windowSize time.Duration) RateLimiter
 func NewFixedWindowLimiter(rate int, windowSize time.Duration) RateLimiter
 func NewRateLimiterFactory() *RateLimiterFactory
 func (f *RateLimiterFactory) CreateLimiter(config RateLimiterConfig) (RateLimiter, error)
 
-// Advanced Features
+// 高级功能
 type DistributedRateLimiter struct {
-    // Implementation for distributed scenarios
+    // 分布式场景下的实现
 }
 
 type AdaptiveRateLimiter struct {
-    // Implementation for adaptive rate limiting
+    // 自适应速率限制的实现
 }
 
-// HTTP Middleware
+// HTTP 中间件
 func RateLimitMiddleware(limiter RateLimiter) func(http.Handler) http.Handler
 
-// Metrics
+// 指标
 type RateLimiterMetrics struct {
     TotalRequests   int64
     AllowedRequests int64
@@ -100,61 +100,61 @@ type RateLimiterMetrics struct {
 func (rl RateLimiter) GetMetrics() RateLimiterMetrics
 ```
 
-## Algorithm Specifications
+## 算法说明
 
-### Token Bucket Algorithm
-- Tokens are added to a bucket at a fixed rate
-- Each request consumes one or more tokens
-- If insufficient tokens are available, the request is rate limited
-- Burst capacity allows for temporary spikes in traffic
+### 令牌桶算法
+- 以固定速率向桶中添加令牌
+- 每个请求消耗一个或多个令牌
+- 如果可用令牌不足，则请求被限流
+- 突发容量允许临时流量激增
 
-### Sliding Window Algorithm
-- Maintains a sliding time window of recent requests
-- More accurate than fixed window as it doesn't suffer from boundary effects
-- Smooths out traffic spikes across window boundaries
+### 滑动窗口算法
+- 维护最近请求的滑动时间窗口
+- 比固定窗口更准确，不会受到边界效应影响
+- 在窗口边界处平滑处理流量激增
 
-### Fixed Window Algorithm
-- Simple counter that resets at fixed intervals
-- Fast and memory-efficient
-- May allow bursts at window boundaries
+### 固定窗口算法
+- 简单计数器，在固定间隔重置
+- 快速且内存效率高
+- 可能在窗口边界处允许突发流量
 
-## Constraints
+## 约束条件
 
-- All rate limiters must be thread-safe for concurrent usage
-- Implement proper error handling for invalid configurations
-- Support for context cancellation in blocking operations
-- Efficient memory usage for high-throughput scenarios
-- Configurable precision for timing operations
+- 所有速率限制器必须支持并发使用（线程安全）
+- 对无效配置应实现适当的错误处理
+- 阻塞操作需支持上下文取消
+- 在高吞吐场景下应具备高效的内存使用
+- 支持定时操作的可配置精度
 
-## Sample Usage
+## 示例用法
 
-### Basic Usage
+### 基础用法
 
 ```go
-// Create a token bucket rate limiter (10 requests/second, burst of 5)
+// 创建一个令牌桶速率限制器（10次请求/秒，突发容量为5）
 limiter := NewTokenBucketLimiter(10, 5)
 
-// Check if request is allowed
+// 检查请求是否被允许
 if limiter.Allow() {
-    fmt.Println("Request allowed")
-    // Process request
+    fmt.Println("请求允许")
+    // 处理请求
 } else {
-    fmt.Println("Request rate limited")
-    // Handle rate limiting
+    fmt.Println("请求被限流")
+    // 处理限流情况
 }
 
-// Wait for request to be allowed (with timeout)
+// 等待请求被允许（带超时）
 ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 defer cancel()
 
 if err := limiter.Wait(ctx); err != nil {
-    fmt.Printf("Request timed out: %v\n", err)
+    fmt.Printf("请求超时: %v\n", err)
 } else {
-    fmt.Println("Request processed after waiting")
+    fmt.Println("等待后请求已处理")
 }
 ```
 
-### Factory Usage
+### 工厂用法
 
 ```go
 factory := NewRateLimiterFactory()
@@ -170,29 +170,29 @@ if err != nil {
     log.Fatal(err)
 }
 
-// Use the limiter
+// 使用速率限制器
 for i := 0; i < 200; i++ {
     if limiter.Allow() {
-        fmt.Printf("Request %d allowed\n", i+1)
+        fmt.Printf("请求 %d 允许\n", i+1)
     } else {
-        fmt.Printf("Request %d rate limited\n", i+1)
+        fmt.Printf("请求 %d 被限流\n", i+1)
     }
     time.Sleep(10 * time.Millisecond)
 }
 ```
 
-### HTTP Middleware Usage
+### HTTP 中间件用法
 
 ```go
-limiter := NewTokenBucketLimiter(100, 10) // 100 req/sec, burst of 10
+limiter := NewTokenBucketLimiter(100, 10) // 100 请求/秒，突发容量为10
 
 mux := http.NewServeMux()
 mux.HandleFunc("/api/endpoint", func(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
-    w.Write([]byte("Request processed"))
+    w.Write([]byte("请求已处理"))
 })
 
-// Apply rate limiting middleware
+// 应用速率限制中间件
 handler := RateLimitMiddleware(limiter)(mux)
 
 server := &http.Server{
@@ -200,75 +200,75 @@ server := &http.Server{
     Handler: handler,
 }
 
-log.Println("Server starting on :8080")
+log.Println("服务器在 :8080 启动")
 server.ListenAndServe()
 ```
 
-### Advanced Usage with Metrics
+### 带指标的高级用法
 
 ```go
 limiter := NewTokenBucketLimiter(50, 10)
 
-// Simulate load
+// 模拟负载
 for i := 0; i < 1000; i++ {
     limiter.Allow()
     time.Sleep(time.Millisecond)
 }
 
-// Get metrics
+// 获取指标
 metrics := limiter.GetMetrics()
-fmt.Printf("Total requests: %d\n", metrics.TotalRequests)
-fmt.Printf("Allowed requests: %d\n", metrics.AllowedRequests)
-fmt.Printf("Denied requests: %d\n", metrics.DeniedRequests)
-fmt.Printf("Success rate: %.2f%%\n", 
+fmt.Printf("总请求数: %d\n", metrics.TotalRequests)
+fmt.Printf("允许的请求数: %d\n", metrics.AllowedRequests)
+fmt.Printf("被拒绝的请求数: %d\n", metrics.DeniedRequests)
+fmt.Printf("成功率: %.2f%%\n", 
     float64(metrics.AllowedRequests)/float64(metrics.TotalRequests)*100)
 ```
 
-## Performance Requirements
+## 性能要求
 
-- **Token Bucket**: O(1) time complexity for Allow() operations
-- **Sliding Window**: O(log n) time complexity where n is the number of requests in window
-- **Fixed Window**: O(1) time complexity for Allow() operations
-- Memory usage should be bounded and configurable
-- Support for at least 10,000 concurrent goroutines
+- **令牌桶**：`Allow()` 操作的时间复杂度为 O(1)
+- **滑动窗口**：时间复杂度为 O(log n)，其中 n 是窗口中的请求数
+- **固定窗口**：`Allow()` 操作的时间复杂度为 O(1)
+- 内存使用应有限且可配置
+- 支持至少 10,000 个并发 goroutine
 
-## Testing Requirements
+## 测试要求
 
-Your implementation should pass tests for:
-- Basic functionality of each algorithm
-- Concurrent access from multiple goroutines
-- Context cancellation in blocking operations
-- Rate limit accuracy under various load patterns
-- Memory leak detection under sustained load
-- Performance benchmarks for high-throughput scenarios
+你的实现应通过以下测试：
+- 每种算法的基本功能
+- 多个 goroutine 的并发访问
+- 阻塞操作中的上下文取消
+- 不同负载模式下的速率限制准确性
+- 持续负载下的内存泄漏检测
+- 高吞吐场景下的性能基准测试
 
-## Instructions
+## 指令
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-29/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the required interfaces, types, and methods.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 仓库。
+- **Clone** 你的 fork 到本地机器。
+- **创建** 一个以你的 GitHub 用户名命名的目录，位于 `challenge-29/submissions/` 下。
+- **复制** `solution-template.go` 文件到你的提交目录。
+- **实现** 所需的接口、类型和方法。
+- **本地测试** 你的解决方案，运行测试文件。
+- **提交** 并 **推送** 代码到你的 fork。
+- **创建** 一个拉取请求以提交你的解决方案。
 
-## Testing Your Solution Locally
+## 本地测试你的解决方案
 
-Run the following command in the `challenge-29/` directory:
+在 `challenge-29/` 目录中运行以下命令：
 
 ```bash
 go test -v
 ```
 
-For performance testing:
+性能测试：
 
 ```bash
 go test -v -bench=.
 ```
 
-For race condition testing:
+竞态条件检测：
 
 ```bash
 go test -v -race
-``` 
+```

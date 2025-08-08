@@ -1,54 +1,54 @@
-# Learning Materials for String Pattern Matching
+# 字符串模式匹配学习资料
 
-## Introduction to String Pattern Matching
+## 字符串模式匹配简介
 
-String pattern matching is the process of finding occurrences of a pattern string within a larger text string. This fundamental algorithm is used in many applications such as:
+字符串模式匹配是指在较长的文本字符串中查找模式字符串出现的位置。这一基础算法广泛应用于以下场景：
 
-- Text editors (find and replace)
-- Bioinformatics (DNA sequence matching)
-- Internet search engines
-- Data mining and analysis
-- Spam filters and security systems
+- 文本编辑器（查找和替换）
+- 生物信息学（DNA序列匹配）
+- 互联网搜索引擎
+- 数据挖掘与分析
+- 垃圾邮件过滤器和安全系统
 
-In this learning material, we'll explore three different algorithms for string pattern matching:
+在本学习材料中，我们将探讨三种不同的字符串模式匹配算法：
 
-1. Naive (Brute Force) Algorithm
-2. Knuth-Morris-Pratt (KMP) Algorithm
-3. Rabin-Karp Algorithm
+1. 暴力（朴素）算法
+2. 克努斯-莫里斯-普拉特（KMP）算法
+3. 拉宾-卡普（Rabin-Karp）算法
 
-## 1. Naive Pattern Matching Algorithm
+## 1. 暴力模式匹配算法
 
-The naive approach is the most straightforward method for string matching. It checks for a match starting at each possible position in the text.
+暴力方法是字符串匹配最直接的方式。它从文本中的每个可能位置开始检查是否匹配。
 
-### How the Naive Algorithm Works
+### 暴力算法的工作原理
 
-1. Align the pattern at the beginning of the text
-2. Compare each character of the pattern with the corresponding character in the text
-3. If all characters match, record the starting position
-4. Shift the pattern by one position to the right
-5. Repeat steps 2-4 until the end of the text is reached
+1. 将模式对齐到文本开头
+2. 逐个比较模式与文本对应位置的字符
+3. 如果所有字符都匹配，则记录起始位置
+4. 将模式向右移动一个位置
+5. 重复步骤2-4，直到到达文本末尾
 
-### Implementing the Naive Algorithm in Go
+### 在Go语言中实现暴力算法
 
 ```go
 func NaivePatternMatch(text, pattern string) []int {
     matches := []int{}
     
-    // Handle edge cases
+    // 处理边界情况
     if len(pattern) == 0 || len(text) < len(pattern) {
         return matches
     }
     
-    // Check each possible position in the text
+    // 检查文本中每个可能的位置
     for i := 0; i <= len(text)-len(pattern); i++ {
         j := 0
         
-        // Check if the pattern matches at this position
+        // 检查该位置是否匹配
         for j < len(pattern) && text[i+j] == pattern[j] {
             j++
         }
         
-        // If j reached the end of the pattern, we found a match
+        // 如果j达到模式末尾，说明找到匹配
         if j == len(pattern) {
             matches = append(matches, i)
         }
@@ -58,47 +58,47 @@ func NaivePatternMatch(text, pattern string) []int {
 }
 ```
 
-### Complexity of the Naive Algorithm
+### 暴力算法的时间复杂度
 
-- **Time Complexity**: O(n*m) where n is the length of the text and m is the length of the pattern
-- **Space Complexity**: O(k) where k is the number of matches found
+- **时间复杂度**：O(n×m)，其中n是文本长度，m是模式长度
+- **空间复杂度**：O(k)，其中k是找到的匹配数量
 
-The naive algorithm is simple to implement but can be inefficient for large texts or patterns with many partial matches.
+暴力算法实现简单，但对于大文本或存在大量部分匹配的情况效率较低。
 
-## 2. Knuth-Morris-Pratt (KMP) Algorithm
+## 2. 克努斯-莫里斯-普拉特（KMP）算法
 
-The KMP algorithm improves upon the naive approach by avoiding redundant comparisons when a mismatch occurs. It uses a preprocessed table (called the "failure function" or "longest proper prefix which is also suffix" array) to skip characters that we know will match based on previously matched characters.
+KMP算法通过避免失配时的重复比较来改进暴力方法。它使用预处理表（称为“失败函数”或“最长真前缀也是后缀”数组）来跳过已知会匹配的字符。
 
-### How the KMP Algorithm Works
+### KMP算法的工作原理
 
-1. Preprocess the pattern to build a partial match table (also called the "LPS" or "π" table)
-2. Use this table to determine how far to shift the pattern when a mismatch occurs
-3. Never backtrack in the text - each character in the text is examined exactly once
+1. 预处理模式以构建部分匹配表（也称“LPS”或“π”表）
+2. 利用此表确定失配时应将模式移多少位
+3. 不回溯文本——文本中的每个字符仅被检查一次
 
-### Creating the LPS (Longest Prefix Suffix) Array
+### 构建LPS（最长前缀后缀）数组
 
-The LPS array helps determine the longest proper prefix of the pattern that is also a suffix of the pattern up to each position. This information is used to avoid redundant comparisons.
+LPS数组帮助确定模式在每个位置上最长的真前缀同时也是后缀的部分。这些信息用于避免重复比较。
 
 ```go
 func computeLPSArray(pattern string) []int {
     m := len(pattern)
     lps := make([]int, m)
     
-    // Length of the previous longest prefix suffix
+    // 上一个最长前后缀的长度
     length := 0
     i := 1
     
-    // The loop calculates lps[i] for i = 1 to m-1
+    // 循环计算lps[i]，i从1到m-1
     for i < m {
         if pattern[i] == pattern[length] {
             length++
             lps[i] = length
             i++
         } else {
-            // This is the tricky part
+            // 这是关键部分
             if length != 0 {
                 length = lps[length-1]
-                // Note: We do not increment i here
+                // 注意：这里不增加i
             } else {
                 lps[i] = 0
                 i++
@@ -110,13 +110,13 @@ func computeLPSArray(pattern string) []int {
 }
 ```
 
-### Implementing the KMP Algorithm in Go
+### 在Go语言中实现KMP算法
 
 ```go
 func KMPSearch(text, pattern string) []int {
     matches := []int{}
     
-    // Handle edge cases
+    // 处理边界情况
     if len(pattern) == 0 || len(text) < len(pattern) {
         return matches
     }
@@ -124,31 +124,31 @@ func KMPSearch(text, pattern string) []int {
     n := len(text)
     m := len(pattern)
     
-    // Preprocess the pattern
+    // 预处理模式
     lps := computeLPSArray(pattern)
     
-    i := 0 // Index for text
-    j := 0 // Index for pattern
+    i := 0 // 文本索引
+    j := 0 // 模式索引
     
     for i < n {
-        // Current characters match, move both pointers forward
+        // 当前字符匹配，两个指针都向前移动
         if pattern[j] == text[i] {
             i++
             j++
         }
         
-        // Found a complete match
+        // 找到完整匹配
         if j == m {
             matches = append(matches, i-j)
-            // Use lps to shift pattern for next match
+            // 使用lps调整模式位置进行下一次匹配
             j = lps[j-1]
         } else if i < n && pattern[j] != text[i] {
-            // Mismatch after j matches
+            // 匹配j个字符后发生失配
             if j != 0 {
-                // Use lps to shift pattern
+                // 使用lps调整模式位置
                 j = lps[j-1]
             } else {
-                // No match found, move to next character in text
+                // 未找到匹配，移动到文本下一个字符
                 i++
             }
         }
@@ -158,40 +158,40 @@ func KMPSearch(text, pattern string) []int {
 }
 ```
 
-### Complexity of the KMP Algorithm
+### KMP算法的时间复杂度
 
-- **Time Complexity**: O(n+m) where n is the length of the text and m is the length of the pattern
-- **Space Complexity**: O(m) for the LPS array plus O(k) for storing the matches
+- **时间复杂度**：O(n+m)，其中n是文本长度，m是模式长度
+- **空间复杂度**：O(m)用于LPS数组，加上O(k)用于存储匹配结果
 
-The KMP algorithm is much more efficient than the naive approach for texts with many potential matches, especially for longer patterns.
+KMP算法比暴力方法高效得多，尤其适用于存在大量潜在匹配的文本，特别是长模式的情况。
 
-## 3. Rabin-Karp Algorithm
+## 3. 拉宾-卡普（Rabin-Karp）算法
 
-The Rabin-Karp algorithm uses hashing to find pattern matches more efficiently. Instead of comparing each character, it compares hash values of the pattern and substrings of the text.
+拉宾-卡普算法使用哈希技术更高效地查找模式匹配。它不是逐个比较字符，而是比较模式和文本子串的哈希值。
 
-### How the Rabin-Karp Algorithm Works
+### 拉宾-卡普算法的工作原理
 
-1. Compute the hash value of the pattern
-2. Compute hash values for all possible m-length substrings of the text using a rolling hash function
-3. Compare the hash value of the pattern with the hash value of each substring
-4. If the hash values match, verify the actual strings character by character
+1. 计算模式的哈希值
+2. 使用滚动哈希函数计算文本中所有长度为m的子串的哈希值
+3. 比较模式的哈希值与每个子串的哈希值
+4. 如果哈希值匹配，则逐字符验证实际字符串
 
-### Implementing a Rolling Hash Function
+### 实现滚动哈希函数
 
-A rolling hash function allows us to compute the hash value of the next substring in constant time by using the hash value of the current substring:
+滚动哈希函数允许我们通过当前子串的哈希值，在常数时间内计算下一个子串的哈希值：
 
 ```go
-// Remove the leftmost character and add the rightmost character
+// 移除最左边的字符并添加最右边的字符
 newHash = (oldHash - oldChar * pow) * base + newChar
 ```
 
-### Implementing the Rabin-Karp Algorithm in Go
+### 在Go语言中实现拉宾-卡普算法
 
 ```go
 func RabinKarpSearch(text, pattern string) []int {
     matches := []int{}
     
-    // Handle edge cases
+    // 处理边界情况
     if len(pattern) == 0 || len(text) < len(pattern) {
         return matches
     }
@@ -199,33 +199,33 @@ func RabinKarpSearch(text, pattern string) []int {
     n := len(text)
     m := len(pattern)
     
-    // Large prime number to avoid hash collisions
+    // 大质数以减少哈希冲突
     prime := 101
     
-    // Base value for the hash function
+    // 哈希函数的基础值
     base := 256
     
-    // Hash value for pattern and initial window
+    // 模式的哈希值和初始窗口的哈希值
     patternHash := 0
     windowHash := 0
     
-    // Highest power of base that we need
+    // 所需的base最高次幂
     h := 1
     for i := 0; i < m-1; i++ {
         h = (h * base) % prime
     }
     
-    // Calculate initial hash values
+    // 计算初始哈希值
     for i := 0; i < m; i++ {
         patternHash = (base*patternHash + int(pattern[i])) % prime
         windowHash = (base*windowHash + int(text[i])) % prime
     }
     
-    // Slide the pattern over text one by one
+    // 逐个滑动模式
     for i := 0; i <= n-m; i++ {
-        // Check if hash values match
+        // 检查哈希值是否匹配
         if patternHash == windowHash {
-            // Verify the match character by character
+            // 逐字符验证匹配
             match := true
             for j := 0; j < m; j++ {
                 if text[i+j] != pattern[j] {
@@ -238,11 +238,11 @@ func RabinKarpSearch(text, pattern string) []int {
             }
         }
         
-        // Calculate hash value for next window
+        // 计算下一个窗口的哈希值
         if i < n-m {
             windowHash = (base*(windowHash-int(text[i])*h) + int(text[i+m])) % prime
             
-            // Ensure we only have positive hash values
+            // 确保哈希值为正
             if windowHash < 0 {
                 windowHash += prime
             }
@@ -253,43 +253,43 @@ func RabinKarpSearch(text, pattern string) []int {
 }
 ```
 
-### Complexity of the Rabin-Karp Algorithm
+### 拉宾-卡普算法的时间复杂度
 
-- **Average Case Time Complexity**: O(n+m) where n is the length of the text and m is the length of the pattern
-- **Worst Case Time Complexity**: O(n*m) if there are many hash collisions
-- **Space Complexity**: O(k) where k is the number of matches found
+- **平均情况时间复杂度**：O(n+m)，其中n是文本长度，m是模式长度
+- **最坏情况时间复杂度**：O(n×m)，当存在大量哈希冲突时
+- **空间复杂度**：O(k)，其中k是找到的匹配数量
 
-The Rabin-Karp algorithm is particularly efficient for multiple pattern searching and plagiarism detection.
+拉宾-卡普算法特别适用于多模式搜索和抄袭检测。
 
-## Comparing the Algorithms
+## 算法对比
 
-| Algorithm | Average Time Complexity | Worst Case Time Complexity | Space Complexity | Strengths | Weaknesses |
-|-----------|-------------------------|----------------------------|------------------|-----------|------------|
-| Naive     | O(n*m)                 | O(n*m)                    | O(1)             | Simple, low overhead | Inefficient for large strings |
-| KMP       | O(n+m)                 | O(n+m)                    | O(m)             | Very efficient, no backtracking | More complex, requires preprocessing |
-| Rabin-Karp | O(n+m)                | O(n*m)                    | O(1)             | Good for multiple patterns | Hash collisions can occur |
+| 算法 | 平均时间复杂度 | 最坏时间复杂度 | 空间复杂度 | 优点 | 缺点 |
+|-----------|----------------|----------------|--------------|------|------|
+| 暴力     | O(n×m)         | O(n×m)         | O(1)         | 简单，开销低 | 大字符串效率差 |
+| KMP       | O(n+m)         | O(n+m)         | O(m)         | 非常高效，无需回溯 | 较复杂，需要预处理 |
+| 拉宾-卡普 | O(n+m)         | O(n×m)         | O(1)         | 多模式搜索效果好 | 可能发生哈希冲突 |
 
-## Practical Applications
+## 实际应用
 
-### 1. Text Editors
+### 1. 文本编辑器
 
-Pattern matching is essential for "find" and "replace" operations in text editors.
+模式匹配对于文本编辑器中的“查找”和“替换”操作至关重要。
 
-### 2. Bioinformatics
+### 2. 生物信息学
 
-DNA sequence matching uses pattern matching to find gene sequences within the genome.
+DNA序列匹配使用模式匹配在基因组中查找基因序列。
 
-### 3. Intrusion Detection
+### 3. 入侵检测
 
-Network security systems use pattern matching to identify suspicious patterns in network traffic.
+网络安全系统使用模式匹配识别网络流量中的可疑模式。
 
-### 4. Plagiarism Detection
+### 4. 抄袭检测
 
-Document similarity checks use pattern matching to find copied content.
+文档相似性检查使用模式匹配查找复制内容。
 
-## Further Reading
+## 进一步阅读
 
-1. [Knuth-Morris-Pratt Algorithm (GeeksforGeeks)](https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/)
-2. [Rabin-Karp Algorithm (GeeksforGeeks)](https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/)
-3. [String Matching Algorithms (Wikipedia)](https://en.wikipedia.org/wiki/String-searching_algorithm)
-4. [Advanced String Searching (Stanford CS166)](https://web.stanford.edu/class/cs166/) 
+1. [克努斯-莫里斯-普拉特算法（GeeksforGeeks）](https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/)
+2. [拉宾-卡普算法（GeeksforGeeks）](https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/)
+3. [字符串匹配算法（维基百科）](https://en.wikipedia.org/wiki/String-searching_algorithm)
+4. [高级字符串搜索（斯坦福CS166）](https://web.stanford.edu/class/cs166/)

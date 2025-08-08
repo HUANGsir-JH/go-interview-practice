@@ -1,23 +1,23 @@
-# Learning: Authentication & Session Management
+# 学习：认证与会话管理
 
-## 🌟 **What is Authentication?**
+## 🌟 **什么是认证？**
 
-Authentication is the process of verifying the identity of a user or system. It answers the question "Who are you?" and is fundamental to securing web applications.
+认证是验证用户或系统身份的过程。它回答了“你是谁？”这个问题，是保护Web应用程序的基础。
 
-### **Authentication vs Authorization**
-- **Authentication**: Verifying identity ("Who are you?")
-- **Authorization**: Determining permissions ("What can you do?")
+### **认证 vs 授权**
+- **认证**：验证身份（“你是谁？”）
+- **授权**：确定权限（“你能做什么？”）
 
-## 🔐 **Password Security**
+## 🔐 **密码安全**
 
-### **Password Hashing with bcrypt**
-Never store plain text passwords. Use bcrypt for secure hashing:
+### **使用 bcrypt 进行密码哈希**
+切勿存储明文密码。请使用 bcrypt 进行安全哈希：
 
 ```go
 import "golang.org/x/crypto/bcrypt"
 
 func hashPassword(password string) (string, error) {
-    // Cost of 12 provides good security vs performance balance
+    // 12 的成本值在安全性和性能之间提供了良好的平衡
     hash, err := bcrypt.GenerateFromPassword([]byte(password), 12)
     return string(hash), err
 }
@@ -28,52 +28,52 @@ func verifyPassword(password, hash string) bool {
 }
 ```
 
-### **Password Strength Requirements**
-Implement strong password policies:
+### **密码强度要求**
+实施强密码策略：
 
 ```go
 func validatePassword(password string) []string {
     var errors []string
     
     if len(password) < 8 {
-        errors = append(errors, "Password must be at least 8 characters")
+        errors = append(errors, "密码必须至少包含8个字符")
     }
     
     if !regexp.MustCompile(`[A-Z]`).MatchString(password) {
-        errors = append(errors, "Password must contain uppercase letter")
+        errors = append(errors, "密码必须包含大写字母")
     }
     
     if !regexp.MustCompile(`[a-z]`).MatchString(password) {
-        errors = append(errors, "Password must contain lowercase letter")
+        errors = append(errors, "密码必须包含小写字母")
     }
     
     if !regexp.MustCompile(`\d`).MatchString(password) {
-        errors = append(errors, "Password must contain a digit")
+        errors = append(errors, "密码必须包含数字")
     }
     
     if !regexp.MustCompile(`[!@#$%^&*]`).MatchString(password) {
-        errors = append(errors, "Password must contain special character")
+        errors = append(errors, "密码必须包含特殊字符")
     }
     
     return errors
 }
 ```
 
-## 🎫 **JWT (JSON Web Tokens)**
+## 🎫 **JWT（JSON Web Tokens）**
 
-JWT is a stateless authentication method that encodes user information in a token.
+JWT 是一种无状态的认证方法，将用户信息编码在令牌中。
 
-### **JWT Structure**
-A JWT consists of three parts separated by dots:
-- **Header**: Algorithm and token type
-- **Payload**: Claims (user data)
-- **Signature**: Verification signature
+### **JWT 结构**
+JWT 由三部分组成，用点号分隔：
+- **头部**：算法和令牌类型
+- **载荷**：声明（用户数据）
+- **签名**：验证签名
 
 ```
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 ```
 
-### **Creating JWT Tokens**
+### **生成 JWT 令牌**
 ```go
 import "github.com/golang-jwt/jwt/v5"
 
@@ -103,15 +103,15 @@ func generateJWT(user User, secret []byte) (string, error) {
 }
 ```
 
-### **Validating JWT Tokens**
+### **验证 JWT 令牌**
 ```go
 func validateJWT(tokenString string, secret []byte) (*Claims, error) {
     claims := &Claims{}
     
     token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-        // Verify signing method
+        // 验证签名方法
         if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-            return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+            return nil, fmt.Errorf("意外的签名方法: %v", token.Header["alg"])
         }
         return secret, nil
     })
@@ -121,44 +121,44 @@ func validateJWT(tokenString string, secret []byte) (*Claims, error) {
     }
     
     if !token.Valid {
-        return nil, fmt.Errorf("invalid token")
+        return nil, fmt.Errorf("无效的令牌")
     }
     
     return claims, nil
 }
 ```
 
-## 🛡️ **Middleware for Authentication**
+## 🛡️ **认证中间件**
 
-### **JWT Authentication Middleware**
+### **JWT 认证中间件**
 ```go
 func jwtMiddleware(secret []byte) fiber.Handler {
     return func(c *fiber.Ctx) error {
-        // Extract token from Authorization header
+        // 从 Authorization 头部提取令牌
         authHeader := c.Get("Authorization")
         if authHeader == "" {
             return c.Status(401).JSON(fiber.Map{
-                "error": "Missing authorization header",
+                "error": "缺少授权头",
             })
         }
         
-        // Parse "Bearer <token>" format
+        // 解析 "Bearer <token>" 格式
         parts := strings.Split(authHeader, " ")
         if len(parts) != 2 || parts[0] != "Bearer" {
             return c.Status(401).JSON(fiber.Map{
-                "error": "Invalid authorization header format",
+                "error": "无效的授权头格式",
             })
         }
         
-        // Validate token
+        // 验证令牌
         claims, err := validateJWT(parts[1], secret)
         if err != nil {
             return c.Status(401).JSON(fiber.Map{
-                "error": "Invalid or expired token",
+                "error": "无效或过期的令牌",
             })
         }
         
-        // Store user info in context
+        // 将用户信息存入上下文
         c.Locals("user_id", claims.UserID)
         c.Locals("username", claims.Username)
         c.Locals("role", claims.Role)
@@ -168,7 +168,7 @@ func jwtMiddleware(secret []byte) fiber.Handler {
 }
 ```
 
-### **Role-Based Access Control**
+### **基于角色的访问控制**
 ```go
 func requireRole(requiredRole string) fiber.Handler {
     return func(c *fiber.Ctx) error {
@@ -176,7 +176,7 @@ func requireRole(requiredRole string) fiber.Handler {
         
         if userRole != requiredRole {
             return c.Status(403).JSON(fiber.Map{
-                "error": "Insufficient permissions",
+                "error": "权限不足",
             })
         }
         
@@ -184,14 +184,14 @@ func requireRole(requiredRole string) fiber.Handler {
     }
 }
 
-// Usage
+// 使用示例
 admin := app.Group("/admin", jwtMiddleware(secret), requireRole("admin"))
 ```
 
-## 🔄 **Session Management**
+## 🔄 **会话管理**
 
-### **Token Refresh Pattern**
-Implement token refresh for better security:
+### **令牌刷新模式**
+实现令牌刷新以提高安全性：
 
 ```go
 type TokenPair struct {
@@ -200,13 +200,13 @@ type TokenPair struct {
 }
 
 func generateTokenPair(user User) (*TokenPair, error) {
-    // Short-lived access token (15 minutes)
+    // 短时访问令牌（15分钟）
     accessToken, err := generateJWT(user, 15*time.Minute)
     if err != nil {
         return nil, err
     }
     
-    // Long-lived refresh token (7 days)
+    // 长时刷新令牌（7天）
     refreshToken, err := generateRefreshToken(user, 7*24*time.Hour)
     if err != nil {
         return nil, err
@@ -219,8 +219,8 @@ func generateTokenPair(user User) (*TokenPair, error) {
 }
 ```
 
-### **Token Blacklisting**
-Maintain a blacklist of revoked tokens:
+### **令牌黑名单**
+维护被撤销令牌的黑名单：
 
 ```go
 type TokenBlacklist struct {
@@ -243,7 +243,7 @@ func (tb *TokenBlacklist) IsBlacklisted(tokenID string) bool {
         return false
     }
     
-    // Clean up expired entries
+    // 清理过期条目
     if time.Now().After(expiry) {
         delete(tb.tokens, tokenID)
         return false
@@ -253,28 +253,28 @@ func (tb *TokenBlacklist) IsBlacklisted(tokenID string) bool {
 }
 ```
 
-## 👤 **User Management Patterns**
+## 👤 **用户管理模式**
 
-### **User Registration**
+### **用户注册**
 ```go
 func registerUser(req RegisterRequest) (*User, error) {
-    // Validate input
+    // 验证输入
     if err := validateRegistration(req); err != nil {
         return nil, err
     }
     
-    // Check if user exists
+    // 检查用户是否存在
     if userExists(req.Username, req.Email) {
-        return nil, errors.New("user already exists")
+        return nil, errors.New("用户已存在")
     }
     
-    // Hash password
+    // 哈希密码
     hashedPassword, err := hashPassword(req.Password)
     if err != nil {
         return nil, err
     }
     
-    // Create user
+    // 创建用户
     user := &User{
         ID:       generateUserID(),
         Username: req.Username,
@@ -285,7 +285,7 @@ func registerUser(req RegisterRequest) (*User, error) {
         CreatedAt: time.Now(),
     }
     
-    // Save to database/storage
+    // 保存到数据库/存储
     if err := saveUser(user); err != nil {
         return nil, err
     }
@@ -294,26 +294,26 @@ func registerUser(req RegisterRequest) (*User, error) {
 }
 ```
 
-### **User Login**
+### **用户登录**
 ```go
 func loginUser(req LoginRequest) (*AuthResponse, error) {
-    // Find user
+    // 查找用户
     user, err := findUserByUsername(req.Username)
     if err != nil {
-        return nil, errors.New("invalid credentials")
+        return nil, errors.New("无效凭据")
     }
     
-    // Verify password
+    // 验证密码
     if !verifyPassword(req.Password, user.Password) {
-        return nil, errors.New("invalid credentials")
+        return nil, errors.New("无效凭据")
     }
     
-    // Check if account is active
+    // 检查账户是否激活
     if !user.Active {
-        return nil, errors.New("account is disabled")
+        return nil, errors.New("账户已被禁用");
     }
     
-    // Generate tokens
+    // 生成令牌
     tokenPair, err := generateTokenPair(*user)
     if err != nil {
         return nil, err
@@ -327,29 +327,29 @@ func loginUser(req LoginRequest) (*AuthResponse, error) {
 }
 ```
 
-## 🔒 **Security Best Practices**
+## 🔒 **安全最佳实践**
 
-### **1. Secure Token Storage**
-- Store JWT secret in environment variables
-- Use strong, randomly generated secrets
-- Rotate secrets periodically
+### **1. 安全的令牌存储**
+- 将 JWT 密钥存储在环境变量中
+- 使用强且随机生成的密钥
+- 定期轮换密钥
 
 ```go
 func getJWTSecret() []byte {
     secret := os.Getenv("JWT_SECRET")
     if secret == "" {
-        log.Fatal("JWT_SECRET environment variable is required")
+        log.Fatal("JWT_SECRET 环境变量是必需的")
     }
     return []byte(secret)
 }
 ```
 
-### **2. Rate Limiting**
-Prevent brute force attacks:
+### **2. 速率限制**
+防止暴力破解攻击：
 
 ```go
 func loginRateLimit() fiber.Handler {
-    // Allow 5 login attempts per minute per IP
+    // 每个IP每分钟允许5次登录尝试
     return limiter.New(limiter.Config{
         Max:        5,
         Expiration: 1 * time.Minute,
@@ -360,46 +360,46 @@ func loginRateLimit() fiber.Handler {
 }
 ```
 
-### **3. Input Validation**
-Always validate and sanitize input:
+### **3. 输入验证**
+始终验证并清理输入：
 
 ```go
 func validateLoginRequest(req LoginRequest) error {
     if req.Username == "" {
-        return errors.New("username is required")
+        return errors.New("用户名是必需的")
     }
     
     if req.Password == "" {
-        return errors.New("password is required")
+        return errors.New("密码是必需的")
     }
     
-    // Sanitize username
+    // 清理用户名
     req.Username = strings.TrimSpace(req.Username)
     
     return nil
 }
 ```
 
-### **4. HTTPS Only**
-Always use HTTPS in production:
+### **4. 仅限 HTTPS**
+生产环境中始终使用 HTTPS：
 
 ```go
 app := fiber.New(fiber.Config{
-    // Force HTTPS
+    // 强制使用 HTTPS
     EnableTrustedProxyCheck: true,
     TrustedProxies: []string{"127.0.0.1"},
 })
 
-// Add security headers
+// 添加安全头
 app.Use(func(c *fiber.Ctx) error {
     c.Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
     return c.Next()
 })
 ```
 
-## 🧪 **Testing Authentication**
+## 🧪 **测试认证**
 
-### **Testing JWT Functions**
+### **测试 JWT 函数**
 ```go
 func TestJWTGeneration(t *testing.T) {
     user := User{
@@ -414,7 +414,7 @@ func TestJWTGeneration(t *testing.T) {
     assert.NoError(t, err)
     assert.NotEmpty(t, token)
     
-    // Validate the token
+    // 验证令牌
     claims, err := validateJWT(token, secret)
     assert.NoError(t, err)
     assert.Equal(t, user.ID, claims.UserID)
@@ -422,17 +422,17 @@ func TestJWTGeneration(t *testing.T) {
 }
 ```
 
-### **Testing Protected Endpoints**
+### **测试受保护端点**
 ```go
 func TestProtectedEndpoint(t *testing.T) {
     app := setupTestApp()
     
-    // Test without token
+    // 测试无令牌情况
     req := httptest.NewRequest("GET", "/profile", nil)
     resp, _ := app.Test(req)
     assert.Equal(t, 401, resp.StatusCode)
     
-    // Test with valid token
+    // 测试有效令牌
     token := generateTestToken(t)
     req = httptest.NewRequest("GET", "/profile", nil)
     req.Header.Set("Authorization", "Bearer "+token)
@@ -441,23 +441,23 @@ func TestProtectedEndpoint(t *testing.T) {
 }
 ```
 
-## 🎯 **Best Practices Summary**
+## 🎯 **最佳实践总结**
 
-1. **Never store plain text passwords**
-2. **Use strong password requirements**
-3. **Implement proper JWT validation**
-4. **Use HTTPS in production**
-5. **Implement rate limiting**
-6. **Validate and sanitize all input**
-7. **Use environment variables for secrets**
-8. **Implement proper error handling**
-9. **Test authentication thoroughly**
-10. **Follow the principle of least privilege**
+1. **永远不要存储明文密码**
+2. **使用强密码要求**
+3. **实现正确的 JWT 验证**
+4. **生产环境中使用 HTTPS**
+5. **实现速率限制**
+6. **验证并清理所有输入**
+7. **使用环境变量存储密钥**
+8. **实现适当的错误处理**
+9. **彻底测试认证逻辑**
+10. **遵循最小权限原则**
 
-## 📚 **Next Steps**
+## 📚 **下一步**
 
-After mastering authentication:
-1. **OAuth2 Integration** - Third-party authentication
-2. **Multi-Factor Authentication** - Enhanced security
-3. **Session Storage** - Redis/database sessions
-4. **Audit Logging** - Track authentication events
+掌握认证后：
+1. **OAuth2 集成** - 第三方认证
+2. **多因素认证** - 增强安全性
+3. **会话存储** - Redis/数据库会话
+4. **审计日志** - 跟踪认证事件

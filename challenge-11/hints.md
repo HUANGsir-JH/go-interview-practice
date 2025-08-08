@@ -1,36 +1,36 @@
-# Hints for Challenge 11: Concurrent Web Content Aggregator
+# 挑战 11 提示：并发网页内容聚合器
 
-## Hint 1: Understanding the Core Structure
-Start by implementing the basic ContentAggregator struct with the necessary fields:
+## 提示 1：理解核心结构
+从实现基本的 ContentAggregator 结构体开始，包含必要的字段：
 ```go
 type ContentAggregator struct {
     fetcher         ContentFetcher
     processor       ContentProcessor
     workerCount     int
-    requestLimiter  *rate.Limiter  // for rate limiting
+    requestLimiter  *rate.Limiter  // 用于速率限制
     wg              sync.WaitGroup
     shutdown        chan struct{}
     shutdownOnce    sync.Once
 }
 ```
 
-## Hint 2: Rate Limiting Implementation
-Use Go's `golang.org/x/time/rate` package for rate limiting:
+## 提示 2：速率限制实现
+使用 Go 的 `golang.org/x/time/rate` 包实现速率限制：
 ```go
 import "golang.org/x/time/rate"
 
-// In constructor
+// 在构造函数中
 requestLimiter := rate.NewLimiter(rate.Limit(requestsPerSecond), 1)
 
-// Before making requests
+// 发起请求前
 err := requestLimiter.Wait(ctx)
 if err != nil {
-    return err // context cancelled or deadline exceeded
+    return err // 上下文被取消或超时
 }
 ```
 
-## Hint 3: Worker Pool Pattern
-Create a worker pool that processes jobs from a channel:
+## 提示 3：工作池模式
+创建一个从通道处理任务的工作池：
 ```go
 func (ca *ContentAggregator) workerPool(ctx context.Context, jobs <-chan string, results chan<- ProcessedData, errors chan<- error) {
     for i := 0; i < ca.workerCount; i++ {
@@ -41,9 +41,9 @@ func (ca *ContentAggregator) workerPool(ctx context.Context, jobs <-chan string,
                 select {
                 case url, ok := <-jobs:
                     if !ok {
-                        return // channel closed
+                        return // 通道已关闭
                     }
-                    // Process URL here
+                    // 在此处处理 URL
                 case <-ctx.Done():
                     return
                 }
@@ -53,18 +53,18 @@ func (ca *ContentAggregator) workerPool(ctx context.Context, jobs <-chan string,
 }
 ```
 
-## Hint 4: Fan-Out, Fan-In Pattern
-Distribute URLs to workers and collect results:
+## 提示 4：扇出、扇入模式
+将 URL 分发给工作线程并收集结果：
 ```go
 func (ca *ContentAggregator) FetchAndProcess(ctx context.Context, urls []string) ([]ProcessedData, error) {
     jobs := make(chan string, len(urls))
     results := make(chan ProcessedData, len(urls))
     errors := make(chan error, len(urls))
     
-    // Start workers
+    // 启动工作线程
     ca.workerPool(ctx, jobs, results, errors)
     
-    // Send jobs
+    // 发送任务
     go func() {
         defer close(jobs)
         for _, url := range urls {
@@ -76,19 +76,19 @@ func (ca *ContentAggregator) FetchAndProcess(ctx context.Context, urls []string)
         }
     }()
     
-    // Collect results
-    // Implementation here...
+    // 收集结果
+    // 实现在此...
 }
 ```
 
-## Hint 5: Context Propagation and Error Handling
-Always pass context down the call chain and handle cancellation:
+## 提示 5：上下文传播与错误处理
+始终向下传递上下文并处理取消操作：
 ```go
-// In worker processing
+// 在工作线程处理中
 content, err := ca.fetcher.Fetch(ctx, url)
 if err != nil {
     select {
-    case errors <- fmt.Errorf("fetch error for %s: %w", url, err):
+    case errors <- fmt.Errorf("获取失败：%s: %w", url, err):
     case <-ctx.Done():
     }
     return
@@ -97,29 +97,29 @@ if err != nil {
 processedData, err := ca.processor.Process(ctx, content)
 if err != nil {
     select {
-    case errors <- fmt.Errorf("process error for %s: %w", url, err):
+    case errors <- fmt.Errorf("处理失败：%s: %w", url, err):
     case <-ctx.Done():
     }
     return
 }
 ```
 
-## Hint 6: Graceful Shutdown
-Implement proper cleanup in the shutdown method:
+## 提示 6：优雅关闭
+在关闭方法中实现适当的清理：
 ```go
 func (ca *ContentAggregator) Shutdown() error {
     ca.shutdownOnce.Do(func() {
         close(ca.shutdown)
-        ca.wg.Wait() // Wait for all workers to finish
+        ca.wg.Wait() // 等待所有工作线程完成
     })
     return nil
 }
 ```
 
-## Hint 7: Result Collection Pattern
-Use a separate goroutine to collect results and handle the done signal:
+## 提示 7：结果收集模式
+使用单独的 goroutine 收集结果并处理完成信号：
 ```go
-// Create channels for collecting results
+// 创建用于收集结果的通道
 var allResults []ProcessedData
 var allErrors []error
 
@@ -138,19 +138,19 @@ go func() {
     }
 }()
 
-// Wait for completion or context cancellation
+// 等待完成或上下文取消
 select {
 case <-done:
-    // All URLs processed
+    // 所有 URL 已处理
 case <-ctx.Done():
     return nil, ctx.Err()
 }
 ```
 
-## Key Concepts to Remember:
-- **Context**: Always propagate context and check for cancellation
-- **Channels**: Use buffered channels to avoid blocking
-- **WaitGroup**: Coordinate goroutine completion
-- **Rate Limiting**: Respect rate limits to avoid overwhelming servers
-- **Error Handling**: Collect and return meaningful errors
-- **Resource Cleanup**: Always close channels and wait for goroutines 
+## 需要记住的关键概念：
+- **上下文**：始终传递上下文并检查是否被取消
+- **通道**：使用带缓冲的通道以避免阻塞
+- **WaitGroup**：协调 goroutine 的完成
+- **速率限制**：遵守速率限制，避免过度冲击服务器
+- **错误处理**：收集并返回有意义的错误
+- **资源清理**：始终关闭通道并等待 goroutine 结束

@@ -1,10 +1,10 @@
-# Hints for GORM CRUD Operations Challenge
+# GORM CRUD 操作挑战提示
 
-## Hint 1: Database Connection Setup
+## 提示 1：数据库连接设置
 
-Start with the database connection - Make sure your `ConnectDB()` function properly connects to SQLite and auto-migrates the User model.
+从数据库连接开始——确保你的 `ConnectDB()` 函数正确连接到 SQLite，并自动迁移 User 模型。
 
-Use `gorm.Open()` with SQLite driver, call `AutoMigrate(&User{})` to create the table, and return the database connection and any error.
+使用 `gorm.Open()` 配合 SQLite 驱动，调用 `AutoMigrate(&User{})` 创建表，并返回数据库连接和任何错误。
 
 ```go
 import "gorm.io/driver/sqlite"
@@ -19,9 +19,9 @@ func ConnectDB() (*gorm.DB, error) {
 }
 ```
 
-## Hint 2: Creating Users
+## 提示 2：创建用户
 
-Use `db.Create(user)` to insert the user. Check for errors after the operation. The user's ID will be automatically set after creation.
+使用 `db.Create(user)` 插入用户。操作后检查错误。创建后用户的 ID 将自动设置。
 
 ```go
 func CreateUser(db *gorm.DB, user *User) error {
@@ -30,9 +30,9 @@ func CreateUser(db *gorm.DB, user *User) error {
 }
 ```
 
-## Hint 3: Reading Users by ID
+## 提示 3：按 ID 读取用户
 
-Use `db.First(&user, id)` to find a user by ID. Handle the case where user doesn't exist and return a pointer to the user.
+使用 `db.First(&user, id)` 按 ID 查找用户。处理用户不存在的情况并返回用户指针。
 
 ```go
 func GetUserByID(db *gorm.DB, id uint) (*User, error) {
@@ -45,9 +45,9 @@ func GetUserByID(db *gorm.DB, id uint) (*User, error) {
 }
 ```
 
-## Hint 4: Reading All Users
+## 提示 4：读取所有用户
 
-Use `db.Find(&users)` to get all users. Return a slice of users and handle empty results (return empty slice, not nil).
+使用 `db.Find(&users)` 获取所有用户。返回用户切片并处理空结果（返回空切片，而不是 nil）。
 
 ```go
 func GetAllUsers(db *gorm.DB) ([]User, error) {
@@ -57,9 +57,9 @@ func GetAllUsers(db *gorm.DB) ([]User, error) {
 }
 ```
 
-## Hint 5: Updating Users
+## 提示 5：更新用户
 
-Use `db.Save(user)` to update the user. Make sure the user has a valid ID and handle the case where user doesn't exist.
+使用 `db.Save(user)` 更新用户。确保用户具有有效 ID，并处理用户不存在的情况。
 
 ```go
 func UpdateUser(db *gorm.DB, user *User) error {
@@ -68,9 +68,9 @@ func UpdateUser(db *gorm.DB, user *User) error {
 }
 ```
 
-## Hint 6: Deleting Users
+## 提示 6：删除用户
 
-Use `db.Delete(&User{}, id)` to delete by ID. Handle the case where user doesn't exist and return appropriate error messages.
+使用 `db.Delete(&User{}, id)` 按 ID 删除。处理用户不存在的情况并返回适当的错误信息。
 
 ```go
 func DeleteUser(db *gorm.DB, id uint) error {
@@ -79,9 +79,9 @@ func DeleteUser(db *gorm.DB, id uint) error {
 }
 ```
 
-## Common Patterns
+## 常见模式
 
-### Database Connection
+### 数据库连接
 ```go
 func ConnectDB() (*gorm.DB, error) {
     db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
@@ -98,7 +98,7 @@ func ConnectDB() (*gorm.DB, error) {
 }
 ```
 
-### Error Handling
+### 错误处理
 ```go
 func CreateUser(db *gorm.DB, user *User) error {
     result := db.Create(user)
@@ -109,7 +109,7 @@ func CreateUser(db *gorm.DB, user *User) error {
 }
 ```
 
-### Not Found Handling
+### 未找到处理
 ```go
 func GetUserByID(db *gorm.DB, id uint) (*User, error) {
     var user User
@@ -121,50 +121,50 @@ func GetUserByID(db *gorm.DB, id uint) (*User, error) {
 }
 ```
 
-## Validation and Constraints
+## 验证与约束
 
-### Model Validation
-Your User model has these constraints:
-- `Name`: Required (not null)
-- `Email`: Required and unique
-- `Age`: Must be greater than 0
+### 模型验证
+你的 User 模型有以下约束：
+- `Name`：必需（非空）
+- `Email`：必需且唯一
+- `Age`：必须大于 0
 
-### Testing Validation
-The tests will check:
-- Creating user with invalid age (negative)
-- Creating user with duplicate email
-- All CRUD operations work correctly
+### 测试验证
+测试将检查：
+- 使用无效年龄（负数）创建用户
+- 使用重复邮箱创建用户
+- 所有 CRUD 操作均能正常工作
 
-## Common Mistakes to Avoid
+## 常见错误避免
 
-1. **Not handling errors** - Always check for errors after database operations
-2. **Returning nil instead of empty slice** - For `GetAllUsers()`, return empty slice if no users
-3. **Not checking if user exists** - For update/delete operations, verify user exists first
-4. **Forgetting to auto-migrate** - Make sure to call `AutoMigrate()` in `ConnectDB()`
-5. **Not using pointers** - Return pointers to User structs, not values
+1. **未处理错误** - 数据库操作后始终检查错误
+2. **返回 nil 而非空切片** - 对于 `GetAllUsers()`，如果没有用户则返回空切片
+3. **未检查用户是否存在** - 对于更新/删除操作，先确认用户存在
+4. **忘记自动迁移** - 确保在 `ConnectDB()` 中调用 `AutoMigrate()`
+5. **未使用指针** - 返回 User 结构体的指针，而非值
 
-## Testing Tips
+## 测试技巧
 
-1. **Clean up after tests** - Always clean up test data
-2. **Test edge cases** - Test with invalid data, non-existent users, etc.
-3. **Verify constraints** - Make sure validation works correctly
+1. **测试后清理** - 始终清理测试数据
+2. **测试边界情况** - 测试无效数据、不存在的用户等
+3. **验证约束** - 确保验证逻辑正确
 
-## Debugging
+## 调试
 
-1. **Enable GORM logging** to see SQL queries:
+1. **启用 GORM 日志** 以查看 SQL 查询：
 ```go
 db = db.Debug()
 ```
 
-2. **Check table structure** after migration:
+2. **检查迁移后的表结构**：
 ```go
-// Verify table exists
+// 验证表是否存在
 assert.True(t, db.Migrator().HasTable(&User{}))
 ```
 
-3. **Check data in database**:
+3. **检查数据库中的数据**：
 ```go
-// Print all users
+// 打印所有用户
 var users []User
 db.Find(&users)
 for _, user := range users {
@@ -172,43 +172,43 @@ for _, user := range users {
 }
 ```
 
-## Performance Considerations
+## 性能考虑
 
-1. **Use appropriate methods** - Use `First()` for single records, `Find()` for multiple
-2. **Handle large datasets** - Consider pagination for large result sets
-3. **Use transactions** - For multiple related operations
+1. **使用适当的方法** - 单条记录使用 `First()`，多条记录使用 `Find()`
+2. **处理大数据集** - 对于大结果集考虑分页
+3. **使用事务** - 对于多个相关操作
 
-## Useful GORM Methods
+## 有用的 GORM 方法
 
-- `db.Create()` - Create records
-- `db.First()` - Get first record
-- `db.Find()` - Get multiple records
-- `db.Save()` - Update records
-- `db.Delete()` - Delete records
-- `db.Where()` - Filter results
-- `db.AutoMigrate()` - Migrate models
+- `db.Create()` - 创建记录
+- `db.First()` - 获取第一条记录
+- `db.Find()` - 获取多条记录
+- `db.Save()` - 更新记录
+- `db.Delete()` - 删除记录
+- `db.Where()` - 过滤结果
+- `db.AutoMigrate()` - 迁移模型
 
-## SQLite Specific Notes
+## SQLite 特定注意事项
 
-- SQLite is used for this challenge, so some SQL syntax might be different from other databases
-- SQLite has good support for all basic operations
-- Use `gorm.io/driver/sqlite` for the driver
+- 本挑战使用 SQLite，因此某些 SQL 语法可能与其他数据库不同
+- SQLite 对所有基本操作都有良好支持
+- 使用 `gorm.io/driver/sqlite` 作为驱动
 
-## Final Tips
+## 最终建议
 
-1. **Read the tests carefully** - They show exactly what your functions should do
-2. **Start simple** - Get basic CRUD working first, then add validation
-3. **Test incrementally** - Test each function as you implement it
-4. **Use the learning resources** - Check the GORM documentation for detailed examples
+1. **仔细阅读测试** - 它们明确展示了你的函数应如何工作
+2. **从简单开始** - 先实现基本的 CRUD，再添加验证
+3. **逐步测试** - 实现每个函数后立即测试
+4. **利用学习资源** - 查阅 GORM 文档获取详细示例
 
-## Common Error Messages
+## 常见错误消息
 
-- `UNIQUE constraint failed` - Email already exists
-- `CHECK constraint failed` - Age is invalid
-- `record not found` - User doesn't exist
-- `database is locked` - SQLite file access issue
+- `UNIQUE constraint failed` - 邮箱已存在
+- `CHECK constraint failed` - 年龄无效
+- `record not found` - 用户不存在
+- `database is locked` - SQLite 文件访问问题
 
-## Code Structure Example
+## 代码结构示例
 
 ```go
 package main
@@ -229,16 +229,16 @@ type User struct {
 }
 
 func ConnectDB() (*gorm.DB, error) {
-    // TODO: Implement database connection
+    // TODO: 实现数据库连接
     return nil, nil
 }
 
 func CreateUser(db *gorm.DB, user *User) error {
-    // TODO: Implement user creation
+    // TODO: 实现用户创建
     return nil
 }
 
-// ... other functions
+// ... 其他函数
 ```
 
-Remember to implement each function step by step and test thoroughly! 
+记得逐步实现每个函数并彻底测试！

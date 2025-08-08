@@ -1,84 +1,84 @@
-[View the Scoreboard](SCOREBOARD.md)
+[查看排行榜](SCOREBOARD.md)
 
-# Challenge 17: Palindrome Checker
+# 挑战 17：回文检查器
 
-## Problem Statement
+## 问题描述
 
-Write a function `IsPalindrome` that checks if a given string is a palindrome. A palindrome is a word, phrase, number, or other sequence of characters that reads the same forward and backward (ignoring spaces, punctuation, and capitalization).
+编写一个函数 `IsPalindrome`，用于检查给定字符串是否为回文。回文是指一个单词、短语、数字或其他字符序列，从前往后读和从后往前读是一样的（忽略空格、标点符号和大小写）。
 
-## Function Signature
+## 函数签名
 
 ```go
 func IsPalindrome(s string) bool
 ```
 
-## Input Format
+## 输入格式
 
-- A string `s` containing letters, numbers, spaces and punctuation.
+- 一个字符串 `s`，包含字母、数字、空格和标点符号。
 
-## Output Format
+## 输出格式
 
-- A boolean value: `true` if the string is a palindrome, `false` otherwise.
+- 布尔值：如果字符串是回文，则返回 `true`，否则返回 `false`。
 
-## Requirements
+## 要求
 
-1. The function should be case-insensitive ("A" is the same as "a").
-2. The function should ignore spaces and punctuation marks.
-3. The function should handle alphanumeric strings.
+1. 函数应不区分大小写（"A" 与 "a" 视为相同）。
+2. 函数应忽略空格和标点符号。
+3. 函数应处理字母数字字符串。
 
-## Sample Input and Output
+## 示例输入与输出
 
-### Sample Input 1
+### 示例输入 1
 
 ```
 "racecar"
 ```
 
-### Sample Output 1
+### 示例输出 1
 
 ```
 true
 ```
 
-### Sample Input 2
+### 示例输入 2
 
 ```
 "A man, a plan, a canal: Panama"
 ```
 
-### Sample Output 2
+### 示例输出 2
 
 ```
 true
 ```
 
-### Sample Input 3
+### 示例输入 3
 
 ```
 "hello"
 ```
 
-### Sample Output 3
+### 示例输出 3
 
 ```
 false
 ```
 
-## Instructions
+## 指令
 
-- **Fork** the repository.
-- **Clone** your fork to your local machine.
-- **Create** a directory named after your GitHub username inside `challenge-17/submissions/`.
-- **Copy** the `solution-template.go` file into your submission directory.
-- **Implement** the `IsPalindrome` function.
-- **Test** your solution locally by running the test file.
-- **Commit** and **push** your code to your fork.
-- **Create** a pull request to submit your solution.
+- **Fork** 仓库。
+- **Clone** 你的副本到本地机器。
+- 在 `challenge-17/submissions/` 目录下创建一个以你的 GitHub 用户名命名的文件夹。
+- 将 `solution-template.go` 文件复制到你的提交目录中。
+- **实现** `IsPalindrome` 函数。
+- **本地测试** 你的解决方案，运行测试文件。
+- **Commit** 并 **push** 代码到你的副本。
+- **创建** 一个拉取请求以提交你的解决方案。
 
-## Testing Your Solution Locally
+## 本地测试你的解决方案
 
-Run the following command in the `challenge-17/` directory:
+在 `challenge-17/` 目录下运行以下命令：
 
 ```bash
 go test -v
-``` 
+```

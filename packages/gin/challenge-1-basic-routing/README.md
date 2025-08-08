@@ -1,19 +1,19 @@
-# Challenge 1: Basic Routing
+# 挑战 1：基础路由
 
-Build a simple **User Management API** using Gin with basic HTTP routing and request handling.
+使用 Gin 构建一个简单的 **用户管理 API**，包含基础的 HTTP 路由和请求处理。
 
-## Challenge Requirements
+## 挑战要求
 
-Implement a REST API for managing users with the following endpoints:
+实现一个用于管理用户的 REST API，包含以下端点：
 
-- `GET /users` - Get all users
-- `GET /users/:id` - Get user by ID
-- `POST /users` - Create new user
-- `PUT /users/:id` - Update existing user
-- `DELETE /users/:id` - Delete user
-- `GET /users/search` - Search users by name
+- `GET /users` - 获取所有用户
+- `GET /users/:id` - 根据 ID 获取用户
+- `POST /users` - 创建新用户
+- `PUT /users/:id` - 更新现有用户
+- `DELETE /users/:id` - 删除用户
+- `GET /users/search` - 根据姓名搜索用户
 
-## Data Structure
+## 数据结构
 
 ```go
 type User struct {
@@ -32,7 +32,7 @@ type Response struct {
 }
 ```
 
-## Request/Response Examples
+## 请求/响应示例
 
 **GET /users**
 ```json
@@ -49,7 +49,7 @@ type Response struct {
 }
 ```
 
-**POST /users** (Request body)
+**POST /users**（请求体）
 ```json
 {
     "name": "Alice Johnson",
@@ -58,13 +58,13 @@ type Response struct {
 }
 ```
 
-## Testing Requirements
+## 测试要求
 
-Your solution must pass tests for:
-- Get all users returns proper response structure
-- Get user by ID returns correct user or 404
-- Create user adds new user with auto-incremented ID
-- Update user modifies existing user or returns 404
-- Delete user removes user or returns 404
-- Search users by name (case-insensitive)
-- Proper HTTP status codes and response format for all operations 
+你的解决方案必须通过以下测试：
+- 获取所有用户返回正确的响应结构
+- 根据 ID 获取用户返回正确用户或 404
+- 创建用户添加新用户并自增 ID
+- 更新用户修改现有用户或返回 404
+- 删除用户移除用户或返回 404
+- 根据姓名搜索用户（不区分大小写）
+- 所有操作均返回正确的 HTTP 状态码和响应格式

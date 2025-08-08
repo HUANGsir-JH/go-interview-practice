@@ -3,29 +3,29 @@
   <div class="col">
     <div class="card shadow-lg border-0">
       <div class="card-header bg-primary text-white">
-        <h3 class="mb-0"><i class="bi bi-person-workspace me-2"></i>Interview Simulator</h3>
+        <h3 class="mb-0"><i class="bi bi-person-workspace me-2"></i>面试模拟器</h3>
       </div>
       <div class="card-body bg-light">
-        <p class="text-muted mb-4">🚀 Select challenges, set a duration, and start your coding interview session. Get real-time feedback and track your progress!</p>
+        <p class="text-muted mb-4">🚀 选择挑战题，设置时长，开始你的编码面试。实时获得反馈并追踪你的进步！</p>
 
         <div class="mb-3 d-flex align-items-center gap-2">
           <span class="badge rounded-pill bg-primary">1</span>
-          <span class="fw-semibold">Select Challenges</span>
-          <span class="ms-auto small text-muted">Selected: <span id="selected-count">0</span></span>
+          <span class="fw-semibold">选择挑战题</span>
+          <span class="ms-auto small text-muted">已选： <span id="selected-count">0</span></span>
         </div>
 
         <div id="step-1" class="card border-primary mb-4">
           <div class="card-header bg-white">
             <div class="row g-2 align-items-center">
               <div class="col-md-6">
-                <input id="challenge-search" class="form-control form-control-sm" placeholder="🔍 Search challenges by title or number..." />
+                <input id="challenge-search" class="form-control form-control-sm" placeholder="🔍 按标题或编号搜索挑战题..." />
               </div>
               <div class="col-md-6 text-md-end">
                 <div class="btn-group btn-group-sm" role="group">
-                  <button type="button" class="btn btn-outline-secondary active" data-filter="all">All</button>
-                  <button type="button" class="btn btn-outline-success" data-filter="beginner">Beginner</button>
-                  <button type="button" class="btn btn-outline-warning" data-filter="intermediate">Intermediate</button>
-                  <button type="button" class="btn btn-outline-danger" data-filter="advanced">Advanced</button>
+                  <button type="button" class="btn btn-outline-secondary active" data-filter="all">全部</button>
+                  <button type="button" class="btn btn-outline-success" data-filter="beginner">初级</button>
+                  <button type="button" class="btn btn-outline-warning" data-filter="intermediate">中级</button>
+                  <button type="button" class="btn btn-outline-danger" data-filter="advanced">高级</button>
                 </div>
               </div>
             </div>
@@ -35,28 +35,28 @@
           </div>
           <div class="card-footer bg-white d-flex justify-content-end">
             <button type="button" id="to-step-2" class="btn btn-primary" disabled>
-              Next <i class="bi bi-arrow-right-short ms-1"></i>
+              下一步 <i class="bi bi-arrow-right-short ms-1"></i>
             </button>
           </div>
         </div>
 
         <div class="mb-3 d-flex align-items-center gap-2">
           <span class="badge rounded-pill bg-primary">2</span>
-          <span class="fw-semibold">Duration & Start</span>
+          <span class="fw-semibold">时长与开始</span>
         </div>
 
         <div id="step-2" class="card border-success">
           <div class="card-body">
             <div class="row g-3 align-items-end">
               <div class="col-md-4">
-                <label class="form-label fw-semibold">⏱️ Duration (minutes)</label>
+                <label class="form-label fw-semibold">⏱️ 时长（分钟）</label>
                 <input id="interview-duration" type="number" class="form-control form-control-lg" min="5" max="240" value="45" />
-                <div class="form-text">Recommended: 30-60 minutes</div>
+                <div class="form-text">建议：30-60 分钟</div>
               </div>
               <div class="col-md-8 text-md-end">
-                <button type="button" id="back-to-step-1" class="btn btn-outline-secondary me-2"><i class="bi bi-arrow-left-short me-1"></i>Back</button>
+                <button type="button" id="back-to-step-1" class="btn btn-outline-secondary me-2"><i class="bi bi-arrow-left-short me-1"></i>返回</button>
                 <button type="button" id="start-interview" class="btn btn-success btn-lg">
-                  <i class="bi bi-play-circle me-1"></i>Start Interview
+                  <i class="bi bi-play-circle me-1"></i>开始面试
                 </button>
               </div>
             </div>
@@ -74,22 +74,22 @@
         <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
           <div class="d-flex justify-content-between align-items-center">
             <div>
-              <h5 class="mb-0"><i class="bi bi-lightning-charge me-2"></i>Active Interview</h5>
+              <h5 class="mb-0"><i class="bi bi-lightning-charge me-2"></i>正在进行的面试</h5>
               <small class="opacity-75" id="session-meta"></small>
             </div>
             <div class="d-flex align-items-center gap-3">
               <span class="badge bg-dark fs-5 px-3 py-2 font-monospace" id="timer">--:--</span>
               <div class="dropdown">
                 <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-flag-fill me-1"></i>Finish Interview
+                  <i class="bi bi-flag-fill me-1"></i>结束面试
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li><button class="dropdown-item" id="finish-interview">
-                    <i class="bi bi-flag-fill me-2 text-warning"></i>Finish & Submit
+                    <i class="bi bi-flag-fill me-2 text-warning"></i>结束并提交
                   </button></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><button class="dropdown-item" id="save-progress">
-                    <i class="bi bi-save me-2 text-info"></i>Save Progress
+                    <i class="bi bi-save me-2 text-info"></i>保存进度
                   </button></li>
                 </ul>
               </div>
@@ -99,29 +99,29 @@
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-4">
-              <!-- Problem Description & AI Assistant Tabs -->
+              <!-- 问题描述与AI助手标签页 -->
               <div class="card h-100 border-primary border-2">
                 <div class="card-header bg-primary text-white p-0">
                   <ul class="nav nav-tabs nav-fill border-0" id="sidebar-tabs" role="tablist">
                     <li class="nav-item" role="presentation">
                       <button class="nav-link active border-0 fw-semibold" id="problem-tab" data-bs-toggle="tab" data-bs-target="#problem-content" type="button" role="tab" style="background: rgba(255,255,255,0.2); color: white;">
-                        <i class="bi bi-file-text me-1"></i>Problem
+                        <i class="bi bi-file-text me-1"></i>题目
                       </button>
                     </li>
                     <li class="nav-item" role="presentation">
                       <button class="nav-link border-0 fw-semibold" id="ai-tab" data-bs-toggle="tab" data-bs-target="#ai-content" type="button" role="tab" style="color: rgba(255,255,255,0.7);">
-                        <i class="bi bi-robot me-1"></i>AI Assistant
+                        <i class="bi bi-robot me-1"></i>AI助手
                       </button>
                     </li>
                   </ul>
                 </div>
                 <div class="card-body p-0">
                   <div class="tab-content h-100" id="sidebar-tab-content">
-                    <!-- Problem Description Tab -->
+                    <!-- 问题描述标签页 -->
                     <div class="tab-pane fade show active h-100" id="problem-content" role="tabpanel">
                       <div class="p-3 h-100 d-flex flex-column">
                         <div class="mb-3 p-2 bg-light rounded">
-                          <div class="small text-muted mb-1">Current Challenge:</div>
+                          <div class="small text-muted mb-1">当前挑战：</div>
                           <div><span class="badge bg-secondary">#<span id="preview-challenge-id">-</span></span> <span id="preview-challenge-title" class="fw-semibold"></span></div>
                         </div>
                         <div class="flex-grow-1" style="overflow-y: auto; max-height: 550px;">
@@ -130,28 +130,28 @@
                       </div>
                     </div>
                     
-                    <!-- AI Assistant Tab -->
+                    <!-- AI助手标签页 -->
                     <div class="tab-pane fade h-100" id="ai-content" role="tabpanel">
                       <div class="p-3 h-100 d-flex flex-column">
                         <div class="text-center mb-3">
                           <div class="d-inline-block p-3 bg-primary bg-opacity-10 rounded-circle mb-3">
                             <i class="bi bi-robot fs-2 text-primary"></i>
                           </div>
-                          <h6 class="text-primary mb-1">AI Assistant</h6>
-                          <p class="small text-muted mb-0">Your coding companion</p>
+                          <h6 class="text-primary mb-1">AI助手</h6>
+                          <p class="small text-muted mb-0">你的编程伙伴</p>
                         </div>
                         
-                        <!-- AI Action Buttons -->
+                        <!-- AI操作按钮 -->
                         <div class="d-grid gap-2">
                           <button type="button" class="btn btn-primary btn-sm" onclick="requestAIReview()">
-                            <i class="bi bi-search me-1"></i> Get AI Code Review
+                            <i class="bi bi-search me-1"></i> 获取AI代码审查
                           </button>
                           <button type="button" class="btn btn-info btn-sm" onclick="requestInterviewQuestions()">
-                            <i class="bi bi-chat-dots me-1"></i> Ask Interviewer Questions
+                            <i class="bi bi-chat-dots me-1"></i> 向面试官提问
                           </button>
                           <div class="btn-group w-100" role="group">
                             <button type="button" class="btn btn-warning btn-sm" onclick="requestHint(1)">
-                              💡 Hint Lv1
+                              💡 提示 Lv1
                             </button>
                             <button type="button" class="btn btn-outline-warning btn-sm" onclick="requestHint(2)">
                               Lv2
@@ -165,17 +165,17 @@
                           </div>
                         </div>
                         
-                        <!-- AI Response Area -->
+                        <!-- AI响应区域 -->
                         <div id="ai-response-area" class="mt-3" style="display: none;">
                           <div class="card border-0 bg-light">
                             <div class="card-header bg-primary text-white py-2">
                               <h6 class="mb-0">
                                 <i class="bi bi-robot me-1"></i>
-                                <span id="ai-response-title">AI Feedback</span>
+                                <span id="ai-response-title">AI反馈</span>
                               </h6>
                             </div>
                             <div class="card-body p-3" id="ai-response-content">
-                              <!-- AI responses will appear here -->
+                              <!-- AI响应将显示在这里 -->
                             </div>
                           </div>
                         </div>
@@ -183,7 +183,7 @@
                         <div class="mt-auto">
                           <div class="alert alert-success py-2 px-3 mb-0 small">
                             <i class="bi bi-check-circle me-1"></i>
-                            <strong>AI Ready!</strong> Click buttons above to get AI assistance.
+                            <strong>AI就绪！</strong> 点击上方按钮获取AI帮助。
                           </div>
                         </div>
                       </div>
@@ -199,16 +199,16 @@
                     <div class="d-flex justify-content-between align-items-center">
                       <div>
                         <h5 id="challenge-title" class="mb-1 text-primary"></h5>
-                        <small class="text-muted">Challenge #<span id="challenge-id"></span> • <span id="challenge-difficulty" class="text-capitalize"></span></small>
+                        <small class="text-muted">挑战 #<span id="challenge-id"></span> • <span id="challenge-difficulty" class="text-capitalize"></span></small>
                       </div>
                       <div class="d-flex flex-wrap gap-2 align-items-center">
-                        <div class="btn-group btn-group-sm me-2" role="group" aria-label="Navigate questions">
+                        <div class="btn-group btn-group-sm me-2" role="group" aria-label="导航问题">
                           <button type="button" id="prev-question" class="btn btn-outline-primary"><i class="bi bi-chevron-left"></i></button>
                           <div id="question-pager" class="btn-group btn-group-sm"></div>
                           <button type="button" id="next-question" class="btn btn-outline-primary"><i class="bi bi-chevron-right"></i></button>
                         </div>
                         <button type="button" id="run-tests" class="btn btn-success btn-sm">
-                          <span class="btn-label"><i class="bi bi-play"></i> Run Tests</span>
+                          <span class="btn-label"><i class="bi bi-play"></i> 运行测试</span>
                           <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         </button>
                       </div>
@@ -219,7 +219,7 @@
                 <div class="mt-3">
                   <div class="card border-0">
                     <div class="card-header bg-info text-white py-2">
-                      <h6 class="mb-0"><i class="bi bi-terminal me-1"></i>Test Output</h6>
+                      <h6 class="mb-0"><i class="bi bi-terminal me-1"></i>测试输出</h6>
                     </div>
                     <div class="card-body">
                       <div class="test-results p-2 bg-dark text-light rounded" id="test-output" style="min-height:80px; font-family: 'Courier New', monospace; font-size: 0.85rem;"></div>
@@ -231,8 +231,8 @@
               <div id="challenge-placeholder" class="text-center py-5" style="display:block;">
                 <div class="text-muted">
                   <i class="bi bi-hourglass-split fs-1 d-block mb-3"></i>
-                  <h5 class="text-muted">Loading your first challenge...</h5>
-                  <p class="small">Please wait while we prepare your interview session.</p>
+                  <h5 class="text-muted">正在加载你的第一个挑战...</h5>
+                  <p class="small">请稍等，我们正在准备你的面试会话。</p>
                 </div>
               </div>
             </div>
@@ -246,13 +246,13 @@
     <div class="col-12">
       <div class="card shadow-lg border-0">
         <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-          <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Interview History</h5>
-          <button id="clear-history" class="btn btn-sm btn-outline-light"><i class="bi bi-trash"></i> Clear All</button>
+          <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>面试历史</h5>
+          <button id="clear-history" class="btn btn-sm btn-outline-light"><i class="bi bi-trash"></i> 清空所有</button>
         </div>
         <div class="card-body" id="history-list">
           <div class="text-muted text-center py-3">
             <i class="bi bi-journal-x fs-2 d-block mb-2"></i>
-            No interviews yet. Start your first interview to see your progress!
+            尚无面试记录。开始你的第一次面试以查看进度！
           </div>
         </div>
       </div>
@@ -261,13 +261,13 @@
 
 
 
-  <!-- Finish Interview Modal -->
+  <!-- 结束面试模态框 -->
   <div class="modal fade" id="finishInterviewModal" tabindex="-1" aria-labelledby="finishInterviewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header bg-warning text-dark">
           <h5 class="modal-title" id="finishInterviewModalLabel">
-            <i class="bi bi-flag-fill me-2"></i>Finish Interview
+            <i class="bi bi-flag-fill me-2"></i>结束面试
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -275,14 +275,14 @@
           <div class="mb-4">
             <i class="bi bi-question-circle fs-1 text-warning"></i>
           </div>
-          <h4 class="mb-3">Are you sure you want to finish?</h4>
-          <p class="text-muted mb-4">Your interview session will end and you'll receive your final score based on completed challenges.</p>
+          <h4 class="mb-3">确定要结束吗？</h4>
+          <p class="text-muted mb-4">你的面试会话将结束，并根据已完成的挑战获得最终评分。</p>
           <div class="row g-3 mb-4">
             <div class="col-6">
               <div class="card bg-light">
                 <div class="card-body text-center">
                   <div class="fw-bold text-primary" id="modal-time-remaining">--:--</div>
-                  <small class="text-muted">Time Remaining</small>
+                  <small class="text-muted">剩余时间</small>
                 </div>
               </div>
             </div>
@@ -290,7 +290,7 @@
               <div class="card bg-light">
                 <div class="card-body text-center">
                   <div class="fw-bold text-success" id="modal-challenges-completed">0/0</div>
-                  <small class="text-muted">Challenges Attempted</small>
+                  <small class="text-muted">尝试的挑战</small>
                 </div>
               </div>
             </div>
@@ -298,23 +298,23 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            <i class="bi bi-arrow-left me-1"></i>Continue Interview
+            <i class="bi bi-arrow-left me-1"></i>继续面试
           </button>
           <button type="button" class="btn btn-warning" id="confirm-finish-interview">
-            <i class="bi bi-flag-fill me-1"></i>Yes, Finish Interview
+            <i class="bi bi-flag-fill me-1"></i>是的，结束面试
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Clear History Modal -->
+  <!-- 清空历史模态框 -->
   <div class="modal fade" id="clearHistoryModal" tabindex="-1" aria-labelledby="clearHistoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header bg-danger text-white">
           <h5 class="modal-title" id="clearHistoryModalLabel">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>Clear Interview History
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>清空面试历史
           </h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -322,19 +322,19 @@
           <div class="mb-4">
             <i class="bi bi-trash3 fs-1 text-danger"></i>
           </div>
-          <h4 class="mb-3">Are you sure?</h4>
-          <p class="text-muted mb-4">This will permanently delete all your interview history and scores. This action cannot be undone.</p>
+          <h4 class="mb-3">确定要清空吗？</h4>
+          <p class="text-muted mb-4">这将永久删除你所有的面试历史和分数。此操作无法撤销。</p>
           <div class="alert alert-warning">
             <i class="bi bi-info-circle me-2"></i>
-            <strong>Warning:</strong> All your past interview records will be lost forever.
+            <strong>警告：</strong> 你过去的所有面试记录将永远丢失。
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            <i class="bi bi-x-circle me-1"></i>Cancel
+            <i class="bi bi-x-circle me-1"></i>取消
           </button>
           <button type="button" class="btn btn-danger" id="confirm-clear-history">
-            <i class="bi bi-trash3 me-1"></i>Yes, Clear All History
+            <i class="bi bi-trash3 me-1"></i>是的，清空所有历史
           </button>
         </div>
       </div>
@@ -385,7 +385,7 @@
       container.innerHTML = `
         <div class="text-muted text-center py-3">
           <i class="bi bi-journal-x fs-2 d-block mb-2"></i>
-          No interviews yet. Start your first interview to see your progress!
+          尚无面试记录。开始你的第一次面试以查看进度！
         </div>`;
       return; 
     }
@@ -401,17 +401,17 @@
         <div class="card-body">
           <div class="d-flex justify-content-between">
             <div>
-              <h6 class="mb-1">${item.title || 'Custom Interview'}</h6>
+              <h6 class="mb-1">${item.title || '自定义面试'}</h6>
               <div class="small text-muted">
                 <i class="bi bi-calendar me-1"></i>${dt.toLocaleString()} • 
                 <i class="bi bi-clock me-1"></i>${item.duration}m • 
-                <i class="bi bi-list-check me-1"></i>${item.challengeIds.length} challenges
+                <i class="bi bi-list-check me-1"></i>${item.challengeIds.length} 个挑战
               </div>
             </div>
             <div class="text-end">
-              <div class="badge bg-${scoreColor} fs-6 mb-1">Score: ${item.score}%</div>
-              <div class="small text-muted">Solved: ${challenges}</div>
-              <div class="small text-muted">Tests: ${tests}</div>
+              <div class="badge bg-${scoreColor} fs-6 mb-1">得分：${item.score}%</div>
+              <div class="small text-muted">完成：${challenges}</div>
+              <div class="small text-muted">测试：${tests}</div>
             </div>
           </div>
         </div>`;
@@ -443,7 +443,7 @@
 
   async function fetchChallenge(id) {
     const res = await fetch(`/api/challenges/${id}`);
-    if (!res.ok) throw new Error('failed fetching challenge');
+    if (!res.ok) throw new Error('获取挑战失败');
     return res.json();
   }
 
@@ -455,7 +455,7 @@
   function initSession(challengeIds, duration) {
     currentSession = {
       id: Date.now().toString(36),
-      title: `Interview ${new Date().toLocaleString()}`,
+      title: `面试 ${new Date().toLocaleString()}`,
       username: getUsername(),
       challengeIds: challengeIds.map(Number),
       duration,
@@ -468,11 +468,11 @@
 
   function updateSessionMeta() {
     const meta = document.getElementById('session-meta');
-    meta.textContent = `${currentSession.challengeIds.length} challenges • ${currentSession.duration}m`;
+    meta.textContent = `${currentSession.challengeIds.length} 个挑战 • ${currentSession.duration} 分钟`;
   }
 
   function renderChallengeList() {
-    // Render numeric pager buttons
+    // 渲染数字分页按钮
     const pager = document.getElementById('question-pager');
     if (!pager) return;
     pager.innerHTML = '';
@@ -500,7 +500,7 @@
     document.getElementById('challenge-title').textContent = ch.title;
     document.getElementById('challenge-id').textContent = ch.id;
     document.getElementById('challenge-difficulty').textContent = ch.difficulty;
-    // Update right-side preview
+    // 更新右侧预览
     const prevTitle = document.getElementById('preview-challenge-title');
     const prevId = document.getElementById('preview-challenge-id');
     const prevDesc = document.getElementById('preview-description');
@@ -519,10 +519,10 @@
     const saved = currentSession.answers[id] ?? ch.template;
     editor.setValue(saved || '', -1);
     
-    // Update the pager buttons to show current selection
+    // 更新分页按钮以显示当前选择
     renderChallengeList();
     
-    // Switch to Problem tab to show the new challenge description
+    // 切换到问题标签页以显示新挑战描述
     const problemTab = document.getElementById('problem-tab');
     if (problemTab) {
       const tab = new bootstrap.Tab(problemTab);
@@ -540,11 +540,11 @@
     const outputEl = document.getElementById('test-output');
     const execTimeEl = document.getElementById('exec-time');
 
-    // Loading UI
+    // 加载中UI
     btn.disabled = true;
     spinner.classList.remove('d-none');
-    label.innerHTML = '<i class="bi bi-hourglass-split"></i> Testing...';
-    outputEl.innerHTML = '<div class="d-flex align-items-center text-muted"><div class="spinner-border spinner-border-sm me-2" role="status"></div> Running tests...</div>';
+    label.innerHTML = '<i class="bi bi-hourglass-split"></i> 测试中...';
+    outputEl.innerHTML = '<div class="d-flex align-items-center text-muted"><div class="spinner-border spinner-border-sm me-2" role="status"></div> 运行测试...</div>';
     execTimeEl.style.display = 'none';
 
     let data;
@@ -552,13 +552,13 @@
       const res = await fetch('/api/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ challengeId: id, code }) });
       data = await res.json();
     } catch (e) {
-      outputEl.innerHTML = '<span class="text-danger">Failed to run tests. Please try again.</span>';
+      outputEl.innerHTML = '<span class="text-danger">运行测试失败。请重试。</span>';
       btn.disabled = false;
       spinner.classList.add('d-none');
-      label.innerHTML = '<i class="bi bi-play"></i> Test';
+      label.innerHTML = '<i class="bi bi-play"></i> 测试';
       return;
     }
-    // Parse test results like backend does for packages
+    // 解析测试结果，如后端对包的处理方式
     const output = data.output || '';
     const lines = output.split('\n');
     let passed = 0, total = 0;
@@ -577,15 +577,15 @@
 
     outputEl.innerHTML = formatTestOutput(output);
     if (data.executionMs !== undefined) {
-      execTimeEl.textContent = `Execution time: ${formatExecutionTime(data.executionMs)}`;
+      execTimeEl.textContent = `执行时间：${formatExecutionTime(data.executionMs)}`;
       execTimeEl.style.display = 'block';
     }
     renderChallengeList();
 
-    // Reset UI
+    // 重置UI
     btn.disabled = false;
     spinner.classList.add('d-none');
-    label.innerHTML = '<i class="bi bi-play"></i> Test';
+    label.innerHTML = '<i class="bi bi-play"></i> 测试';
   }
 
   function saveProgress() {
@@ -601,22 +601,22 @@
     let totalTestsPassed = 0;
     let totalTestsRun = 0;
     
-    // Count challenges solved (all tests passed) vs total challenges selected
+    // 计算解决的挑战数（所有测试通过）与总挑战数
     for (const id of currentSession.challengeIds) {
       const r = currentSession.results[id];
       if (r) {
         totalTestsRun += (r.testsTotal || 0);
         totalTestsPassed += (r.testsPassed || 0);
         
-        // A challenge is considered "solved" only if ALL its tests pass
+        // 只有当所有测试都通过时，才认为挑战已解决
         if (r.testsPassed > 0 && r.testsPassed === r.testsTotal) {
           solvedChallenges++;
         }
       }
-      // If not attempted, it counts as 0 (not solved)
+      // 如果未尝试，则计为0（未解决）
     }
     
-    // Score is based on challenges solved, not individual tests
+    // 得分基于解决的挑战数，而非单个测试
     const score = totalChallenges ? Math.round((solvedChallenges / totalChallenges) * 100) : 0;
     
     return { 
@@ -632,7 +632,7 @@
     if (!currentSession) return;
     const { score, totalPassed, totalTests, solvedChallenges, totalChallenges } = computeScore();
 
-    // Save to history
+    // 保存到历史记录
     const history = loadHistory();
     history.push({
       title: currentSession.title,
@@ -649,12 +649,12 @@
     saveHistory(history);
     renderHistory();
 
-    // Reset UI
+    // 重置UI
     clearInterval(timerInterval);
     document.getElementById('interview-session').style.display = 'none';
     document.getElementById('setup').style.display = 'block';
     
-    // Show results in a nice modal
+    // 在一个漂亮的模态框中显示结果
     showFinishResultsModal(score, totalPassed, totalTests, solvedChallenges, totalChallenges);
     currentSession = null;
   }
@@ -667,21 +667,21 @@
           <div class="modal-content">
             <div class="modal-header bg-${scoreColor} text-white">
               <h5 class="modal-title">
-                <i class="bi bi-trophy-fill me-2"></i>Interview Completed!
+                <i class="bi bi-trophy-fill me-2"></i>面试已完成！
               </h5>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body text-center">
               <div class="mb-4">
                 <div class="display-1 fw-bold text-${scoreColor}">${score}%</div>
-                <p class="text-muted">Your Final Score</p>
+                <p class="text-muted">你的最终得分</p>
               </div>
               <div class="row g-3 mb-4">
                 <div class="col-6">
                   <div class="card bg-light">
                     <div class="card-body text-center">
                       <div class="fw-bold text-success">${solvedChallenges}</div>
-                      <small class="text-muted">Challenges Solved</small>
+                      <small class="text-muted">已解决挑战</small>
                     </div>
                   </div>
                 </div>
@@ -689,7 +689,7 @@
                   <div class="card bg-light">
                     <div class="card-body text-center">
                       <div class="fw-bold text-primary">${totalChallenges}</div>
-                      <small class="text-muted">Total Challenges</small>
+                      <small class="text-muted">总挑战数</small>
                     </div>
                   </div>
                 </div>
@@ -699,7 +699,7 @@
                   <div class="card bg-light">
                     <div class="card-body text-center">
                       <div class="fw-bold text-info">${testsPassed}</div>
-                      <small class="text-muted">Tests Passed</small>
+                      <small class="text-muted">通过测试</small>
                     </div>
                   </div>
                 </div>
@@ -707,49 +707,49 @@
                   <div class="card bg-light">
                     <div class="card-body text-center">
                       <div class="fw-bold text-secondary">${testsTotal}</div>
-                      <small class="text-muted">Tests Run</small>
+                      <small class="text-muted">运行测试</small>
                     </div>
                   </div>
                 </div>
               </div>
               ${score >= 80 ? 
-                '<div class="alert alert-success"><i class="bi bi-star-fill me-2"></i>Excellent work! You\'re ready for technical interviews.</div>' :
+                '<div class="alert alert-success"><i class="bi bi-star-fill me-2"></i>表现优秀！你已准备好技术面试。</div>' :
                 score >= 60 ?
-                '<div class="alert alert-warning"><i class="bi bi-lightbulb me-2"></i>Good job! Keep practicing to improve your score.</div>' :
-                '<div class="alert alert-info"><i class="bi bi-arrow-repeat me-2"></i>Keep practicing! Every interview makes you stronger.</div>'
+                '<div class="alert alert-warning"><i class="bi bi-lightbulb me-2"></i>做得好！继续练习以提高分数。</div>' :
+                '<div class="alert alert-info"><i class="bi bi-arrow-repeat me-2"></i>继续练习！每次面试都会让你更强大。</div>'
               }
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                <i class="bi bi-arrow-left me-1"></i>Start New Interview
+                <i class="bi bi-arrow-left me-1"></i>开始新面试
               </button>
             </div>
           </div>
         </div>
       </div>`;
     
-    // Remove any existing results modal
+    // 移除任何现有的结果模态框
     document.getElementById('resultsModal')?.remove();
     
-    // Add modal to body
+    // 将模态框添加到body
     document.body.insertAdjacentHTML('beforeend', modalContent);
     
-    // Show modal
+    // 显示模态框
     const modal = new bootstrap.Modal(document.getElementById('resultsModal'));
     modal.show();
     
-    // Clean up when closed
+    // 关闭时清理
     document.getElementById('resultsModal').addEventListener('hidden.bs.modal', () => {
       document.getElementById('resultsModal').remove();
     });
   }
 
-  // Bindings
+  // 绑定事件
   document.getElementById('start-interview').addEventListener('click', async () => {
     const chosen = Array.from(document.querySelectorAll('#challenge-checkboxes input[type="checkbox"]:checked')).map(c => c.value);
     const duration = parseInt(document.getElementById('interview-duration').value || '0', 10);
-    if (chosen.length === 0) { alert('Select at least one challenge.'); return; }
-    if (duration <= 0) { alert('Enter a valid duration.'); return; }
+    if (chosen.length === 0) { alert('至少选择一个挑战。'); return; }
+    if (duration <= 0) { alert('请输入有效时长。'); return; }
     initSession(chosen, duration);
     document.getElementById('setup').style.display = 'none';
     document.getElementById('interview-session').style.display = 'block';
@@ -757,13 +757,13 @@
     renderChallengeList();
     startTimer(duration);
     
-    // Smooth scroll to top to show interview session
+    // 平滑滚动到顶部以显示面试会话
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
     
-    // Automatically open the first challenge after a short delay
+    // 稍作延迟后自动打开第一个挑战
     const sorted = chosen.map(Number).sort((a,b) => a-b);
     if (sorted.length > 0) {
       setTimeout(async () => {
@@ -775,7 +775,7 @@
   document.getElementById('finish-interview').addEventListener('click', () => {
     if (!currentSession) return;
     
-    // Update modal content with current session info
+    // 更新模态框内容以包含当前会话信息
     const remainingTime = Math.max(0, currentSession.startedAt + currentSession.duration * 60 * 1000 - Date.now());
     const minutes = Math.floor(remainingTime / 60000);
     const seconds = Math.floor((remainingTime % 60000) / 1000);
@@ -784,15 +784,15 @@
     const attempted = Object.keys(currentSession.results).length;
     document.getElementById('modal-challenges-completed').textContent = `${attempted}/${currentSession.challengeIds.length}`;
     
-    // Show confirmation modal
+    // 显示确认模态框
     const modal = new bootstrap.Modal(document.getElementById('finishInterviewModal'));
     modal.show();
   });
   
   document.getElementById('confirm-finish-interview').addEventListener('click', () => {
-    // Close confirmation modal
+    // 关闭确认模态框
     bootstrap.Modal.getInstance(document.getElementById('finishInterviewModal')).hide();
-    // Execute finish
+    // 执行结束
     finishInterview();
   });
   document.getElementById('run-tests').addEventListener('click', runTestsForCurrent);
@@ -808,7 +808,7 @@
     bootstrap.Modal.getInstance(document.getElementById('clearHistoryModal')).hide();
   });
 
-  // Prev/Next navigation between questions
+  // 上一题/下一题导航
   const prevBtn = document.getElementById('prev-question');
   const nextBtn = document.getElementById('next-question');
   function gotoRelative(delta) {
@@ -825,7 +825,7 @@
   prevBtn.addEventListener('click', ()=>gotoRelative(-1));
   nextBtn.addEventListener('click', ()=>gotoRelative(1));
 
-  // Step navigation
+  // 步骤导航
   const step1 = document.getElementById('step-1');
   const step2 = document.getElementById('step-2');
   const toStep2 = document.getElementById('to-step-2');
@@ -837,7 +837,7 @@
     toStep2.disabled = count === 0;
   }
 
-  // Dynamic checkbox rendering & filtering
+  // 动态复选框渲染与过滤
   const checkboxContainer = document.getElementById('challenge-checkboxes');
 
   function renderCheckboxes(list) {
@@ -859,7 +859,7 @@
         </label>`;
     }).join('');
     checkboxContainer.innerHTML = html;
-    // Bind change events
+    // 绑定change事件
     checkboxContainer.querySelectorAll('input[type=\"checkbox\"]').forEach(cb => {
       cb.addEventListener('change', (e) => {
         const id = e.target.value;
@@ -879,7 +879,7 @@
       const matchesTerm = !term || text.includes(term) || normalizedText.includes(normalizedTerm);
       return matchesDiff && matchesTerm;
     });
-    // Sort by id ascending by default
+    // 默认按ID升序排序
     list.sort((a,b) => a.id - b.id);
     return list;
   }
@@ -888,7 +888,7 @@
     renderCheckboxes(filteredChallenges());
   }
 
-  // Initial render
+  // 初始渲染
   applyFiltersAndRender();
   updateSelectedCount();
 
@@ -899,7 +899,7 @@
     step1.scrollIntoView({ behavior: 'smooth' });
   });
 
-  // Filtering and search controls
+  // 过滤和搜索控件
   const filterButtons = Array.from(step1.querySelectorAll('button[data-filter]'));
   const searchInput = document.getElementById('challenge-search');
 
@@ -914,16 +914,16 @@
   });
   searchInput.addEventListener('input', applyFiltersAndRender);
 
-  // Handle tab styling for sidebar tabs
+  // 处理侧边栏标签页样式
   const sidebarTabButtons = document.querySelectorAll('#sidebar-tabs .nav-link');
   sidebarTabButtons.forEach(tab => {
     tab.addEventListener('shown.bs.tab', function (event) {
-      // Remove active styling from all tabs
+      // 移除所有标签页的激活样式
       sidebarTabButtons.forEach(t => {
         t.style.background = 'transparent';
         t.style.color = 'rgba(255,255,255,0.7)';
       });
-      // Add active styling to current tab
+      // 添加当前标签页的激活样式
       event.target.style.background = 'rgba(255,255,255,0.2)';
       event.target.style.color = 'white';
     });
@@ -931,44 +931,44 @@
 
   renderHistory();
 
-  // Helper function to escape HTML
+  // 帮助函数：转义HTML
   function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
 
-  // Helper function to get current challenge ID
+  // 帮助函数：获取当前挑战ID
   function getCurrentChallengeId() {
     if (!currentSession || !currentSession.challengeIds || currentSession.challengeIds.length === 0) {
       return null;
     }
     
-    // For now, let's use the first challenge ID
-    // In a more sophisticated implementation, you might track which challenge is currently active
+    // 目前使用第一个挑战ID
+    // 在更复杂的实现中，你可能会跟踪当前活跃的挑战
     return currentSession.challengeIds[0];
   }
 
 
 
-  // AI Functions
+  // AI功能
   window.requestAIReview = async function() {
     const currentCode = editor ? editor.getValue() : '';
     
     if (!currentCode.trim()) {
-      alert('Please write some code first!');
+      alert('请先写一些代码！');
       return;
     }
     
-    // Get current challenge ID using the helper function
+    // 使用帮助函数获取当前挑战ID
     const currentChallengeId = getCurrentChallengeId();
     
     if (!currentChallengeId) {
-      alert('Please start an interview session and select a challenge first!\n\nSteps:\n1. Select challenges from the list\n2. Set duration\n3. Click "Start Interview"\n4. Begin coding on a challenge');
+      alert('请先开始面试会话并选择一个挑战！\n\n步骤：\n1. 从列表中选择挑战\n2. 设置时长\n3. 点击“开始面试”\n4. 开始在挑战上编码');
       return;
     }
 
-    showAILoading('Getting AI Code Review...');
+    showAILoading('正在获取AI代码审查...');
     
     try {
       const response = await fetch('/api/ai/code-review', {
@@ -977,7 +977,7 @@
         body: JSON.stringify({
           challengeId: currentChallengeId,
           code: currentCode,
-          context: `Interview session, ${currentSession.challengeIds.length} challenges, ${Math.floor((Date.now() - currentSession.startedAt) / 60000)} minutes elapsed`
+          context: `面试会话，${currentSession.challengeIds.length} 个挑战，已过去 ${Math.floor((Date.now() - currentSession.startedAt) / 60000)} 分钟`
         })
       });
       
@@ -986,30 +986,30 @@
       }
       
       const review = await response.json();
-      console.log('AI Review Response:', review);
+      console.log('AI审查响应:', review);
       
       if (!review || typeof review !== 'object') {
-        throw new Error('Invalid response format from AI service');
+        throw new Error('AI服务返回格式无效');
       }
       
       displayAIReview(review);
     } catch (error) {
-      showAIError('Failed to get AI review: ' + error.message);
+      showAIError('获取AI审查失败: ' + error.message);
     }
   };
 
   window.requestInterviewQuestions = async function() {
     const currentCode = editor ? editor.getValue() : '';
     
-    // Get current challenge ID using the helper function
+    // 使用帮助函数获取当前挑战ID
     const currentChallengeId = getCurrentChallengeId();
     
     if (!currentChallengeId) {
-      alert('Please start an interview session and select a challenge first!');
+      alert('请先开始面试会话并选择一个挑战！');
       return;
     }
 
-    showAILoading('Generating Interview Questions...');
+    showAILoading('正在生成面试问题...');
     
     try {
       const response = await fetch('/api/ai/interviewer-questions', {
@@ -1018,33 +1018,33 @@
         body: JSON.stringify({
           challengeId: currentChallengeId,
           code: currentCode,
-          userProgress: `Challenge 1 of ${currentSession.challengeIds.length}`
+          userProgress: `第1个挑战，共${currentSession.challengeIds.length}个`
         })
       });
       
       const result = await response.json();
-      console.log('AI Questions Response:', result);
+      console.log('AI问题响应:', result);
       
-      // Handle both direct array and object with questions property
+      // 处理数组和对象中的questions属性
       const questions = result.questions || result;
       displayInterviewQuestions(questions);
     } catch (error) {
-      showAIError('Failed to get interview questions: ' + error.message);
+      showAIError('获取面试问题失败: ' + error.message);
     }
   };
 
   window.requestHint = async function(level = 1) {
     const currentCode = editor ? editor.getValue() : '';
     
-    // Get current challenge ID using the helper function
+    // 使用帮助函数获取当前挑战ID
     const currentChallengeId = getCurrentChallengeId();
     
     if (!currentChallengeId) {
-      alert('Please start an interview session and select a challenge first!');
+      alert('请先开始面试会话并选择一个挑战！');
       return;
     }
 
-    showAILoading(`Getting Hint (Level ${level})...`);
+    showAILoading(`正在获取提示 (等级 ${level})...`);
     
     try {
       const response = await fetch('/api/ai/code-hint', {
@@ -1060,7 +1060,7 @@
       const result = await response.json();
       displayHint(result.hint, level);
     } catch (error) {
-      showAIError('Failed to get hint: ' + error.message);
+      showAIError('获取提示失败: ' + error.message);
     }
   };
 
@@ -1069,7 +1069,7 @@
     const title = document.getElementById('ai-response-title');
     const content = document.getElementById('ai-response-content');
     
-    title.textContent = 'AI Thinking...';
+    title.textContent = 'AI思考中...';
     content.innerHTML = `
       <div class="text-center">
         <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
@@ -1083,29 +1083,29 @@
     const title = document.getElementById('ai-response-title');
     const content = document.getElementById('ai-response-content');
     
-    // Provide defaults for missing properties
+    // 提供缺失属性的默认值
     const overallScore = review.overall_score || 0;
     const readabilityScore = review.readability_score || 0;
-    const interviewerFeedback = review.interviewer_feedback || 'No feedback available';
+    const interviewerFeedback = review.interviewer_feedback || '暂无反馈';
     
-    title.textContent = `AI Code Review (Score: ${overallScore}/100)`;
+    title.textContent = `AI代码审查 (得分: ${overallScore}/100)`;
     
     let html = `
       <div class="row mb-3">
         <div class="col-md-6">
           <div class="badge bg-${getScoreColor(overallScore)} fs-6">
-            Overall Score: ${overallScore}/100
+            总体得分: ${overallScore}/100
           </div>
         </div>
         <div class="col-md-6">
           <div class="badge bg-info fs-6">
-            Readability: ${readabilityScore}/100
+            可读性: ${readabilityScore}/100
           </div>
         </div>
       </div>
       
       <div class="mb-3">
-        <h6><i class="bi bi-chat-quote-fill me-1"></i>Interviewer Feedback:</h6>
+        <h6><i class="bi bi-chat-quote-fill me-1"></i>面试官反馈:</h6>
         <div class="alert alert-light p-2 small">${escapeHtml(interviewerFeedback)}</div>
       </div>
     `;
@@ -1113,11 +1113,11 @@
     if (review.issues && Array.isArray(review.issues) && review.issues.length > 0) {
       html += `
         <div class="mb-3">
-          <h6><i class="bi bi-exclamation-triangle me-1"></i>Issues Found:</h6>
+          <h6><i class="bi bi-exclamation-triangle me-1"></i>发现的问题:</h6>
           ${review.issues.map(issue => `
             <div class="alert alert-${getSeverityColor(issue.severity)} p-2 small mb-1">
               <strong>${escapeHtml(issue.type.toUpperCase())}:</strong> ${escapeHtml(issue.description)}
-              ${issue.solution ? `<br><em>Fix: ${escapeHtml(issue.solution)}</em>` : ''}
+              ${issue.solution ? `<br><em>修复: ${escapeHtml(issue.solution)}</em>` : ''}
             </div>
           `).join('')}
         </div>
@@ -1127,7 +1127,7 @@
     if (review.suggestions && Array.isArray(review.suggestions) && review.suggestions.length > 0) {
       html += `
         <div class="mb-3">
-          <h6><i class="bi bi-lightbulb me-1"></i>Suggestions:</h6>
+          <h6><i class="bi bi-lightbulb me-1"></i>建议:</h6>
           ${review.suggestions.map(suggestion => `
             <div class="alert alert-info p-2 small mb-1">
               <strong>${escapeHtml(suggestion.category)}:</strong> ${escapeHtml(suggestion.description)}
@@ -1140,13 +1140,13 @@
     if (review.complexity) {
       html += `
         <div class="mb-3">
-          <h6><i class="bi bi-speedometer me-1"></i>Complexity Analysis:</h6>
+          <h6><i class="bi bi-speedometer me-1"></i>复杂度分析:</h6>
           <div class="row">
             <div class="col-6">
-              <div class="badge bg-secondary">Time: ${review.complexity.time_complexity}</div>
+              <div class="badge bg-secondary">时间: ${review.complexity.time_complexity}</div>
             </div>
             <div class="col-6">
-              <div class="badge bg-secondary">Space: ${review.complexity.space_complexity}</div>
+              <div class="badge bg-secondary">空间: ${review.complexity.space_complexity}</div>
             </div>
           </div>
         </div>
@@ -1160,15 +1160,15 @@
     const title = document.getElementById('ai-response-title');
     const content = document.getElementById('ai-response-content');
     
-    title.textContent = 'Interview Questions';
+    title.textContent = '面试问题';
     
     let html = `
       <div class="mb-2">
-        <h6><i class="bi bi-person-check me-1"></i>The interviewer asks:</h6>
+        <h6><i class="bi bi-person-check me-1"></i>面试官提问:</h6>
       </div>
     `;
     
-    // Ensure questions is an array
+    // 确保questions是数组
     if (questions && Array.isArray(questions)) {
       questions.forEach((question, index) => {
       html += `
@@ -1180,7 +1180,7 @@
     } else {
       html += `
         <div class="alert alert-warning p-2 small">
-          No questions available at this time.
+          当前没有可用的问题。
         </div>
       `;
     }
@@ -1192,14 +1192,14 @@
     const title = document.getElementById('ai-response-title');
     const content = document.getElementById('ai-response-content');
     
-    title.textContent = `Hint (Level ${level}/4)`;
+    title.textContent = `提示 (等级 ${level}/4)`;
     
-    // Ensure hint is a string
-    const safeHint = hint || 'No hint available at this time.';
+    // 确保hint是字符串
+    const safeHint = hint || '当前没有可用的提示。';
     
     const nextLevelButton = level < 4 ? `
       <button class="btn btn-warning btn-sm mt-2" onclick="requestHint(${level + 1})">
-        <i class="bi bi-lightbulb me-1"></i>Need More Help? (Level ${level + 1})
+        <i class="bi bi-lightbulb me-1"></i>需要更多帮助？(等级 ${level + 1})
       </button>
     ` : '';
     
@@ -1216,7 +1216,7 @@
     const title = document.getElementById('ai-response-title');
     const content = document.getElementById('ai-response-content');
     
-    title.textContent = 'AI Error';
+    title.textContent = 'AI错误';
     content.innerHTML = `
       <div class="alert alert-danger p-2 small">
         <i class="bi bi-exclamation-triangle me-1"></i>
@@ -1243,5 +1243,3 @@
 })();
 </script>
 {{end}}
-
-

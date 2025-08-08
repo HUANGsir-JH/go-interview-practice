@@ -1,67 +1,67 @@
-# Learning Materials for Circuit Breaker Pattern
+# 电路断路器模式学习资料
 
-## Introduction to Circuit Breaker Pattern
+## 电路断路器模式简介
 
-The Circuit Breaker pattern is a design pattern used in software development to detect failures and encapsulate the logic of preventing a failure from constantly recurring. It's particularly useful in distributed systems where services may become temporarily unavailable.
+电路断路器模式是一种在软件开发中用于检测故障并封装防止故障反复发生的逻辑的设计模式。它在分布式系统中特别有用，因为服务可能会暂时不可用。
 
-Named after electrical circuit breakers that protect electrical circuits from damage, the software circuit breaker pattern prevents an application from repeatedly trying to execute operations that are likely to fail.
+该模式得名于保护电气电路免受损坏的电气断路器，软件电路断路器模式可防止应用程序不断尝试执行可能失败的操作。
 
-## The Problem It Solves
+## 它解决的问题
 
-In distributed systems, services often depend on external resources:
-- External APIs
-- Databases
-- File systems
-- Network services
+在分布式系统中，服务通常依赖外部资源：
+- 外部API
+- 数据库
+- 文件系统
+- 网络服务
 
-When these resources become unavailable or slow, your application can:
-- Keep retrying and waste resources
-- Create cascading failures
-- Degrade user experience
-- Overwhelm already struggling services
+当这些资源不可用或响应缓慢时，你的应用程序可能会：
+- 不断重试并浪费资源
+- 引发级联故障
+- 降低用户体验
+- 使本已困难的服务更加不堪重负
 
-## How Circuit Breaker Works
+## 电路断路器的工作原理
 
-### Three States
+### 三种状态
 
-1. **Closed State** (Normal Operation)
-   - Requests pass through to the service
-   - Failures are monitored and counted
-   - If failure threshold is reached, circuit trips to Open
+1. **关闭状态**（正常运行）
+   - 请求会通过到服务
+   - 监控并统计失败次数
+   - 如果达到失败阈值，电路将跳转至打开状态
 
-2. **Open State** (Failing Fast)
-   - All requests fail immediately without calling the service
-   - Prevents wasting resources on operations likely to fail
-   - After a timeout period, circuit moves to Half-Open
+2. **打开状态**（快速失败）
+   - 所有请求立即失败，不调用服务
+   - 防止在很可能失败的操作上浪费资源
+   - 超时时间过后，电路进入半开状态
 
-3. **Half-Open State** (Testing Recovery)
-   - Limited number of requests are allowed through
-   - If requests succeed, circuit closes
-   - If requests fail, circuit opens again
+3. **半开状态**（测试恢复）
+   - 允许有限数量的请求通过
+   - 如果请求成功，电路关闭
+   - 如果请求失败，电路再次打开
 
-### State Transition Diagram
+### 状态转换图
 
 ```
-    [Closed] --failure threshold--> [Open]
+    [关闭] --失败阈值--> [打开]
         ^                             |
         |                             |
-    success                      timeout elapsed
+    成功                      超时结束
         |                             |
         v                             v
-    [Half-Open] --failure--> [Open]
+    [半开] --失败--> [打开]
 ```
 
-## Go Implementation Concepts
+## Go语言实现概念
 
-### 1. Thread Safety
+### 1. 线程安全
 
-Circuit breakers must be thread-safe since they're typically shared across goroutines:
+电路断路器必须是线程安全的，因为它们通常在多个goroutine之间共享：
 
 ```go
 type CircuitBreaker struct {
     state   State
     metrics Metrics
-    mutex   sync.RWMutex  // Protects shared state
+    mutex   sync.RWMutex  // 保护共享状态
 }
 
 func (cb *CircuitBreaker) GetState() State {
@@ -71,9 +71,9 @@ func (cb *CircuitBreaker) GetState() State {
 }
 ```
 
-### 2. Metrics Collection
+### 2. 指标收集
 
-Track essential metrics for decision making:
+跟踪关键指标以支持决策：
 
 ```go
 type Metrics struct {
@@ -85,40 +85,40 @@ type Metrics struct {
 }
 ```
 
-### 3. Configurable Behavior
+### 3. 可配置行为
 
-Make the circuit breaker configurable for different use cases:
+让电路断路器可配置以适应不同使用场景：
 
 ```go
 type Config struct {
-    MaxRequests uint32                      // Half-open request limit
-    Interval    time.Duration               // Metrics window
-    Timeout     time.Duration               // Open -> Half-open timeout
-    ReadyToTrip func(Metrics) bool          // Custom failure condition
-    OnStateChange func(string, State, State) // State change callback
+    MaxRequests uint32                      // 半开状态下的请求限制
+    Interval    time.Duration               // 指标窗口
+    Timeout     time.Duration               // 打开 -> 半开超时
+    ReadyToTrip func(Metrics) bool          // 自定义失败条件
+    OnStateChange func(string, State, State) // 状态变化回调
 }
 ```
 
-### 4. Context Support
+### 4. 上下文支持
 
-Respect Go's context cancellation:
+尊重Go的上下文取消机制：
 
 ```go
 func (cb *CircuitBreaker) Call(ctx context.Context, operation func() (interface{}, error)) (interface{}, error) {
-    // Check context cancellation
+    // 检查上下文取消
     select {
     case <-ctx.Done():
         return nil, ctx.Err()
     default:
     }
     
-    // Circuit breaker logic...
+    // 电路断路器逻辑...
 }
 ```
 
-## Common Implementation Patterns
+## 常见实现模式
 
-### 1. Functional Options Pattern
+### 1. 函数选项模式
 
 ```go
 type Option func(*Config)
@@ -130,7 +130,7 @@ func WithTimeout(timeout time.Duration) Option {
 }
 
 func NewCircuitBreaker(options ...Option) CircuitBreaker {
-    config := &Config{/* defaults */}
+    config := &Config{/* 默认值 */}
     for _, option := range options {
         option(config)
     }
@@ -138,30 +138,30 @@ func NewCircuitBreaker(options ...Option) CircuitBreaker {
 }
 ```
 
-### 2. Error Wrapping
+### 2. 错误包装
 
-Distinguish between circuit breaker errors and operation errors:
+区分电路断路器错误和操作错误：
 
 ```go
 var (
-    ErrCircuitBreakerOpen = errors.New("circuit breaker is open")
-    ErrTooManyRequests   = errors.New("too many requests in half-open state")
+    ErrCircuitBreakerOpen = errors.New("电路断路器处于打开状态")
+    ErrTooManyRequests   = errors.New("半开状态下请求数过多")
 )
 
 func (cb *CircuitBreaker) Call(ctx context.Context, operation func() (interface{}, error)) (interface{}, error) {
     if err := cb.canExecute(); err != nil {
-        return nil, err  // Circuit breaker error
+        return nil, err  // 电路断路器错误
     }
     
-    result, err := operation()  // Original operation error
+    result, err := operation()  // 原始操作错误
     cb.recordResult(err == nil)
     return result, err
 }
 ```
 
-### 3. State Management
+### 3. 状态管理
 
-Clean state transitions with proper cleanup:
+通过适当的清理实现清晰的状态转换：
 
 ```go
 func (cb *CircuitBreaker) setState(newState State) {
@@ -173,37 +173,37 @@ func (cb *CircuitBreaker) setState(newState State) {
     cb.state = newState
     cb.lastStateChange = time.Now()
     
-    // Reset state-specific data
+    // 重置特定状态的数据
     switch newState {
     case StateClosed:
-        cb.metrics = Metrics{}  // Reset metrics
+        cb.metrics = Metrics{}  // 重置指标
     case StateHalfOpen:
-        cb.halfOpenRequests = 0  // Reset request counter
+        cb.halfOpenRequests = 0  // 重置请求计数器
     }
     
-    // Trigger callback
+    // 触发回调
     if cb.config.OnStateChange != nil {
         cb.config.OnStateChange(cb.name, oldState, newState)
     }
 }
 ```
 
-## Best Practices
+## 最佳实践
 
-### 1. Choose Appropriate Thresholds
+### 1. 选择合适的阈值
 
-- **Failure Threshold**: Too low = unnecessary tripping, too high = delayed protection
-- **Timeout Duration**: Balance between service recovery time and user experience
-- **Half-Open Requests**: Enough to test recovery but not overwhelm
+- **失败阈值**：过低会导致不必要的跳闸，过高则延迟保护
+- **超时持续时间**：平衡服务恢复时间和用户体验
+- **半开状态请求数量**：足够测试恢复但不过度压垮
 
-### 2. Implement Proper Monitoring
+### 2. 实现适当的监控
 
 ```go
 func (cb *CircuitBreaker) GetMetrics() Metrics {
     cb.mutex.RLock()
     defer cb.mutex.RUnlock()
     
-    // Return copy to prevent data races
+    // 返回副本以防止数据竞争
     return Metrics{
         Requests:            cb.metrics.Requests,
         Successes:           cb.metrics.Successes,
@@ -214,18 +214,18 @@ func (cb *CircuitBreaker) GetMetrics() Metrics {
 }
 ```
 
-### 3. Handle Different Failure Types
+### 3. 处理不同的错误类型
 
-Not all errors should trip the circuit:
+并非所有错误都应触发电路跳闸：
 
 ```go
 func (cb *CircuitBreaker) shouldCountAsFailure(err error) bool {
-    // Don't count client errors (4xx) as circuit breaker failures
+    // 不将客户端错误（4xx）视为电路断路器失败
     if httpErr, ok := err.(*HTTPError); ok {
         return httpErr.StatusCode >= 500
     }
     
-    // Don't count context cancellation as failure
+    // 不将上下文取消视为失败
     if errors.Is(err, context.Canceled) {
         return false
     }
@@ -234,9 +234,9 @@ func (cb *CircuitBreaker) shouldCountAsFailure(err error) bool {
 }
 ```
 
-### 4. Graceful Degradation
+### 4. 优雅降级
 
-Provide fallback mechanisms:
+提供备用机制：
 
 ```go
 func CallWithFallback(cb CircuitBreaker, primary, fallback func() (interface{}, error)) (interface{}, error) {
@@ -248,11 +248,11 @@ func CallWithFallback(cb CircuitBreaker, primary, fallback func() (interface{}, 
 }
 ```
 
-## Testing Strategies
+## 测试策略
 
-### 1. State Transition Testing
+### 1. 状态转换测试
 
-Verify correct state changes under various conditions:
+验证在各种条件下正确的状态变化：
 
 ```go
 func TestStateTransitions(t *testing.T) {
@@ -263,22 +263,22 @@ func TestStateTransitions(t *testing.T) {
         Timeout: 100 * time.Millisecond,
     })
     
-    // Test Closed -> Open
+    // 测试关闭 -> 打开
     for i := 0; i < 3; i++ {
         cb.Call(ctx, failingOperation)
     }
     assert.Equal(t, StateOpen, cb.GetState())
     
-    // Test Open -> Half-Open
+    // 测试打开 -> 半开
     time.Sleep(150 * time.Millisecond)
     cb.Call(ctx, successOperation)
     assert.Equal(t, StateClosed, cb.GetState())
 }
 ```
 
-### 2. Concurrency Testing
+### 2. 并发测试
 
-Ensure thread safety under load:
+确保在高负载下保持线程安全：
 
 ```go
 func TestConcurrentAccess(t *testing.T) {
@@ -294,13 +294,13 @@ func TestConcurrentAccess(t *testing.T) {
     }
     
     wg.Wait()
-    // Verify metrics consistency
+    // 验证指标一致性
 }
 ```
 
-### 3. Mock Operations
+### 3. 模拟操作
 
-Create controllable operations for testing:
+创建可控的操作用于测试：
 
 ```go
 type MockOperation struct {
@@ -317,15 +317,15 @@ func (m *MockOperation) Execute() (interface{}, error) {
     }
     
     if m.shouldFail {
-        return nil, errors.New("operation failed")
+        return nil, errors.New("操作失败")
     }
-    return "success", nil
+    return "成功", nil
 }
 ```
 
-## Real-World Applications
+## 实际应用场景
 
-### 1. HTTP Client Wrapper
+### 1. HTTP客户端封装
 
 ```go
 type ResilientHTTPClient struct {
@@ -346,7 +346,7 @@ func (c *ResilientHTTPClient) Get(url string) (*http.Response, error) {
 }
 ```
 
-### 2. Database Connection Pool
+### 2. 数据库连接池
 
 ```go
 type ResilientDB struct {
@@ -367,7 +367,7 @@ func (rdb *ResilientDB) Query(query string, args ...interface{}) (*sql.Rows, err
 }
 ```
 
-### 3. Microservice Communication
+### 3. 微服务通信
 
 ```go
 type ServiceClient struct {
@@ -378,7 +378,7 @@ type ServiceClient struct {
 
 func (sc *ServiceClient) CallService(endpoint string, data interface{}) (interface{}, error) {
     return sc.breaker.Call(context.Background(), func() (interface{}, error) {
-        // Implement HTTP call to microservice
+        // 实现对微服务的HTTP调用
         resp, err := sc.client.Post(sc.baseURL+endpoint, "application/json", data)
         if err != nil {
             return nil, err
@@ -386,20 +386,20 @@ func (sc *ServiceClient) CallService(endpoint string, data interface{}) (interfa
         defer resp.Body.Close()
         
         if resp.StatusCode >= 500 {
-            return nil, fmt.Errorf("server error: %d", resp.StatusCode)
+            return nil, fmt.Errorf("服务器错误: %d", resp.StatusCode)
         }
         
-        // Parse response...
+        // 解析响应...
         return response, nil
     })
 }
 ```
 
-## Advanced Features
+## 高级功能
 
-### 1. Multiple Circuit Breakers
+### 1. 多个电路断路器
 
-Different services may need different configurations:
+不同服务可能需要不同的配置：
 
 ```go
 type CircuitBreakerRegistry struct {
@@ -419,7 +419,7 @@ func (r *CircuitBreakerRegistry) GetBreaker(serviceName string) CircuitBreaker {
 }
 ```
 
-### 2. Health Check Integration
+### 2. 健康检查集成
 
 ```go
 func (cb *CircuitBreaker) HealthCheck() error {
@@ -427,12 +427,12 @@ func (cb *CircuitBreaker) HealthCheck() error {
     metrics := cb.GetMetrics()
     
     if state == StateOpen {
-        return fmt.Errorf("circuit breaker is open: %d consecutive failures", 
+        return fmt.Errorf("电路断路器处于打开状态: %d次连续失败", 
             metrics.ConsecutiveFailures)
     }
     
     if metrics.Failures > 0 && float64(metrics.Failures)/float64(metrics.Requests) > 0.5 {
-        return fmt.Errorf("high failure rate: %.2f%%", 
+        return fmt.Errorf("高失败率: %.2f%%", 
             float64(metrics.Failures)/float64(metrics.Requests)*100)
     }
     
@@ -440,7 +440,7 @@ func (cb *CircuitBreaker) HealthCheck() error {
 }
 ```
 
-### 3. Metrics Export
+### 3. 指标导出
 
 ```go
 func (cb *CircuitBreaker) ExportMetrics() map[string]interface{} {
@@ -459,20 +459,20 @@ func (cb *CircuitBreaker) ExportMetrics() map[string]interface{} {
 }
 ```
 
-## Summary
+## 总结
 
-The Circuit Breaker pattern is essential for building resilient distributed systems. It provides:
+电路断路器模式对于构建健壮的分布式系统至关重要。它提供了：
 
-- **Failure Detection**: Automatically detects when services are failing
-- **Fast Failure**: Prevents resource waste by failing quickly
-- **Automatic Recovery**: Tests service recovery and automatically resumes normal operation
-- **System Protection**: Prevents cascading failures across services
+- **故障检测**：自动检测服务是否失败
+- **快速失败**：通过快速失败防止资源浪费
+- **自动恢复**：测试服务恢复并自动恢复正常操作
+- **系统保护**：防止跨服务的级联故障
 
-Key implementation considerations:
-- Thread safety for concurrent access
-- Configurable thresholds and timeouts
-- Proper error handling and classification
-- Comprehensive testing including race conditions
-- Integration with monitoring and alerting systems
+关键实现考虑因素：
+- 并发访问的线程安全性
+- 可配置的阈值和超时
+- 正确的错误处理与分类
+- 包括竞态条件在内的全面测试
+- 与监控和告警系统的集成
 
-This pattern is widely used in production systems at companies like Netflix, Amazon, and Google to ensure system reliability and user experience. 
+该模式被Netflix、Amazon和Google等公司广泛应用于生产系统中，以确保系统可靠性和用户体验。

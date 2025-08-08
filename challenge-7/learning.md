@@ -1,12 +1,12 @@
-# Learning Materials for Bank Account with Error Handling
+# Bank Account Learning Materials (with Error Handling)
 
 ## Error Handling in Go
 
-Error handling is a critical aspect of writing robust Go programs. This challenge focuses on implementing a banking system with proper error handling techniques.
+Error handling is a crucial aspect of writing robust Go programs. This challenge focuses on implementing a banking system with proper error handling techniques.
 
 ### Basic Error Handling
 
-Go uses explicit error handling with return values instead of exceptions:
+Go uses return values for explicit error handling, rather than exceptions:
 
 ```go
 // Function that may return an error
@@ -17,7 +17,7 @@ func divideNumbers(a, b float64) (float64, error) {
     return a / b, nil
 }
 
-// Error handling with if checks
+// Handle errors using if checks
 result, err := divideNumbers(10, 0)
 if err != nil {
     fmt.Println("Error:", err)
@@ -31,17 +31,17 @@ fmt.Println("Result:", result)
 Standard ways to create errors:
 
 ```go
-// Using errors.New for simple error messages
+// Use errors.New for simple error messages
 err := errors.New("insufficient funds")
 
-// Using fmt.Errorf for formatted error messages
+// Use fmt.Errorf for formatted error messages
 amount := 100
 err := fmt.Errorf("insufficient funds: need $%d more", amount)
 ```
 
 ### Custom Error Types
 
-Creating custom error types allows for more detailed error handling:
+Creating custom error types enables more detailed error handling:
 
 ```go
 // Define a custom error type
@@ -52,30 +52,30 @@ type InsufficientFundsError struct {
 
 // Implement the error interface
 func (e *InsufficientFundsError) Error() string {
-    return fmt.Sprintf("insufficient funds: balance $%.2f, attempted to withdraw $%.2f", 
+    return fmt.Sprintf("insufficient funds: current balance $%.2f, attempted withdrawal $%.2f",
         e.Balance, e.Amount)
 }
 ```
 
 **Key concepts for custom errors:**
-- Implement the `Error() string` method
+- Implement `Error() string` method
 - Include relevant context in error fields
 - Use pointer receivers when checking error types
-- Type assertion with `ok` pattern for error type checking
+- Use `ok` pattern for type assertions to check error types
 
 ### Error Wrapping (Go 1.13+)
 
-Go 1.13 introduced error wrapping for better error context:
+Go 1.13 introduced error wrapping to provide better error context:
 
 **Key concepts:**
-- Use `fmt.Errorf` with `%w` verb to wrap errors
-- Use `errors.As()` to check for specific error types in a chain
-- Use `errors.Is()` to check for specific error values in a chain
+- Use `fmt.Errorf` with `%w` placeholder to wrap errors
+- Use `errors.As()` to check for specific error types in error chains
+- Use `errors.Is()` to check for specific error values in error chains
 - Preserve original error context while adding meaningful information
 
 ### Sentinel Errors
 
-Predefined errors that can be compared directly:
+Predefined errors that can be directly compared:
 
 ```go
 // Define sentinel errors as package-level variables
@@ -87,74 +87,74 @@ var (
 ```
 
 **Key concepts:**
-- Use package-level variables for reusable errors
+- Define reusable errors using package-level variables
 - Compare errors using `==` or `errors.Is()`
 - Provide clear, descriptive error messages
 
 ### Error Handling Patterns
 
-#### 1. Return Early Pattern
-Validate inputs first and return errors immediately to avoid deep nesting.
+#### 1. Early Return Pattern
+Validate inputs first and return errors immediately, avoiding deep nesting.
 
 #### 2. Error Handler Functions
-Create functions that can handle multiple error-prone operations in sequence.
+Create functions that process multiple error-prone operations in sequence.
 
 #### 3. Error Context
 Always provide meaningful context when returning or wrapping errors.
 
-### Banking Application Specific Considerations
+### Special Considerations for Banking Applications
 
 #### Account Operations
-- **Balance validation**: Check sufficient funds before withdrawal
-- **Amount validation**: Ensure positive amounts for deposits/withdrawals
-- **Account existence**: Verify account exists before operations
-- **Input sanitization**: Validate all user inputs
+- **Balance Validation**: Check sufficient balance before withdrawal
+- **Amount Validation**: Ensure deposit/withdrawal amounts are positive
+- **Account Existence Validation**: Confirm account exists before operation
+- **Input Sanitization**: Validate all user inputs
 
-#### Error Types for Banking
+#### Banking-Specific Error Types
 - **InsufficientFundsError**: Specific error for balance issues
 - **InvalidAmountError**: For negative or zero amounts
-- **AccountNotFoundError**: When account lookup fails
-- **ValidationError**: For input validation failures
+- **AccountNotFoundError**: Used when account lookup fails
+- **ValidationError**: Used when input validation fails
 
 ### Thread Safety in Banking Applications
 
-Banking applications need to handle concurrent access:
+Banking applications must handle concurrent access:
 
 **Key concepts:**
 - Use `sync.Mutex` to protect account operations
 - Lock before checking balance and modifying it
-- Use `defer` to ensure mutex is always unlocked
-- Consider read/write locks for read-heavy operations
+- Use `defer` to ensure mutex is always released
+- Consider read-write locks for read-heavy, write-light operations
 
 ### Testing Error Scenarios
 
 Testing error handling is critical:
 
 **Testing strategies:**
-- Test each error condition separately
+- Test each error case separately
 - Verify error types and messages
 - Test successful operations after handling errors
 - Use table-driven tests for multiple error scenarios
 - Mock dependencies to simulate error conditions
 
-### Error Logging and Reporting
+### Logging and Reporting Errors
 
 Proper error logging is essential:
 
-**Logging best practices:**
-- Log errors with sufficient context
-- Include relevant IDs (account, transaction, user)
+**Best practices for logging:**
+- Include sufficient context when logging errors
+- Include relevant identifiers (account, transaction, user)
 - Log at appropriate levels (error, warning, info)
-- Don't log the same error multiple times in the call stack
-- Structure logs for easy parsing and monitoring
+- Avoid duplicating error logs in call stack
+- Use structured logging for easier parsing and monitoring
 
 ### Panic and Recover
 
-While Go prefers explicit error handling, `panic` and `recover` are available for exceptional cases:
+Although Go favors explicit error handling, `panic` and `recover` are still useful in special cases:
 
 **When to use panic:**
-- Unrecoverable errors that indicate programmer mistakes
-- Initialization failures that prevent the program from working
+- Unrecoverable errors indicating programmer mistakes
+- Initialization failures preventing program execution
 - Internal consistency violations
 
 **Recovery patterns:**
@@ -166,6 +166,6 @@ While Go prefers explicit error handling, `panic` and `recover` are available fo
 ## Further Reading
 
 - [Error Handling in Go](https://blog.golang.org/error-handling-and-go)
-- [Working with Errors in Go 1.13+](https://blog.golang.org/go1.13-errors)
+- [Error Handling in Go 1.13+](https://blog.golang.org/go1.13-errors)
 - [Effective Error Handling in Go](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
-- [Sync Package Documentation](https://pkg.go.dev/sync) 
+- [Sync Package Documentation](https://pkg.go.dev/sync)

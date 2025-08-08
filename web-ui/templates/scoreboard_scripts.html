@@ -1,7 +1,7 @@
 {{define "scripts"}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize Bootstrap tabs if they exist
+        // 初始化Bootstrap标签页（如果存在）
         const tabElems = document.querySelectorAll('#scoreboardTabs a');
         if (tabElems.length > 0) {
             tabElems.forEach(tab => {
@@ -9,22 +9,22 @@
                     e.preventDefault();
                     this.classList.add('active');
                     
-                    // Remove active class from sibling tabs
+                    // 移除其他标签页的 active 类
                     tabElems.forEach(t => {
                         if (t !== this) t.classList.remove('active');
                     });
                     
-                    // Show the target tab pane
+                    // 显示目标标签页面板
                     const tabId = this.getAttribute('href');
                     const tabPane = document.querySelector(tabId);
                     
-                    // Hide all tab panes first
+                    // 先隐藏所有标签页面板
                     document.querySelectorAll('.tab-pane').forEach(pane => {
                         pane.classList.remove('show');
                         pane.classList.remove('active');
                     });
                     
-                    // Show the target pane
+                    // 显示目标面板
                     if (tabPane) {
                         tabPane.classList.add('show');
                         tabPane.classList.add('active');
@@ -34,4 +34,4 @@
         }
     });
 </script>
-{{end}} 
+{{end}}

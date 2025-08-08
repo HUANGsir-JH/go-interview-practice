@@ -1,88 +1,88 @@
-# Challenge 1: Basic CLI Application
+# 挑战 1：基础命令行应用程序
 
-Build a **Task Manager CLI** using Cobra that demonstrates fundamental command-line application concepts.
+使用 Cobra 构建一个 **任务管理器命令行应用**，以展示基本的命令行应用程序概念。
 
-## Challenge Requirements
+## 挑战要求
 
-Create a CLI application called `taskcli` that supports:
+创建一个名为 `taskcli` 的命令行应用程序，支持以下功能：
 
-1. **Root Command** - Display welcome message and help
-2. **Version Command** - Show application version
-3. **About Command** - Display application information  
-4. **Basic Help** - Auto-generated help text for all commands
+1. **根命令** - 显示欢迎信息和帮助
+2. **版本命令** - 显示应用程序版本信息
+3. **关于命令** - 显示应用程序详细信息
+4. **基础帮助** - 所有命令自动生成的帮助文本
 
-## Expected CLI Structure
+## 预期的 CLI 结构
 
 ```
-taskcli                    # Root command - shows help
-taskcli version           # Shows version information
-taskcli about             # Shows about information
-taskcli help              # Shows help (auto-generated)
-taskcli help version      # Shows help for version command
+taskcli                    # 根命令 - 显示帮助
+taskcli version           # 显示版本信息
+taskcli about             # 显示关于信息
+taskcli help              # 显示帮助（自动生成）
+taskcli help version      # 显示版本命令的帮助信息
 ```
 
-## Sample Output
+## 示例输出
 
-**Root Command (`taskcli`):**
+**根命令（`taskcli`）：**
 ```
-Task Manager CLI - Manage your tasks efficiently
+任务管理器命令行工具 - 高效管理您的任务
 
-Usage:
-  taskcli [command]
+用法:
+  taskcli [命令]
 
-Available Commands:
-  about       About this application
-  completion  Generate the autocompletion script for the specified shell
-  help        Help about any command
-  version     Show version information
+可用命令:
+  about       关于此应用程序
+  completion  为指定 shell 生成自动补全脚本
+  help        查看任意命令的帮助信息
+  version     显示版本信息
 
-Flags:
-  -h, --help   help for taskcli
+标志:
+  -h, --help   taskcli 的帮助信息
 
-Use "taskcli [command] --help" for more information about a command.
+有关某个命令的更多信息，请使用 "taskcli [命令] --help"。
 ```
 
-**Version Command (`taskcli version`):**
+**版本命令（`taskcli version`）：**
 ```
 taskcli version 1.0.0
-Built with ❤️ using Cobra
+使用 ❤️ 基于 Cobra 构建
 ```
 
-**About Command (`taskcli about`):**
+**关于命令（`taskcli about`）：**
 ```
-Task Manager CLI v1.0.0
+任务管理器命令行工具 v1.0.0
 
-A simple and efficient task management tool built with Go and Cobra.
-Perfect for managing your daily tasks from the command line.
+一个简单高效的任务管理工具，使用 Go 和 Cobra 开发。
+非常适合从命令行管理您的日常任务。
 
-Author: Your Name
-Repository: https://github.com/example/taskcli
-License: MIT
+作者: 您的名字
+仓库: https://github.com/example/taskcli
+许可证: MIT
 ```
 
-## Implementation Requirements
+## 实现要求
 
-### Root Command
-- Use "taskcli" as the command name
-- Include a description: "Task Manager CLI - Manage your tasks efficiently"  
-- Show help by default when no subcommand is provided
+### 根命令
+- 使用 "taskcli" 作为命令名称
+- 包含描述："任务管理器命令行工具 - 高效管理您的任务"
+- 当未提供子命令时，默认显示帮助信息
 
-### Version Command
-- Command name: "version"
-- Short description: "Show version information"
-- Output format: "taskcli version 1.0.0\nBuilt with ❤️ using Cobra"
+### 版本命令
+- 命令名称："version"
+- 简短描述："显示版本信息"
+- 输出格式："taskcli version 1.0.0\n使用 ❤️ 基于 Cobra 构建"
 
-### About Command  
-- Command name: "about"
-- Short description: "About this application"
-- Show detailed application information including version, description, author, etc.
+### 关于命令
+- 命令名称："about"
+- 简短描述："关于此应用程序"
+- 显示详细的程序信息，包括版本、描述、作者等
 
-## Testing Requirements
+## 测试要求
 
-Your solution must pass tests for:
-- Root command displays help when run without arguments
-- Version command outputs correct format
-- About command shows application information
-- Help command works for all commands
-- Command structure matches expected hierarchy
-- All commands have proper descriptions 
+您的解决方案必须通过以下测试：
+- 根命令在无参数运行时显示帮助
+- 版本命令输出正确的格式
+- 关于命令显示应用程序信息
+- 帮助命令对所有命令均有效
+- 命令结构符合预期层级
+- 所有命令都有适当的描述
