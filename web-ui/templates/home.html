@@ -4,16 +4,16 @@
     <div class="col">
         <div class="hero-section text-center py-4">
             <div class="hero-content">
-                <h1 class="display-5 fw-bold mb-3">Go Interview Practice</h1>
-                <p class="lead mb-4">Master Go programming with hands-on coding challenges</p>
+                <h1 class="display-5 fw-bold mb-3">Go 面试练习</h1>
+                <p class="lead mb-4">通过实践编码挑战掌握 Go 编程</p>
                 
                 <!-- Main Action Buttons -->
                 <div class="d-flex justify-content-center flex-wrap gap-2 mb-4">
                     <a href="#challenges" class="btn btn-light px-4">
-                        <i class="bi bi-play-circle me-2"></i>Browse Challenges
+                        <i class="bi bi-play-circle me-2"></i>浏览挑战
                     </a>
                     <a href="https://github.com/RezaSi/go-interview-practice" class="btn btn-outline-light px-4" target="_blank">
-                        <i class="bi bi-github me-2"></i>View Source
+                        <i class="bi bi-github me-2"></i>查看源码
                     </a>
                 </div>
                 
@@ -32,7 +32,7 @@
                        target="_blank"
                        title="Support this project">
                         <i class="bi bi-heart-fill me-2" style="font-size: 0.8rem;"></i>
-                        Sponsor
+                        赞助
                     </a>
                 </div>
             </div>
@@ -46,13 +46,13 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-8">
-                        <h2>Improve Your Go Skills</h2>
-                        <p class="mb-0">Each challenge includes detailed problem statements, test cases, and learning materials to help you master key Go concepts for technical interviews.</p>
+                        <h2>提升你的 Go 技能</h2>
+                        <p class="mb-0">每个挑战都包含详细的问题陈述、测试案例和学习材料，帮助你掌握技术面试中的关键 Go 概念。</p>
                     </div>
                     <div class="col-md-4 text-md-end mt-3 mt-md-0">
                         <div class="d-flex justify-content-md-end gap-2">
-                            <span class="badge bg-primary rounded-pill py-2 px-3 fs-6">Hands-on Practice</span>
-                            <span class="badge bg-info text-white rounded-pill py-2 px-3 fs-6">Learning Materials</span>
+                            <span class="badge bg-primary rounded-pill py-2 px-3 fs-6">实践练习</span>
+                            <span class="badge bg-info text-white rounded-pill py-2 px-3 fs-6">学习材料</span>
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                                 data-bs-target="#algorithm-challenges" 
                                 type="button" 
                                 role="tab">
-                            <i class="bi bi-cpu me-2"></i>Classic Challenges
+                            <i class="bi bi-cpu me-2"></i>经典挑战
                             <span class="badge bg-primary ms-2">{{len .Challenges}}</span>
                         </button>
                     </li>
@@ -88,9 +88,9 @@
                                 role="tab"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="top"
-                                data-bs-title="🚀 New! Try real-world package challenges"
+                                data-bs-title="🚀 新功能！试试真实世界的包挑战"
                                 data-bs-custom-class="package-tooltip">
-                            <i class="bi bi-box-seam me-2"></i>Package Mastery
+                            <i class="bi bi-box-seam me-2"></i>包掌握
                             <span class="badge bg-success ms-2">{{len .PackagesList}}</span>
                             <!-- Permanent pulsing indicator -->
                             <span class="position-absolute top-0 start-100 translate-middle p-1 bg-warning border border-light rounded-circle new-indicator" id="package-new-indicator" style="margin-left: -8px; margin-top: 2px;">
@@ -108,20 +108,20 @@
             <div class="tab-pane fade show active" id="algorithm-challenges" role="tabpanel">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                        <h3 class="mb-1">Classic Challenges</h3>
-                        <p class="text-muted mb-0">Classic coding interview problems to master fundamental concepts</p>
+                        <h3 class="mb-1">经典挑战</h3>
+                        <p class="text-muted mb-0">掌握基础概念的经典编码面试问题</p>
                     </div>
                     <div class="d-flex gap-2">
                         <div class="btn-group" role="group">
-                            <button class="btn btn-sm btn-outline-secondary active" id="filter-all">All</button>
-                            <button class="btn btn-sm btn-outline-success" id="filter-beginner">Beginner</button>
-                            <button class="btn btn-sm btn-outline-warning" id="filter-intermediate">Intermediate</button>
-                            <button class="btn btn-sm btn-outline-danger" id="filter-advanced">Advanced</button>
+                            <button class="btn btn-sm btn-outline-secondary active" id="filter-all">全部</button>
+                            <button class="btn btn-sm btn-outline-success" id="filter-beginner">初级</button>
+                            <button class="btn btn-sm btn-outline-warning" id="filter-intermediate">中级</button>
+                            <button class="btn btn-sm btn-outline-danger" id="filter-advanced">高级</button>
                         </div>
                         <select class="form-select form-select-sm" id="sort-select" style="width: auto;">
-                            <option value="difficulty" selected>Difficulty</option>
-                            <option value="id-asc">Number ↑</option>
-                            <option value="id-desc">Number ↓</option>
+                            <option value="difficulty" selected>难度</option>
+                            <option value="id-asc">编号 ↑</option>
+                            <option value="id-desc">编号 ↓</option>
                         </select>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
             <div class="card-header py-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="badge {{if eq .Difficulty "Beginner"}}bg-success{{else if eq .Difficulty "Intermediate"}}bg-warning{{else}}bg-danger{{end}} rounded-pill">{{.Difficulty}}</span>
-                    <span class="badge bg-secondary rounded-pill">Challenge #{{.ID}}</span>
+                    <span class="badge bg-secondary rounded-pill">挑战 #{{.ID}}</span>
                 </div>
             </div>
             <div class="card-body">
@@ -143,14 +143,14 @@
                     <!-- Description will be rendered by JavaScript -->
                 </div>
                 <div class="d-flex mt-3 gap-2">
-                    <span class="badge bg-light text-dark border"><i class="bi bi-book"></i> Learning Materials</span>
-                    <span class="badge bg-light text-dark border"><i class="bi bi-code-slash"></i> Test Cases</span>
+                    <span class="badge bg-light text-dark border"><i class="bi bi-book"></i> 学习材料</span>
+                    <span class="badge bg-light text-dark border"><i class="bi bi-code-slash"></i> 测试案例</span>
                 </div>
             </div>
             <div class="card-footer bg-transparent">
                 <div class="d-flex justify-content-between">
-                    <a href="/challenge/{{.ID}}" class="btn btn-primary">Start Challenge</a>
-                    <a href="/scoreboard/{{.ID}}" class="btn btn-outline-secondary">Scoreboard</a>
+                    <a href="/challenge/{{.ID}}" class="btn btn-primary">开始挑战</a>
+                    <a href="/scoreboard/{{.ID}}" class="btn btn-outline-secondary">排行榜</a>
                 </div>
             </div>
         </div>
@@ -163,20 +163,20 @@
             <div class="tab-pane fade" id="package-challenges" role="tabpanel">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h3 class="mb-1">Real-World Package Challenges</h3>
-                        <p class="text-muted mb-0">Master popular Go packages and frameworks used in production</p>
+                        <h3 class="mb-1">真实世界包挑战</h3>
+                        <p class="text-muted mb-0">掌握生产环境中使用的流行 Go 包和框架</p>
                     </div>
                     <div class="d-flex gap-2">
                         <div class="btn-group" role="group">
-                            <button class="btn btn-sm btn-outline-secondary active" id="package-filter-all">All Packages</button>
+                            <button class="btn btn-sm btn-outline-secondary active" id="package-filter-all">所有包</button>
                             <button class="btn btn-sm btn-outline-info" id="package-filter-web">Web</button>
                             <button class="btn btn-sm btn-outline-warning" id="package-filter-cli">CLI</button>
                             <button class="btn btn-sm btn-outline-success" id="package-filter-database">Database</button>
                         </div>
                         <select class="form-select form-select-sm" id="package-sort-select" style="width: auto;">
-                            <option value="popularity" selected>Popularity</option>
-                            <option value="difficulty">Difficulty</option>
-                            <option value="name">Name</option>
+                            <option value="popularity" selected>受欢迎程度</option>
+                            <option value="difficulty">难度</option>
+                            <option value="name">名称</option>
                         </select>
                     </div>
                 </div>
@@ -209,11 +209,11 @@
                                 <!-- Coming Soon Card -->
                                 <div class="text-center py-4">
                                     <i class="bi bi-clock text-muted fs-1 mb-3"></i>
-                                    <h6 class="text-muted">Coming Soon</h6>
-                                    <p class="small text-muted mb-0">{{.Description}} challenges and tutorials</p>
+                                    <h6 class="text-muted">即将推出</h6>
+                                    <p class="small text-muted mb-0">{{.Description}} 挑战和教程</p>
                                     {{if .Prerequisites}}
                                     <div class="mt-3">
-                                        <h6 class="small fw-semibold text-muted">Prerequisites:</h6>
+                                        <h6 class="small fw-semibold text-muted">先决条件:</h6>
                                         <div class="d-flex flex-wrap gap-1 justify-content-center">
                                             {{range .Prerequisites}}
                                             <span class="badge bg-light text-muted border">{{.}}</span>
@@ -238,8 +238,8 @@
                                 <!-- Progress Bar -->
                                 <div class="mb-3">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <small class="text-muted">Progress</small>
-                                        <small class="text-muted">{{if $.UserAttempts}}{{countPackageAttemptsForPackage $.UserAttempts .Package}}{{else}}0{{end}}/{{len .LearningPath}} challenges</small>
+                                        <small class="text-muted">进度</small>
+                                        <small class="text-muted">{{if $.UserAttempts}}{{countPackageAttemptsForPackage $.UserAttempts .Package}}{{else}}0{{end}}/{{len .LearningPath}} 个挑战</small>
                                     </div>
                                     <div class="progress" style="height: 6px;">
                                         <div class="progress-bar bg-success" role="progressbar" 
@@ -249,7 +249,7 @@
                                 
                                 <!-- Challenge List -->
                                 <div class="package-challenges">
-                                    <h6 class="fw-semibold mb-2">Learning Path:</h6>
+                                    <h6 class="fw-semibold mb-2">学习路径:</h6>
                                     <div class="list-group list-group-flush">
                                         {{$challenges := getPackageChallenges .Package}}
                                         {{range $challenges}}
@@ -258,7 +258,7 @@
                                                 {{if isComingSoon .}}
                                                 <i class="bi bi-clock text-muted me-2"></i>
                                                 <span class="small">{{.Title}}</span>
-                                                <span class="badge bg-secondary ms-auto">Coming Soon</span>
+                                                <span class="badge bg-secondary ms-auto">即将推出</span>
                                                 {{else}}
                                                 <i class="{{.Icon}} text-primary me-2"></i>
                                                 <span class="small">{{.Title}}</span>
@@ -271,7 +271,7 @@
                                         <div class="list-group-item px-0 py-2 border-0">
                                             <div class="d-flex align-items-center">
                                                 <i class="bi bi-info-circle text-muted me-2"></i>
-                                                <span class="small text-muted">No challenges available yet</span>
+                                                <span class="small text-muted">暂无可用挑战</span>
                                             </div>
                                         </div>
                                         {{end}}
@@ -283,7 +283,7 @@
                             <div class="card-footer bg-transparent border-0">
                                 <div class="d-flex gap-2">
                                     <a href="/packages/{{.Name}}" class="btn btn-primary btn-sm flex-fill">
-                                        <i class="bi bi-play-circle me-1"></i>Start Learning
+                                        <i class="bi bi-play-circle me-1"></i>开始学习
                                     </a>
                                     <a href="{{.GitHubURL}}" target="_blank" class="btn btn-outline-secondary btn-sm">
                                         <i class="bi bi-github"></i>
@@ -294,7 +294,7 @@
                             <div class="card-footer bg-transparent border-0">
                                 <div class="d-flex gap-2">
                                     <button class="btn btn-secondary btn-sm flex-fill disabled" disabled>
-                                        <i class="bi bi-clock me-1"></i>Coming Soon
+                                        <i class="bi bi-clock me-1"></i>即将推出
                                     </button>
                                     <a href="{{.GitHubURL}}" target="_blank" class="btn btn-outline-secondary btn-sm">
                                         <i class="bi bi-github"></i>
@@ -316,15 +316,15 @@
 <div class="row mb-5">
     <div class="col">
         <div class="text-center py-4">
-            <h4 class="mb-4 text-muted">Proudly Supported By</h4>
+            <h4 class="mb-4 text-muted">荣幸得到以下支持</h4>
             <div class="sponsors-container" id="premium-sponsors">
                 <!-- Premium sponsor logos will appear here -->
                 <div class="text-muted">
                     <i class="bi bi-building me-2"></i>
                     <span class="small">
-                        Interested in premium sponsorship? 
+                        对高级赞助感兴趣？
                         <a href="https://github.com/sponsors/RezaSi" target="_blank" class="text-decoration-none">
-                            Feature your company logo here!
+                            在这里展示您的公司标志！
                         </a>
                     </span>
                 </div>
@@ -340,30 +340,30 @@
             <div class="modal-header bg-gradient-primary text-white border-0">
                 <h5 class="modal-title d-flex align-items-center" id="packageTipsModalLabel">
                     <i class="bi bi-lightbulb-fill text-warning me-2 fs-4"></i>
-                    Welcome to Package Mastery!
+                    欢迎来到包掌握！
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <div class="row">
                     <div class="col-md-8">
-                        <h6 class="fw-bold mb-3">🚀 Master Real-World Go Packages</h6>
-                        <p class="mb-3">Package challenges are different from classic algorithm challenges - they focus on practical skills with popular Go packages used in production environments.</p>
+                        <h6 class="fw-bold mb-3">🚀 掌握真实世界的 Go 包</h6>
+                        <p class="mb-3">包挑战与经典算法挑战不同 - 它们专注于在生产环境中使用的流行 Go 包的实用技能。</p>
                         
                         <div class="mb-4">
-                            <h6 class="fw-semibold text-primary mb-2">What makes Package Challenges unique:</h6>
+                            <h6 class="fw-semibold text-primary mb-2">包挑战的独特之处：</h6>
                             <ul class="list-unstyled">
                                 <li class="mb-2">
                                     <i class="bi bi-check2-circle text-success me-2"></i>
-                                    <strong>Hands-on Experience:</strong> Work with real packages like Gin, Cobra, GORM
+                                    <strong>实践经验:</strong> 使用真实的包，如 Gin、Cobra、GORM
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-check2-circle text-success me-2"></i>
-                                    <strong>Progressive Learning:</strong> Challenges build on each other in a structured path
+                                    <strong>渐进式学习:</strong> 挑战在结构化路径中相互构建
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-check2-circle text-success me-2"></i>
-                                    <strong>Production Skills:</strong> Learn patterns and best practices used in industry
+                                    <strong>生产技能:</strong> 学习行业中使用的模式和最佳实践
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-check2-circle text-success me-2"></i>

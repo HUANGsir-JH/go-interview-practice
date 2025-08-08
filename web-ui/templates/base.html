@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 {{define "base"}}
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Go Interview Practice</title>
+    <title>Go 面试练习</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
@@ -706,25 +706,25 @@
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="/">Go Interview Practice</a>
+            <a class="navbar-brand" href="/">Go 面试练习</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Challenges</a>
+                        <a class="nav-link" href="/">挑战</a>
                     </li>
                     <li class="nav-item position-relative">
                         <a class="nav-link" href="/interview">
-                            Interview Simulator
+                            面试模拟器
                             <span class="position-absolute top-0 start-100 translate-middle p-1 bg-secondary border border-light rounded-circle new-indicator-gray" style="margin-left: -8px; margin-top: 2px;">
                                 <span class="visually-hidden">New</span>
                             </span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/scoreboard">Scoreboard</a>
+                        <a class="nav-link" href="/scoreboard">排行榜</a>
                     </li>
                 </ul>
                 <div class="d-flex">
@@ -738,33 +738,33 @@
                             <ul class="dropdown-menu profile-dropdown">
                                 <li><h6 class="dropdown-header">
                                     <i class="bi bi-git me-2"></i>
-                                    <span id="profile-source-text">Auto-detected from git</span>
+                                    <span id="profile-source-text">从 git 自动检测</span>
                                 </h6></li>
                                 <li><hr class="dropdown-divider"></li>
                                 
                                 <!-- Statistics Section -->
                                 <li><h6 class="dropdown-header">
                                     <i class="bi bi-graph-up me-2"></i>
-                                    Your Progress
+                                    你的进度
                                 </h6></li>
                                 <li class="px-3 py-2">
                                     <div class="row g-2 text-center">
                                         <div class="col-4">
-                                            <div class="small text-muted">Attempted</div>
+                                            <div class="small text-muted">已尝试</div>
                                             <div class="fw-bold text-primary fs-5" id="stat-attempted">-</div>
                                         </div>
                                         <div class="col-4">
-                                            <div class="small text-muted">Completed</div>
+                                            <div class="small text-muted">已完成</div>
                                             <div class="fw-bold text-success fs-5" id="stat-completed">-</div>
                                         </div>
                                         <div class="col-4">
-                                            <div class="small text-muted">Avg Score</div>
+                                            <div class="small text-muted">平均分数</div>
                                             <div class="fw-bold text-warning fs-5" id="stat-average">-</div>
                                         </div>
                                     </div>
                                     <div class="row g-2 text-center mt-2">
                                         <div class="col-12">
-                                            <div class="small text-muted">Main Scoreboard Rank</div>
+                                            <div class="small text-muted">主排行榜排名</div>
                                             <div class="fw-bold text-info" id="stat-rank">-</div>
                                         </div>
                                     </div>
@@ -773,7 +773,7 @@
                                 <!-- Profile Badge Section -->
                                 <li><h6 class="dropdown-header">
                                     <i class="bi bi-award me-2"></i>
-                                    Your Badge
+                                    你的徽章
                                 </h6></li>
                                 <li class="px-3 py-2">
                                     <div class="badge-section">
@@ -782,37 +782,37 @@
                                             <div id="profile-badge-container" style="display: none;">
                                                 <img id="profile-badge" 
                                                      src="" 
-                                                     alt="Go Interview Practice Badge" 
+                                                     alt="Go 面试练习徽章" 
                                                      style="max-width: 100%; height: auto; border-radius: 4px; cursor: pointer;"
                                                      onclick="window.open('https://github.com/RezaSi/go-interview-practice', '_blank')">
                                             </div>
                                             <div id="profile-badge-loading" class="text-muted small">
-                                                <i class="bi bi-hourglass-split me-1"></i>Loading badge preview...
+                                                <i class="bi bi-hourglass-split me-1"></i>加载徽章预览...
                                             </div>
                                             <div id="profile-badge-error" style="display: none;" class="text-muted small">
-                                                <i class="bi bi-exclamation-triangle me-1"></i>Badge not available yet
+                                                <i class="bi bi-exclamation-triangle me-1"></i>徽章暂不可用
                                             </div>
                                         </div>
                                         
                                         <!-- Copy Section -->
                                         <div class="badge-copy-section">
-                                            <div class="small text-muted mb-2">Copy & paste into your GitHub profile:</div>
+                                            <div class="small text-muted mb-2">复制并粘贴到你的 GitHub 个人资料：</div>
                                             <div class="input-group input-group-sm">
                                                 <input type="text" 
                                                        id="badge-markdown" 
                                                        class="form-control font-monospace small" 
                                                        readonly
-                                                       value="[![Go Interview Practice Achievement](https://raw.githubusercontent.com/RezaSi/go-interview-practice/main/badges/YOUR_USERNAME.svg)](https://github.com/RezaSi/go-interview-practice)"
+                                                       value="[![Go 面试练习成就](https://raw.githubusercontent.com/RezaSi/go-interview-practice/main/badges/YOUR_USERNAME.svg)](https://github.com/RezaSi/go-interview-practice)"
                                                        style="font-size: 0.75rem; line-height: 1.2;">
                                                 <button class="btn btn-outline-secondary" 
                                                         type="button" 
                                                         id="copy-badge-btn"
-                                                        title="Copy badge markdown">
+                                                        title="复制徽章 markdown">
                                                     <i class="bi bi-clipboard" id="copy-icon"></i>
                                                 </button>
                                             </div>
                                             <div class="small text-success mt-1" id="copy-success" style="display: none;">
-                                                <i class="bi bi-check-circle me-1"></i>Copied to clipboard!
+                                                <i class="bi bi-check-circle me-1"></i>已复制到剪贴板！
                                             </div>
                                         </div>
                                     </div>
@@ -820,29 +820,29 @@
                                 <li><hr class="dropdown-divider"></li>
                                 
                                 <li><a class="dropdown-item" href="#" id="view-github-profile">
-                                    <i class="bi bi-github me-2"></i>View GitHub Profile
+                                    <i class="bi bi-github me-2"></i>查看 GitHub 个人资料
                                 </a></li>
                                 <li><a class="dropdown-item" href="/scoreboard">
-                                    <i class="bi bi-trophy me-2"></i>View Scoreboard
+                                    <i class="bi bi-trophy me-2"></i>查看排行榜
                                 </a></li>
                                 <li><a class="dropdown-item" href="#" id="refresh-progress">
-                                    <i class="bi bi-arrow-clockwise me-2"></i>Refresh Progress
+                                    <i class="bi bi-arrow-clockwise me-2"></i>刷新进度
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="#" id="change-username">
-                                    <i class="bi bi-pencil me-2"></i>Change Username
+                                    <i class="bi bi-pencil me-2"></i>更改用户名
                                 </a></li>
                             </ul>
                         </div>
                         <div class="profile-loading" id="profile-loading">
                             <div class="loading-spinner"></div>
-                            <span class="loading-text">Detecting username...</span>
+                            <span class="loading-text">检测用户名...</span>
                         </div>
                         <div class="username-input-container" id="username-input-container" style="display: none;">
-                        <input type="text" id="username" class="form-control me-2 has-help" placeholder="GitHub Username">
+                        <input type="text" id="username" class="form-control me-2 has-help" placeholder="GitHub 用户名">
                         <i class="bi bi-question-circle username-help-icon" id="username-help-icon"></i>
                         <div class="username-help-tooltip" id="username-help-tooltip">
-                            <i class="bi bi-lightbulb me-1"></i>Enter your GitHub username to track progress
+                            <i class="bi bi-lightbulb me-1"></i>输入你的 GitHub 用户名以跟踪进度
                             </div>
                         </div>
                     </div>
@@ -857,7 +857,7 @@
 
     <footer class="bg-light py-4 mt-auto">
         <div class="container text-center">
-            <p class="mb-0 text-muted">Go Interview Practice - Build your Go skills with coding challenges</p>
+            <p class="mb-0 text-muted">Go 面试练习 - 通过编码挑战构建你的 Go 技能</p>
         </div>
     </footer>
 
@@ -897,13 +897,13 @@
                         
                         // Update source text
                         const sourceTexts = {
-                            'remote-origin': 'Auto-detected from git remote',
-                            'git-config': 'Auto-detected from git config',
-                            'cookie': 'Saved from previous session',
-                            'localStorage': 'Saved locally',
-                            'manual': 'Manually entered'
+                            'remote-origin': '从 git 远程自动检测',
+                            'git-config': '从 git 配置自动检测',
+                            'cookie': '从之前的会话保存',
+                            'localStorage': '本地保存',
+                            'manual': '手动输入'
                         };
-                        profileSourceText.textContent = sourceTexts[source] || 'GitHub username';
+                        profileSourceText.textContent = sourceTexts[source] || 'GitHub 用户名';
                         
                         // Set GitHub profile link
                         viewGithubProfile.href = `https://github.com/${username}`;
@@ -921,7 +921,7 @@
                 }
                 
                 // Function to show loading state
-                function showLoading(text = 'Detecting username...') {
+                function showLoading(text = '检测用户名...') {
                     profileLoading.style.display = 'flex';
                     profileDisplay.style.display = 'none';
                     usernameInputContainer.style.display = 'none';
@@ -998,16 +998,16 @@
                                 savedUsername = gitData.username;
                                 source = gitData.source;
                                 
-                                console.log(`GitHub username auto-detected from git: ${savedUsername} (source: ${gitData.source})`);
+                                console.log(`GitHub 用户名从 git 自动检测: ${savedUsername} (来源: ${gitData.source})`);
                             }
                         }
                     } catch (error) {
-                        console.log('Could not auto-detect git username:', error.message);
+                        console.log('无法自动检测 git 用户名:', error.message);
                     }
                     
                     // If no git username found, check for cookie
                     if (!savedUsername) {
-                        showLoading('Checking saved username...');
+                        showLoading('检查保存的用户名...');
                 const cookies = document.cookie.split(';');
                 for (let i = 0; i < cookies.length; i++) {
                     const cookie = cookies[i].trim();
@@ -1171,7 +1171,7 @@
                                         statRank.classList.add('text-primary'); // Others
                                     }
                                 } else {
-                                    statRank.textContent = 'Unranked';
+                                    statRank.textContent = '未排名';
                                     statRank.className = 'fw-bold text-secondary';
                                 }
                             } else {
@@ -1189,17 +1189,17 @@
                 
                 // Fallback ranking when API is not available
                 function setFallbackRank(statRank, completedCount) {
-                    let rank = 'Unranked';
+                    let rank = '未排名';
                     if (completedCount >= 20) {
-                        rank = 'Master';
+                        rank = '大师';
                     } else if (completedCount >= 15) {
-                        rank = 'Expert';
+                        rank = '专家';
                     } else if (completedCount >= 10) {
-                        rank = 'Advanced';
+                        rank = '高级';
                     } else if (completedCount >= 5) {
-                        rank = 'Intermediate';
+                        rank = '中级';
                     } else if (completedCount > 0) {
-                        rank = 'Beginner';
+                        rank = '初级';
                     }
                     
                     statRank.textContent = rank;
